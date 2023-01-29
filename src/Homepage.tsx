@@ -10,8 +10,9 @@ const Homepage = () => {
     e.preventDefault()
     try {
       let dataUser = {
-        firstName: 'Maria',
-        lastName: 'Popescu',
+
+        firstName: 'Mario',
+        lastName: 'Darian',
         numberPhone: '0764454567',
       }
       addDoc(usersRef, dataUser)
