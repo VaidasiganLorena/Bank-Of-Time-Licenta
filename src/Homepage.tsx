@@ -1,32 +1,35 @@
-import { doc, getDoc, collection, addDoc} from '@firebase/firestore';
-import React, {  useState } from 'react'
-import { firestore, loginData} from '../src/firebase'
+import { collection, addDoc } from '@firebase/firestore'
+import React from 'react'
+import { firestore } from '../src/firebase'
 import './App.css'
 
-const Homepage=()=> {
-  const [message, setMessage]= useState('');
-  const dataFromFirestoreRef= doc(firestore,'users')
-  const dataFromDatabase= getDoc( dataFromFirestoreRef)
-  const usersRef = collection(firestore, "users");
-  const handleSave = async(e: any) =>{
+const Homepage = () => {
+  const usersRef = collection(firestore, 'users')
+
+  const handleSave = async (e: any) => {
     e.preventDefault()
-  loginData("Maria", "Paun", "0745562855")
+    try {
+      let dataUser = {
+        firstName: 'Mario',
+        lastName: 'Darian',
+        numberPhone: '0764454567',
+      }
+      addDoc(usersRef, dataUser)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  return( 
-  
-  <><div>Homepage</div><form onSubmit={handleSave}>
-      <label>
-        Introdu mesaj
-      </label>
-      <input type={'text'} value={message} onChange={(e) => setMessage(e.currentTarget.value)}>
-      </input>
-      <button type='submit'> Salveza</button>
-    </form></>
+  return (
+    <>
+      <div>Homepage</div>
+      <form onSubmit={handleSave}>
+        <label>Introdu mesaj</label>
+        <input type={'text'}></input>
+        <button type="submit"> Salveza</button>
+      </form>
+    </>
   )
 }
 
 export default Homepage
-
-
-
