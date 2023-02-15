@@ -9,7 +9,6 @@ import {
   Anchor,
   Container,
   BackgroundImage,
-  Box,
   Image,
   Grid,
 } from '@mantine/core'
