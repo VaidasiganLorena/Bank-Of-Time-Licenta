@@ -3,7 +3,6 @@ import { MantineProvider } from '@mantine/core'
 import { Login } from './Components/login/Login'
 import { Route, Routes } from 'react-router-dom'
 import Register from './Components/register/Register'
-import Homepage from './Components/homepage/Homepage'
 
 function App() {
   return (
@@ -25,7 +24,6 @@ function App() {
       <div className="app-light">
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/homepage" element={<Homepage />}></Route>
           <Route path="/register" element={<Register />} />
         </Routes>
       </div>
