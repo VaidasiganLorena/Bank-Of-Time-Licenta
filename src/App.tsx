@@ -3,6 +3,7 @@ import { MantineProvider } from '@mantine/core'
 import { Login } from './Components/login/Login'
 import { Route, Routes } from 'react-router-dom'
 import Register from './Components/register/Register'
+import Intro from './Components/intro/Intro'
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         fontFamily: 'Gill Sans, sans-serif',
         colorScheme: 'light',
         colors: {
-          primary: ['#18204a', '##28886f', '#e5dcca', '##154639'],
+          primary: ['#18204a', '#28886f', '#e5dcca', '##154639'],
           background: ['#ffffff'],
         },
         headings: {
@@ -23,7 +24,8 @@ function App() {
     >
       <div className="app-light">
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Intro />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
       </div>

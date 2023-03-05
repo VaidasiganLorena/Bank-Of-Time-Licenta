@@ -12,11 +12,10 @@ import {
   Image,
   Grid,
 } from '@mantine/core'
-import axios from 'axios'
-import { useEffect } from 'react'
+
 import { useNavigate } from 'react-router-dom'
 
-const useStyles = createStyles((theme:any) => ({
+const useStyles = createStyles((theme: any) => ({
   wrapper: {
     height: '100vh',
     display: 'flex',
@@ -84,27 +83,7 @@ const useStyles = createStyles((theme:any) => ({
 export function Login() {
   const { classes } = useStyles()
   const navigate = useNavigate()
-  const fecthUsers1= ()=> axios.get("http://localhost:5000/users", {
-    method: "GET",
 
-    headers: {
-      "Content-Type": "application/json",
-      // "Authorization": "Bearer " + token,
-      "Access-Control-Allow-Methods": "GET",
-      "Access-Control-Allow-Origin": "*",
-    },
-  })
-  .then( res => console.log(res))
-  
-    const fecthUsers = async(err: any)=>{
-    try{
-      const res = await axios.get("http://localhost:5000/users")
-      console.log(res)
-      }catch{
-        console.log(err)
-      }
-    }
-  
   return (
     <BackgroundImage src="/backround.png" radius="sm">
       <Container className={classes.wrapper} fluid>
@@ -134,7 +113,7 @@ export function Login() {
                 classNames={{ input: classes.input }}
               />
 
-              <Button fullWidth className={classes.buttonLogin} onClick={fecthUsers1}>
+              <Button fullWidth className={classes.buttonLogin}>
                 Autentificare
               </Button>
 
@@ -161,4 +140,3 @@ export function Login() {
     </BackgroundImage>
   )
 }
-
