@@ -15,6 +15,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -74,11 +75,13 @@ const useStyles = createStyles((theme: any) => ({
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 50,
   },
 }))
 
 export default function Intro() {
   const { classes } = useStyles()
+  const navigate = useNavigate()
   const [openModalWhy, setOpenModalWhy] = useState(false)
   const [openModalForWho, setOpenModalForWho] = useState(false)
   const [openModalHow, setOpenModalHow] = useState(false)
@@ -96,7 +99,7 @@ export default function Intro() {
             Banca Timpului
           </Title>
           <Group mr={20}>
-            <Button radius={'xl'} className={classes.buttonLogin}>
+            <Button radius={'xl'} className={classes.buttonLogin} onClick={()=>navigate("/login")}>
               Autentificare
             </Button>
             <Button variant="outline" radius={'xl'} className={classes.buttonRegister}>
