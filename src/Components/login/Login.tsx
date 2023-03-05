@@ -12,9 +12,11 @@ import {
   Image,
   Grid,
 } from '@mantine/core'
+import axios from 'axios'
+import { Component } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: any) => ({
   wrapper: {
     height: '100vh',
     display: 'flex',
@@ -82,6 +84,9 @@ const useStyles = createStyles((theme) => ({
 export function Login() {
   const { classes } = useStyles()
   const navigate = useNavigate()
+ const getData =()=>{
+  axios.get("http://localhost:5000/users").then(response => { console.log(response.data)})
+ }
   return (
     <BackgroundImage src="/backround.png" radius="sm">
       <Container className={classes.wrapper} fluid>
@@ -111,7 +116,7 @@ export function Login() {
                 classNames={{ input: classes.input }}
               />
 
-              <Button fullWidth className={classes.buttonLogin}>
+              <Button fullWidth className={classes.buttonLogin} onClick={()=>getData()}>
                 Autentificare
               </Button>
 
@@ -120,7 +125,7 @@ export function Login() {
                 <Anchor<'a'>
                   href="#"
                   className={classes.anchor}
-                  onClick={(event) => {
+                  onClick={(event: any) => {
                     event.preventDefault()
                     navigate('/register')
                   }}
