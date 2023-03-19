@@ -99,11 +99,20 @@ export default function Intro() {
             Banca Timpului
           </Title>
           <Group mr={20}>
-            <Button radius={'xl'} className={classes.buttonLogin} onClick={()=>navigate("/login")}>
+            <Button
+              radius={'xl'}
+              className={classes.buttonLogin}
+              onClick={() => navigate('/login')}
+            >
               Autentificare
             </Button>
-            <Button variant="outline" radius={'xl'} className={classes.buttonRegister}>
-              înregistrează-te
+            <Button
+              variant="outline"
+              radius={'xl'}
+              className={classes.buttonRegister}
+              onClick={() => navigate('/register')}
+            >
+              Înregistrează-te
             </Button>
           </Group>
         </Flex>

@@ -12,9 +12,10 @@ import {
   Image,
   Grid,
 } from '@mantine/core'
-import axios from 'axios'
-import { Component } from 'react'
+import { useState } from 'react'
+
 import { useNavigate } from 'react-router-dom'
+import { usePostLogin } from '../../api/usePostLogin'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -48,7 +49,6 @@ const useStyles = createStyles((theme: any) => ({
   buttonLogin: {
     backgroundColor: '#28886f',
     borderRadius: 10,
-    marginTop: 30,
     '&:hover': {
       backgroundColor: '#154639',
     },
@@ -79,14 +79,37 @@ const useStyles = createStyles((theme: any) => ({
       paddingBottom: 50,
     },
   },
+  inputError: { border: '1px solid red' },
 }))
 
 export function Login() {
   const { classes } = useStyles()
   const navigate = useNavigate()
- const getData =()=>{
-  axios.get("http://localhost:5000/users").then(response => { console.log(response.data)})
- }
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [errorBackend, setErrorBackend] = useState<string>('')
+  const successCallBack = (data: any) => {
+    setErrorBackend('')
+    localStorage.setItem('userUuid', data.userUuid)
+    localStorage.setItem('userToken', data.authToken)
+    navigate('/homepage')
+  }
+  const errorCallBack = (data: any) => {
+    setErrorBackend(data.response)
+  }
+  const { mutate } = usePostLogin(successCallBack, errorCallBack)
+
+  const onPressLogin = () => {
+    if (
+      (email.length === 0 && password.length === 0) ||
+      email.length === 0 ||
+      password.length === 0
+    ) {
+      setErrorBackend('Câmpurile sunt invalide!')
+    } else {
+      mutate({ email: email, password: password })
+    }
+  }
   return (
     <BackgroundImage src="/backround.png" radius="sm">
       <Container className={classes.wrapper} fluid>
@@ -101,22 +124,37 @@ export function Login() {
                 label="Adresa de email"
                 variant="filled"
                 placeholder="hello@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.currentTarget.value)}
                 size="md"
                 radius={10}
-                classNames={{ input: classes.input }}
+                classNames={{
+                  input: errorBackend.length === 0 ? classes.input : classes.inputError,
+                }}
               />
 
               <PasswordInput
                 label="Parola"
                 variant="filled"
                 placeholder="Parola ta ..."
+                value={password}
+                onChange={(e) => setPassword(e.currentTarget.value)}
                 mt="md"
                 size="md"
                 radius={10}
-                classNames={{ input: classes.input }}
+                classNames={{
+                  input: errorBackend.length === 0 ? classes.input : classes.inputError,
+                }}
               />
-
-              <Button fullWidth className={classes.buttonLogin} onClick={()=>getData()}>
+              <Text c="red" size={'md'} mt={15} align={'center'}>
+                {errorBackend}
+              </Text>
+              <Button
+                fullWidth
+                className={classes.buttonLogin}
+                mt={errorBackend.length === 0 ? 30 : 15}
+                onClick={() => onPressLogin()}
+              >
                 Autentificare
               </Button>
 

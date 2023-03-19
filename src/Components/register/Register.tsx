@@ -16,6 +16,7 @@ import {
 import { useForm } from '@mantine/form'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { usePostRegister } from '../../api/usePostRegister'
 import { cities } from '../../aseert/city'
 
 const useStyles = createStyles((theme) => ({
@@ -106,7 +107,6 @@ const Register = () => {
       email: '',
       numberPhone: '',
       password: '',
-      confirmPassword: '',
       city: '',
       gender: '',
     },
@@ -127,14 +127,34 @@ const Register = () => {
         value.length > 0
           ? null
           : 'Parolă invalidă!',
-      confirmPassword: (value: string, values: any) =>
-        value !== values.password ? 'Parolele nu se potrivesc!' : null,
+
       gender: (value: string) => (value.length !== 0 ? null : 'Nu uita să alegi genul.'),
     },
   })
+
+  const succesCallBack = (data: string, status: number) => {
+    if (status === 200) {
+      console.log(data)
+    }
+  }
+  const errorCallBack = (data: any) => {
+    if (data.status === 400) {
+    }
+  }
+  const { mutate } = usePostRegister(succesCallBack, errorCallBack)
+
   const onPressCreateAcount = () => {
     if (formRegistration.validate().hasErrors === false && validCity === true) {
       console.log(formRegistration.values)
+      mutate({
+        firstName: formRegistration.values.firstName,
+        lastName: formRegistration.values.lastName,
+        email: formRegistration.values.email,
+        phoneNumber: formRegistration.values.numberPhone,
+        password: formRegistration.values.password,
+        city: formRegistration.values.city,
+        gender: formRegistration.values.gender,
+      })
       navigate('/login')
     } else {
       setErrorCity(isValidCity(city))
@@ -267,7 +287,7 @@ const Register = () => {
               <Button
                 size="sm"
                 mt={'xl'}
-                onClick={() => onPressCreateAcount()}
+                onClick={onPressCreateAcount}
                 type="submit"
                 className={classes.submitButton}
               >
