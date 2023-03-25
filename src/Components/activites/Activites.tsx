@@ -8,14 +8,15 @@ import {
   Flex,
   Text,
   Select,
-  Group,
+  Image,
   ScrollArea,
   Divider,
   Stack,
   Button,
 } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
-import React, { useEffect, useRef, useState } from 'react'
+import { IconPin } from '@tabler/icons-react'
+import React, { useEffect, useState } from 'react'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { Cards } from '../Cards'
 import { NavigationBar } from '../Navbar'
@@ -78,15 +79,17 @@ export type TInfoGainer = {
   description: string
   gainerUuid: string
   gender: string
-  helpTypeUuid?: string
+  helpTypeUuid: string
+  nameHelpType: string
   name: string
   numberPhone: string
 }
 export const Activites = () => {
   const { classes } = useStyles()
-  // const currentDay = new Date().getDay
   const [date, setDate] = useState<[Date | null, Date | null]>([null, null])
-  const succesCallBackGetGainers = () => {}
+  const succesCallBackGetGainers = () => {
+    console.log(data)
+  }
   const { data } = useGetInfoGainers(succesCallBackGetGainers)
 
   const age = (dateOfBirth: any) => {
@@ -107,6 +110,7 @@ export const Activites = () => {
       gainerUuid={card.gainerUuid}
       name={card.name}
       age={age(card.dateOfBirth)}
+      helpTypeName={card.nameHelpType}
     />
   ))
   useEffect(() => {}, [])
@@ -119,11 +123,11 @@ export const Activites = () => {
             <Grid h={'100%'} p={0}>
               <Grid.Col span={9} p={20} pr={5} h={'100%'}>
                 <Title order={1} className={classes.title} my={10}>
-                  Alege persoana
+                  Alege cui să faci bine ...
                 </Title>
 
                 <ScrollArea h={'95%'} offsetScrollbars>
-                  <Flex direction={'column'} gap={10}>
+                  <Flex direction={'column'} gap={10} p={15}>
                     {cardsGainer}
                   </Flex>
                 </ScrollArea>
@@ -153,25 +157,21 @@ export const Activites = () => {
                           { value: 'companie', label: 'Companie' },
                           { value: 'ingrijire', label: 'Îngrijire' },
                         ]}
+                        icon={<Image src="/hand.png" height={'1rem'} width={'1rem'} />}
                       />
 
                       <Select
                         classNames={{ input: classes.select }}
                         radius={'xl'}
+                        searchable
                         placeholder="Locație"
                         data={[
                           { value: 'cresc', label: 'Cugir' },
                           { value: 'desc', label: 'Timișoara' },
+                          { value: 'cresc', label: 'Cluj-Napoca' },
+                          { value: 'desc', label: 'Arad' },
                         ]}
-                      />
-                      <Select
-                        classNames={{ input: classes.select }}
-                        radius={'xl'}
-                        placeholder="Persoană"
-                        data={[
-                          { value: 'cresc', label: 'Costel' },
-                          { value: 'desc', label: 'Mioara' },
-                        ]}
+                        icon={<IconPin size="1rem" />}
                       />
                     </Flex>
                     <Button radius={'xl'} bg="#28886f">

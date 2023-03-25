@@ -8,8 +8,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Homepage from './Components/homepage/Homepage'
 import PersonalData from './Components/personalData/PersonalData'
 import Account from './Components/account/Account'
-import ActivitesCalendar from './Components/activitesCalendar/ActivitesCalendar'
 import { Activites } from './Components/activites/Activites'
+import HomepageAdmin from './ComponentsAdmin/HomepageAdmin.tsx/HomepageAdmin'
+import PageGainers from './ComponentsAdmin/HomepageAdmin.tsx/pageGainers/PageGainers'
 
 const queryClient = new QueryClient()
 function App() {
@@ -39,7 +40,8 @@ function App() {
             <Route path="/personal-data" element={<PersonalData />} />
             <Route path="/activites" element={<Activites />} />
             <Route path="/account" element={<Account />} />
-            <Route path="/activites-calendar" element={<ActivitesCalendar />} />
+            <Route path="/homepage-admin" element={<HomepageAdmin />} />
+            <Route path="/gainers" element={<PageGainers />} />
           </Routes>
         </div>
       </QueryClientProvider>

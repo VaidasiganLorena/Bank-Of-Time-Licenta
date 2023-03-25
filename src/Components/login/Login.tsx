@@ -90,9 +90,14 @@ export function Login() {
   const [errorBackend, setErrorBackend] = useState<string>('')
   const successCallBack = (data: any) => {
     setErrorBackend('')
-    localStorage.setItem('userUuid', data.userUuid)
-    localStorage.setItem('userToken', data.authToken)
-    navigate('/homepage')
+    if (data.role === 'admin') {
+      localStorage.setItem('userUuid', data.userUuid)
+      navigate('/homepage-admin')
+    } else {
+      localStorage.setItem('userUuid', data.userUuid)
+      localStorage.setItem('userToken', data.authToken)
+      navigate('/homepage')
+    }
   }
   const errorCallBack = (data: any) => {
     setErrorBackend(data.response)

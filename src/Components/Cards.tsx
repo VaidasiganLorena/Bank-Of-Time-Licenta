@@ -3,8 +3,15 @@ import React, { FunctionComponent } from 'react'
 
 const useStyles = createStyles((theme) => ({
   card: {
+    cursor: 'pointer',
+
     backgroundColor: 'white',
     boxShadow: '0px 0px 7px 0px rgba(143,143,143,1)',
+
+    '&:hover': {
+      transform: 'scale(1.03)',
+      boxShadow: theme.shadows.lg,
+    },
   },
 
   title: {
@@ -23,9 +30,11 @@ type TInfoGainerCard = {
   gainerUuid: string
   name: string
   age: number
+  helpTypeUuid?: string
+  helpTypeName: string
 }
 export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
-  const { name, description, city, age, gainerUuid } = props
+  const { name, description, city, age, gainerUuid, helpTypeName } = props
   const { classes } = useStyles()
   return (
     <Card radius="lg" p={0} className={classes.card} key={gainerUuid}>
@@ -52,7 +61,7 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
           <Group spacing="xs" align={'center'} mt={'xs'}>
             <Text size="sm">Ajutor pentru :</Text>
             <Chip checked={true} color="teal" size={'xs'}>
-              Cumparaturi
+              {helpTypeName}
             </Chip>
           </Group>
         </div>

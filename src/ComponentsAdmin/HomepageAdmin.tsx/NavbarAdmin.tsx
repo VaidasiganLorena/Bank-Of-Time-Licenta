@@ -51,12 +51,11 @@ const useStyles = createStyles((theme: any) => ({
   },
 }))
 const dataLinks = [
-  { link: '/homepage', label: 'Acasă ' },
-  { link: '/activites', label: 'Activități' },
-  { link: '/personal-data', label: 'Date personale ' },
-  { link: '/account', label: 'Cont activitate' },
+  { link: '/homepage-admin', label: 'Acasă' },
+  { link: '/calendars', label: 'Calendar' },
+  { link: '/gainers', label: 'Beneficiari ' },
 ]
-export const NavigationBar = () => {
+export const NavigationBarAdmin = () => {
   const { classes } = useStyles()
   const firstName = localStorage.getItem('firstName')
   const lastName = localStorage.getItem('lastName')
