@@ -17,9 +17,18 @@ import {
 import { DatePicker } from '@mantine/dates'
 import { IconPin } from '@tabler/icons-react'
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { Cards } from '../Cards'
 import { NavigationBar } from '../Navbar'
+import {
+  setStartDate,
+  setEndDate,
+  setLocation,
+  setHelpTypeId,
+  resetActions,
+} from '../../Redux/filters/slice'
+import { cities } from '../../aseert/city'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -83,14 +92,18 @@ export type TInfoGainer = {
   nameHelpType: string
   name: string
   numberPhone: string
+  listOfDates: string
 }
 export const Activites = () => {
   const { classes } = useStyles()
+  const dispatch = useDispatch()
+  // const { city, helpTypes, periods } = useAppSelector((state) => state.filters)
   const [date, setDate] = useState<[Date | null, Date | null]>([null, null])
+
   const succesCallBackGetGainers = () => {
     console.log(data)
   }
-  const { data } = useGetInfoGainers(succesCallBackGetGainers)
+  const { data, refetch } = useGetInfoGainers(succesCallBackGetGainers)
 
   const age = (dateOfBirth: any) => {
     var today = new Date()
@@ -111,8 +124,31 @@ export const Activites = () => {
       name={card.name}
       age={age(card.dateOfBirth)}
       helpTypeName={card.nameHelpType}
+      listOfDates={card.listOfDates}
     />
   ))
+  const selectLocation = (city: string) => {
+    console.log(city)
+    dispatch(setLocation(city))
+    // refetch()
+  }
+  const selectHelptType = (idType: string) => {
+    dispatch(setHelpTypeId(idType))
+    // refetch()
+  }
+  const resetFilter = () => {
+    dispatch(resetActions())
+    // refetch()
+  }
+  const selectPeriods = (range: [Date | null, Date | null] | null) => {
+    setDate(range || [null, null])
+    const startDate = range ? range[0] || null : null
+    const endDate = range ? range[1] || null : null
+    dispatch(setStartDate(String(startDate)))
+    dispatch(setEndDate(String(endDate)))
+    // refetch()
+  }
+
   useEffect(() => {}, [])
   return (
     <BackgroundImage src="/backround.png">
@@ -137,7 +173,7 @@ export const Activites = () => {
                   <DatePicker
                     type="range"
                     value={date}
-                    onChange={setDate}
+                    onChange={selectPeriods}
                     size={'xs'}
                     classNames={{ calendar: classes.calendar }}
                   />
@@ -151,30 +187,26 @@ export const Activites = () => {
                         classNames={{ input: classes.select }}
                         placeholder="Tipul ajutorului"
                         radius={'xl'}
+                        onChange={selectHelptType}
                         data={[
-                          { value: 'curatenie', label: 'Curățenie' },
-                          { value: 'cumparaturi', label: 'Cumpărături' },
-                          { value: 'companie', label: 'Companie' },
-                          { value: 'ingrijire', label: 'Îngrijire' },
+                          { value: '1', label: 'Curățenie' },
+                          { value: '2', label: 'Cumpărături' },
+                          { value: '3', label: 'Companie' },
+                          { value: '4', label: 'Îngrijire' },
                         ]}
                         icon={<Image src="/hand.png" height={'1rem'} width={'1rem'} />}
                       />
-
                       <Select
                         classNames={{ input: classes.select }}
                         radius={'xl'}
+                        onChange={(item: string) => selectLocation(item)}
                         searchable
                         placeholder="Locație"
-                        data={[
-                          { value: 'cresc', label: 'Cugir' },
-                          { value: 'desc', label: 'Timișoara' },
-                          { value: 'cresc', label: 'Cluj-Napoca' },
-                          { value: 'desc', label: 'Arad' },
-                        ]}
+                        data={cities}
                         icon={<IconPin size="1rem" />}
                       />
                     </Flex>
-                    <Button radius={'xl'} bg="#28886f">
+                    <Button radius={'xl'} bg="#28886f" onClick={resetFilter}>
                       Resetează filtrele
                     </Button>
                   </Stack>

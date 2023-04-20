@@ -18,6 +18,7 @@ export const usePostRegister = (
       password: string
       city: string
       gender: string
+      photo: string
     }) => axios.post('http://localhost:3306/user/register', dataRegistration),
     {
       onSuccess: (data) => {

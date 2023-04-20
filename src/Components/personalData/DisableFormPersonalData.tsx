@@ -1,15 +1,18 @@
-import { Container, Group, createStyles, TextInput } from '@mantine/core'
+import { Container, Group, createStyles, rem, Paper, Text, Flex, Image } from '@mantine/core'
 import React, { FunctionComponent } from 'react'
 import { TInfoUser } from './AvaibleFormPersonalData'
 const useStyles = createStyles((theme: any) => ({
   input: {
+    height: rem(54),
     backgroundColor: '#f3f5f7',
-    width: '25vw',
+    paddingLeft: 10,
+    paddingTop: 5,
+    width: '20vw',
     [theme.fn.largerThan(1800)]: {
       width: '15vw',
     },
     [theme.fn.smallerThan(1300)]: {
-      width: '33vw',
+      width: '25vw',
     },
     [theme.fn.smallerThan(980)]: {
       width: '40vw',
@@ -21,73 +24,70 @@ const useStyles = createStyles((theme: any) => ({
 }))
 
 export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => {
-  const { firstname, lastname, email, numberPhone, gender, city } = props
+  const { firstname, lastname, email, phoneNumber, gender, city, photo } = props
   const { classes } = useStyles()
 
   return (
-    <Container p={0} mb={20}>
-      <Group position="center" spacing={15}>
-        <TextInput
-          label="Nume"
-          variant="filled"
-          defaultValue={lastname}
-          size="md"
-          radius={10}
-          classNames={{ input: classes.input }}
-          disabled
-        />
+    <Group>
+      <Image src={photo} radius="xl" width="16rem" height="14rem"></Image>
+      <Container p={0} mb={20}>
+        <Group position="center" spacing={15} mt={'1rem'}>
+          <Paper radius={10} bg="#f3f5f7" className={classes.input}>
+            <Flex direction={'column'} gap={0}>
+              <Text c={'dimmed'} size={'sm'}>
+                Nume
+              </Text>{' '}
+              {lastname}
+            </Flex>
+          </Paper>
 
-        <TextInput
-          label="Prenume"
-          variant="filled"
-          defaultValue={firstname}
-          size="md"
-          radius={10}
-          classNames={{ input: classes.input }}
-          disabled
-        />
-      </Group>
-      <Group position="center" mt={16} spacing={15}>
-        <TextInput
-          label="Adresa de email"
-          variant="filled"
-          defaultValue={email}
-          size="md"
-          radius={10}
-          classNames={{ input: classes.input }}
-          disabled
-        />
-        <TextInput
-          label="Număr de telefon"
-          variant="filled"
-          defaultValue={numberPhone}
-          size="md"
-          radius={10}
-          classNames={{ input: classes.input }}
-          disabled
-        />
-      </Group>
+          <Paper radius={10} bg="#f3f5f7" className={classes.input}>
+            <Flex direction={'column'} gap={0}>
+              <Text c={'dimmed'} size={'sm'}>
+                Prenume
+              </Text>{' '}
+              {firstname}
+            </Flex>
+          </Paper>
+        </Group>
+        <Group position="center" mt={'1rem'} spacing={15}>
+          <Paper radius={10} bg="#f3f5f7" className={classes.input}>
+            <Flex direction={'column'} gap={0}>
+              <Text c={'dimmed'} size={'sm'}>
+                Adresa de email
+              </Text>{' '}
+              {email}
+            </Flex>
+          </Paper>
+          <Paper radius={10} bg="#f3f5f7" className={classes.input}>
+            <Flex direction={'column'} gap={0}>
+              <Text c={'dimmed'} size={'sm'}>
+                Număr de telefon
+              </Text>{' '}
+              {phoneNumber}
+            </Flex>
+          </Paper>
+        </Group>
 
-      <Group position="center" mt={16} spacing={15}>
-        <TextInput
-          label="Oraș"
-          variant="filled"
-          defaultValue={city}
-          size="md"
-          radius={10}
-          classNames={{ input: classes.input }}
-          disabled
-        />
-        <TextInput
-          label="Gen"
-          defaultValue={gender}
-          variant="filled"
-          size="md"
-          radius={10}
-          classNames={{ input: classes.input }}
-          disabled
-        />
-      </Group>
-    </Container>
+        <Group position="center" mt={'1rem'} spacing={15}>
+          <Paper radius={10} bg="#f3f5f7" className={classes.input}>
+            <Flex direction={'column'} gap={0}>
+              <Text c={'dimmed'} size={'sm'}>
+                Oraș
+              </Text>{' '}
+              {city}
+            </Flex>
+          </Paper>
+          <Paper radius={10} bg="#f3f5f7" className={classes.input}>
+            <Flex direction={'column'} gap={0}>
+              <Text c={'dimmed'} size={'sm'}>
+                Gen
+              </Text>{' '}
+              {gender}
+            </Flex>
+          </Paper>
+        </Group>
+      </Container>
+    </Group>
   )
 }

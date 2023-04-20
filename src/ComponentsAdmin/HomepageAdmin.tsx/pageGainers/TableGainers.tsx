@@ -10,7 +10,6 @@ import {
   TextInput,
   rem,
   Checkbox,
-  Paper,
 } from '@mantine/core'
 import { keys } from '@mantine/utils'
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react'

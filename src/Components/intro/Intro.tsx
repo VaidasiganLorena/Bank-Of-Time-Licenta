@@ -6,15 +6,12 @@ import {
   SimpleGrid,
   Title,
   Text,
-  Modal,
   Image,
   Button,
   Group,
   Flex,
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-
-import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const useStyles = createStyles((theme: any) => ({
@@ -82,15 +79,8 @@ const useStyles = createStyles((theme: any) => ({
 export default function Intro() {
   const { classes } = useStyles()
   const navigate = useNavigate()
-  const [openModalWhy, setOpenModalWhy] = useState(false)
-  const [openModalForWho, setOpenModalForWho] = useState(false)
-  const [openModalHow, setOpenModalHow] = useState(false)
   const mobile = useMediaQuery('(max-width: 430px)')
-  const openModal = (index: number) => {
-    if (index === 1) setOpenModalWhy(true)
-    else if (index === 2) setOpenModalForWho(true)
-    else if (index === 3) setOpenModalHow(true)
-  }
+
   return (
     <BackgroundImage src="/backround.png" radius="sm">
       <Container className={classes.wrapper} fluid>
@@ -118,7 +108,7 @@ export default function Intro() {
         </Flex>
         {mobile ? null : (
           <SimpleGrid cols={3} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
-            <Card p="md" radius="xl" className={classes.card} onClick={() => openModal(1)}>
+            <Card p="md" radius="xl" className={classes.card}>
               <Title size={25} color={'#154639'} align="center" mt={50}>
                 De ce suntem noi aici ?
               </Title>
@@ -130,19 +120,8 @@ export default function Intro() {
               </Text>
               <Image src={'/solidarity.png'} width={'90%'} ml={25} />
             </Card>
-            <Modal
-              opened={openModalWhy}
-              onClose={() => setOpenModalWhy(false)}
-              title="De ce ?"
-              centered
-              size="calc(100vw - 5rem)"
-            >
-              'Extend default theme with any amount of additional colors, replace shadows, radius,
-              spacing, fonts and many other properties to match your design requirements. Mantine
-              theme is just an object, you can subscribe to it in any part of application via
-              context and use it to build your own components.',
-            </Modal>
-            <Card p="md" radius="xl" className={classes.card} onClick={() => openModal(2)}>
+
+            <Card p="md" radius="xl" className={classes.card}>
               <Image src={'/help-people.png'} />
               <Title size={25} color={'#154639'} align="center" mt={50}>
                 Pe cine ajutăm ?
@@ -154,18 +133,8 @@ export default function Intro() {
                 context and use it to build your own components.',
               </Text>
             </Card>
-            <Modal
-              opened={openModalForWho}
-              onClose={() => setOpenModalForWho(false)}
-              title="Pentru cine ?"
-              centered
-            >
-              'Extend default theme with any amount of additional colors, replace shadows, radius,
-              spacing, fonts and many other properties to match your design requirements. Mantine
-              theme is just an object, you can subscribe to it in any part of application via
-              context and use it to build your own components.',
-            </Modal>
-            <Card p="md" radius="xl" className={classes.card} onClick={() => openModal(3)}>
+
+            <Card p="md" radius="xl" className={classes.card}>
               <Title size={25} color={'#154639'} align="center" mt={50}>
                 Cum poți ajuta?
               </Title>
@@ -177,17 +146,6 @@ export default function Intro() {
               </Text>
               <Image src={'/volunteer.png'} width={'95%'} ml={25} />
             </Card>
-            <Modal
-              opened={openModalHow}
-              onClose={() => setOpenModalHow(false)}
-              title="Cum?"
-              centered
-            >
-              'Extend default theme with any amount of additional colors, replace shadows, radius,
-              spacing, fonts and many other properties to match your design requirements. Mantine
-              theme is just an object, you can subscribe to it in any part of application via
-              context and use it to build your own components.',
-            </Modal>
           </SimpleGrid>
         )}
       </Container>

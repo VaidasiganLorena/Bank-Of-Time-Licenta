@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import { TInfoUser } from '../Components/personalData/AvaibleFormPersonalData'
+import { TInfoUser } from '../../Components/personalData/AvaibleFormPersonalData'
 
 export const useUpdateInfoUser = (
   successCallBack: (data: string, status: number) => void,

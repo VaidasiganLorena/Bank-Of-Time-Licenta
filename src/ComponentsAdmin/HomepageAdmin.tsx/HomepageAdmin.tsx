@@ -1,5 +1,5 @@
 import { BackgroundImage, Container, createStyles, Paper } from '@mantine/core'
-import { useGetInfoUser } from '../../api/useGetInfoUser'
+import { useGetInfoUser } from '../../api/user/useGetInfoUser'
 import { NavigationBarAdmin } from './NavbarAdmin'
 const useStyles = createStyles((theme: any) => ({
   wrapper: {

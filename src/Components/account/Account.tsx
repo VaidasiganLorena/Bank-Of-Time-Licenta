@@ -1,8 +1,8 @@
 import {
   BackgroundImage,
-  Badge,
   Container,
   createStyles,
+  Flex,
   Group,
   Paper,
   Progress,
@@ -11,8 +11,9 @@ import {
   ThemeIcon,
 } from '@mantine/core'
 import { IconHeart } from '@tabler/icons-react'
-import React, { useState } from 'react'
+import React from 'react'
 import { NavigationBar } from '../Navbar'
+import { CardAppointments } from './CardAppointments'
 const ICON_SIZE = rem(60)
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -52,7 +53,7 @@ const useStyles = createStyles((theme: any) => ({
   card: {
     position: 'relative',
     overflow: 'visible',
-    width: '50%',
+    width: '100%',
     height: '30%',
     borderRadius: 30,
     padding: theme.spacing.xl,
@@ -69,43 +70,78 @@ const useStyles = createStyles((theme: any) => ({
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
     lineHeight: 1,
   },
+
+  paperAppointments: {
+    backgroundColor: '#689983',
+    borderRadius: 30,
+    margin: 15,
+    width: '70%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    [theme.fn.smallerThan('xs')]: {
+      marginBottom: 20,
+      marginTop: 35,
+    },
+  },
 }))
 function Account() {
   const { classes } = useStyles()
-  const [hoursVolunteering, sethoursVolunteering] = useState(15)
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
         <Paper className={classes.paper}>
           <NavigationBar />
-          <Paper radius="md" withBorder className={classes.card} mt={`calc(${ICON_SIZE} / 3)`}>
-            <ThemeIcon className={classes.icon} size={ICON_SIZE} radius={ICON_SIZE}>
-              <IconHeart size="2rem" stroke={1.5} />
-            </ThemeIcon>
+          <Flex direction={'column'} w={'100%'} p={10}>
+            <Paper
+              radius="md"
+              withBorder
+              className={classes.card}
+              mt={`calc(${ICON_SIZE} / 2)`}
+              mr={10}
+            >
+              <ThemeIcon
+                className={classes.icon}
+                size={ICON_SIZE}
+                color={'#28886f'}
+                radius={ICON_SIZE}
+              >
+                <IconHeart size="2rem" stroke={1.5} />
+              </ThemeIcon>
 
-            <Text ta="center" fw={700} className={classes.title}>
-              Swimming challenge
-            </Text>
-            <Text c="dimmed" ta="center" fz="sm">
-              32 km / week
-            </Text>
-
-            <Group position="apart" mt="xs">
-              <Text fz="sm" color="dimmed">
-                Progress
+              <Text ta="center" fw={700} className={classes.title}>
+                Timpul tău în care ai ales să ajuți comunitatea
               </Text>
-              <Text fz="sm" color="dimmed">
-                62%
+              <Text c="dimmed" ta="center" fz="sm">
+                20 ore/ lună
               </Text>
-            </Group>
 
-            <Progress value={62} mt={5} />
+              <Group position="apart" mt="xs">
+                <Text fz="sm" color="dimmed">
+                  Progresul tău
+                </Text>
+                <Text fz="sm" color="dimmed">
+                  62%
+                </Text>
+              </Group>
 
-            <Group position="apart" mt="md">
-              <Text fz="sm">20 / 36 km</Text>
-              <Badge size="sm">4 days left</Badge>
-            </Group>
-          </Paper>
+              <Progress value={62} mt={5} color={'#28886f'} />
+
+              <Group position="apart" mt="md">
+                <Text fz="sm">65 / 100 ore</Text>
+              </Group>
+              <Text c="dimmed" ta="center" fz="sm">
+                Noi suntem mândri de tine continuă tot așa și vei fi răsplătit!
+              </Text>
+            </Paper>
+            <Paper className={classes.paperAppointments}>
+              <Text ta="center" fw={700} c="white" size={'xl'} mt={5}>
+                Activitatea ta
+              </Text>
+              <CardAppointments />
+            </Paper>
+          </Flex>
         </Paper>
       </Container>
     </BackgroundImage>

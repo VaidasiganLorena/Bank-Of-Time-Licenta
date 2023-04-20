@@ -154,6 +154,7 @@ const Register = () => {
         password: formRegistration.values.password,
         city: formRegistration.values.city,
         gender: formRegistration.values.gender,
+        photo: formRegistration.values.gender === 'Masculin' ? 'avatarMan.png' : 'avatar.png',
       })
       navigate('/login')
     } else {
