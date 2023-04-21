@@ -103,7 +103,7 @@ export const Activites = () => {
   const succesCallBackGetGainers = () => {
     console.log(data)
   }
-  const { data, refetch } = useGetInfoGainers(succesCallBackGetGainers)
+  const { data } = useGetInfoGainers(succesCallBackGetGainers)
 
   const age = (dateOfBirth: any) => {
     var today = new Date()

@@ -28,8 +28,8 @@ export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => 
   const { classes } = useStyles()
 
   return (
-    <Group>
-      <Image src={photo} radius="xl" width="16rem" height="14rem"></Image>
+    <Flex direction={'column'} align="center">
+      <Image src={photo} radius="xl" width="15rem" height="13rem"></Image>
       <Container p={0} mb={20}>
         <Group position="center" spacing={15} mt={'1rem'}>
           <Paper radius={10} bg="#f3f5f7" className={classes.input}>
@@ -88,6 +88,6 @@ export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => 
           </Paper>
         </Group>
       </Container>
-    </Group>
+    </Flex>
   )
 }

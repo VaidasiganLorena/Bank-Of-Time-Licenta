@@ -145,7 +145,6 @@ const Register = () => {
 
   const onPressCreateAcount = () => {
     if (formRegistration.validate().hasErrors === false && validCity === true) {
-      console.log(formRegistration.values)
       mutate({
         firstName: formRegistration.values.firstName,
         lastName: formRegistration.values.lastName,

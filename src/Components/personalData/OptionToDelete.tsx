@@ -30,16 +30,16 @@ export const OptionToDelete: FunctionComponent<{ open: boolean; setOpen: any }> 
         Sunteți sigur că doriți să ștergeți contul? O dată șters acesta nu poate fi recuperat.
       </Text>
       <Group position="right">
-        <Button size="sm" className={classes.cancelButton} onClick={() => setOpen(false)}>
-          Anulare
-        </Button>
         <Button
           size="sm"
           variant={'outline'}
-          className={classes.deleteButton}
+          className={classes.saveButton}
           onClick={() => handleDeleteAcount()}
         >
           Ștergere
+        </Button>
+        <Button size="sm" className={classes.cancelButton} onClick={() => setOpen(false)}>
+          Anulare
         </Button>
       </Group>
     </Modal>

@@ -12,7 +12,8 @@ import {
   FileButton,
   ActionIcon,
   Image,
-  Text,
+  Flex,
+  Box,
 } from '@mantine/core'
 import { cities } from '../../aseert/city'
 import { useUpdateInfoUser } from '../../api/user/useUpdateInfoUser'
@@ -55,7 +56,7 @@ const useStyles = createStyles((theme: any) => ({
       width: 'auto',
     },
     '&:hover': {
-      backgroundColor: '#d7e2dfa8',
+      backgroundColor: '#144639',
     },
   },
   root: {
@@ -128,7 +129,6 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   const { firstname, lastname, email, phoneNumber, gender, city, setEditMode, photo } = props
   const { classes } = useStyles()
   const timeoutRef = useRef<number>(0)
-  // const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [location, setLocation] = useState<string>('')
   const [validCity, setValidCity] = useState(true)
@@ -169,7 +169,6 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   }
   const { mutate } = useUpdateInfoUser(succesCallBack, userUuid, authToken)
   const onSave = () => {
-    console.log(validCity, city)
     if (formPersonalData.validate().hasErrors === false && validCity === true) {
       mutate({
         firstname: formPersonalData.values.firstname,
@@ -218,7 +217,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   }
   return (
     <form onSubmit={formPersonalData.onSubmit(onSave)}>
-      <Group position="center">
+      <Flex direction={'column'} align="center">
         <div>
           <FileButton onChange={uploadFile} accept="image/png,image/jpeg">
             {(props) => (
@@ -228,9 +227,9 @@ export const AvaibleFormPersonalData: FunctionComponent<{
             )}
           </FileButton>
 
-          <Image src={file ? file.name : photo} radius="xl" width="16rem" height="14rem"></Image>
+          <Image src={file ? file.name : photo} radius="xl" width="15rem" height="13rem"></Image>
         </div>
-        <div>
+        <Box my={15}>
           <Group position="center" spacing={20}>
             <TextInput
               label="Nume"
@@ -299,8 +298,8 @@ export const AvaibleFormPersonalData: FunctionComponent<{
               {...formPersonalData.getInputProps('gender')}
             />
           </Group>
-        </div>
-      </Group>
+        </Box>
+      </Flex>
       <Group position="center" spacing={15}>
         <Button size="sm" onClick={onSave} className={classes.saveButton}>
           Salvează
