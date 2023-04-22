@@ -11,7 +11,8 @@ import {
   Select,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useState } from 'react'
+import { usePostAppointment } from '../api/appointment/usePostAppointment'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -36,7 +37,18 @@ const useStyles = createStyles((theme) => ({
     padding: theme.spacing.md,
   },
   modalCard: {
-    height: '40%',
+    height: 200,
+    width: 'auto',
+  },
+
+  item: {
+    '&:hover': {
+      backgroundColor: '#28886f',
+    },
+    '&:active': {
+      backgroundColor: '#28886f',
+      borderColor: '#28886f',
+    },
   },
 }))
 type TInfoGainerCard = {
@@ -52,8 +64,29 @@ type TInfoGainerCard = {
 export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
   const { name, description, city, age, gainerUuid, helpTypeName, listOfDates } = props
   const [opened, { open, close }] = useDisclosure(false)
+  const [dateOfAppointment, setDateOfAppointment] = useState<string | null>('')
+  const userUuid = localStorage.getItem('userUuid')
   const { classes } = useStyles()
   const dates = listOfDates.split(',')
+  const succesCallBack = (data: string, status: number) => {
+    if (status === 200) {
+      console.log(data)
+    }
+  }
+  const errorCallBack = (data: any) => {
+    if (data.status === 400) {
+      console.log(data)
+    }
+  }
+  const { mutate } = usePostAppointment(succesCallBack, errorCallBack)
+  const onAppointment = () => {
+    mutate({
+      userUuid: userUuid ? userUuid : '',
+      gainerUuid: gainerUuid,
+      dateOfAppointment: dateOfAppointment ? dateOfAppointment : '',
+      status: 'În așteptare',
+    })
+  }
   return (
     <>
       <Card radius="lg" p={0} className={classes.card} key={gainerUuid}>
@@ -98,17 +131,24 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
         radius="lg"
         title="Alege când ești disponibil să ajuți.."
         centered
-        className={classes.modalCard}
+        classNames={{ body: classes.modalCard }}
       >
         <Select
           radius={'xl'}
           label="Datele disponibile"
           placeholder="Alege data potrivită"
+          value={dateOfAppointment}
+          onChange={setDateOfAppointment}
           data={dates}
+          maxDropdownHeight={280}
+          zIndex={100}
+          classNames={{ item: classes.item }}
         />
-        <Button onClick={close} my={20} radius={'xl'} bg="#28886f">
-          Programează
-        </Button>
+        <Flex w="100%" justify={'flex-end'}>
+          <Button onClick={onAppointment} my={20} radius={'xl'} bg="#28886f">
+            Programează
+          </Button>
+        </Flex>
       </Modal>
     </>
   )

@@ -1,8 +1,10 @@
 import { BackgroundImage, Container, createStyles, Flex, Paper, Text } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 
 import React from 'react'
+import { useGetAppointment } from '../../api/appointment/useGetAppointmentOfUser'
 import { NavigationBar } from '../Navbar'
-import { CardAppointments } from './CardAppointments'
+import { CardAppointment } from './CardAppointment'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -47,13 +49,12 @@ const useStyles = createStyles((theme: any) => ({
 
   paperAppointments: {
     backgroundColor: '#689983',
+    paddingLeft: 15,
     borderRadius: 30,
-    margin: 15,
-    width: '70%',
+    marginRight: 15,
+    width: '100%',
     height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    color: 'green',
     [theme.fn.smallerThan('xs')]: {
       marginBottom: 20,
       marginTop: 35,
@@ -62,17 +63,47 @@ const useStyles = createStyles((theme: any) => ({
 }))
 function Account() {
   const { classes } = useStyles()
+  const tablet = useMediaQuery('(max-width: 800px)')
+  const userUuid = localStorage.getItem('userUuid')
+  const authToken = localStorage.getItem('authToken')
+  const successCallBack = (data: any) => {
+    console.log(data)
+  }
+  const { data } = useGetAppointment(successCallBack, userUuid, authToken)
+  const cardsAppointment = data?.data.response.map((card: any) => (
+    <CardAppointment
+      key={card.appointmentUuid}
+      name={card.name}
+      city={card.city}
+      gainerUuid={card.gainerUuid}
+      dateOfAppointment={card.dateOfAppointment}
+      phoneNumber={card.numberPhone}
+      status={card.status}
+      photo={card.photo}
+    />
+  ))
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
         <Paper className={classes.paper}>
           <NavigationBar />
-          <Flex direction={'column'} p={10}>
+          <Flex p={10} w={'100%'} direction={tablet ? 'column' : 'row'}>
             <Paper className={classes.paperAppointments}>
               <Text ta="center" fw={700} c="white" size={'xl'} mt={5}>
                 Activitatea ta
               </Text>
-              <CardAppointments />
+              {cardsAppointment}
+            </Paper>
+            <Paper radius={'xl'}>
+              <CardAppointment
+                name={''}
+                city={''}
+                gainerUuid={''}
+                dateOfAppointment={''}
+                phoneNumber={''}
+                status={''}
+                photo={''}
+              />
             </Paper>
           </Flex>
         </Paper>

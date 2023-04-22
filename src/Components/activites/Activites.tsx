@@ -100,9 +100,7 @@ export const Activites = () => {
   // const { city, helpTypes, periods } = useAppSelector((state) => state.filters)
   const [date, setDate] = useState<[Date | null, Date | null]>([null, null])
 
-  const succesCallBackGetGainers = () => {
-    console.log(data)
-  }
+  const succesCallBackGetGainers = () => {}
   const { data } = useGetInfoGainers(succesCallBackGetGainers)
 
   const age = (dateOfBirth: any) => {
