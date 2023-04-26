@@ -1,4 +1,4 @@
-import { BackgroundImage, Container, createStyles, Paper } from '@mantine/core'
+import { BackgroundImage, Button, Container, createStyles, Paper } from '@mantine/core'
 import { useGetInfoUser } from '../../api/user/useGetInfoUser'
 import { NavigationBar } from '../Navbar'
 const useStyles = createStyles((theme: any) => ({

@@ -34,10 +34,10 @@ const useStyles = createStyles((theme) => ({
     borderRadius: rem(21),
   },
   rowSelected: {
-    backgroundColor:
-      theme.colorScheme === 'dark'
-        ? theme.fn.rgba(theme.colors[theme.primaryColor][7], 0.2)
-        : theme.colors[theme.primaryColor][0],
+    // backgroundColor:
+    //   theme.colorScheme === 'dark'
+    //     ? theme.fn.rgba(theme.colors[theme.primaryColor][7], 0.2)
+    //     : theme.colors[theme.primaryColor][0],
   },
 }))
 

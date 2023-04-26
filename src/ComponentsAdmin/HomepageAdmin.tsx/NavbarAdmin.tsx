@@ -1,45 +1,26 @@
-import { Avatar, Container, createStyles, Group, Navbar, Text, UnstyledButton } from '@mantine/core'
+import {
+  Avatar,
+  Container,
+  createStyles,
+  Image,
+  Navbar,
+  Tooltip,
+  UnstyledButton,
+} from '@mantine/core'
+import { IconLogout } from '@tabler/icons-react'
+import { useNavigate } from 'react-router-dom'
 const useStyles = createStyles((theme: any) => ({
   navbar: {
     borderRadius: 30,
-    backgroundColor: 'white',
-  },
-  wrapper: {
-    height: '100%',
+    backgroundColor: '#689983',
+    width: '7rem',
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  header: {
-    paddingBottom: theme.spacing.md,
-    marginBottom: `calc(${theme.spacing.md} * 1.5)`,
-    borderBottom: `1px solid #ececec`,
+    justifyContent: 'space-between',
   },
 
-  footer: {
-    paddingTop: theme.spacing.md,
-    marginTop: theme.spacing.md,
-    borderTop: ` 1px solid #ececec`,
-  },
-
-  link: {
-    display: 'flex',
-    alignItems: 'center',
-    height: 40,
-    textDecoration: 'none',
-    fontSize: theme.fontSizes.sm,
-    color: '#687471',
-    fontWeight: 600,
-    textTransform: 'uppercase',
-
-    '&:hover': {
-      boxShadow: 'inset 0px 0px 10px 3px rgba(0,0,0,0.05)',
-      // backgroundColor: '#fcf6eebd',
-      color: '#28886f',
-    },
-  },
   paper: {
-    backgroundColor: '#ffffff80',
     borderRadius: 30,
     width: '100%',
     height: '96vh',
@@ -49,40 +30,54 @@ const useStyles = createStyles((theme: any) => ({
       marginTop: 35,
     },
   },
+  menu: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 30,
+  },
 }))
-const dataLinks = [
-  { link: '/homepage-admin', label: 'Acasă' },
-  { link: '/calendars', label: 'Calendar' },
-  { link: '/gainers', label: 'Beneficiari ' },
-]
-export const NavigationBarAdmin = () => {
-  const { classes } = useStyles()
-  const firstName = localStorage.getItem('firstName')
-  const lastName = localStorage.getItem('lastName')
-  const links = dataLinks.map((item: any) => (
-    <UnstyledButton className={classes.link} key={item.label} component={'a'} href={item.link}>
-      <span>{item.label}</span>
-    </UnstyledButton>
-  ))
-  return (
-    <Container className={classes.wrapper} fluid p={5}>
-      <Navbar height={'98%'} m={5} width={{ sm: 300 }} p={10} className={classes.navbar}>
-        <Navbar.Section>
-          <Avatar src={'/avatar.png'} size={80} radius={120} mx="auto" />
-          <Group spacing={5} position="center">
-            <Text ta="center" fz="lg" c="#687471" weight={500} mt="md">
-              {firstName}
-            </Text>
-            <Text ta="center" fz="lg" c="#687471" weight={500} mt="md">
-              {lastName}
-            </Text>
-          </Group>
 
-          <Group className={classes.header} position="apart"></Group>
+export const NavbarAdmin = () => {
+  const { classes } = useStyles()
+  const navigate = useNavigate()
+  const logOut = () => {
+    localStorage.clear()
+    navigate('/')
+  }
+  return (
+    <Container fluid p={5} m={0}>
+      <Navbar height={'98%'} m={5} p={10} className={classes.navbar}>
+        <Navbar.Section className={classes.menu}>
+          <Avatar src={'/logo.png'} size={80} radius={120} mx="auto" mb={20} />
+          <Tooltip label="Acasă" color="light" position="bottom" offset={-5}>
+            <UnstyledButton component="a" href="/homepage-admin">
+              <Image height={'2.5rem'} width={'2.5rem'} src="home.png" />
+            </UnstyledButton>
+          </Tooltip>
+          <Tooltip label="Beneficiari" color="light" position="bottom" offset={-5}>
+            <UnstyledButton component="a" href="/gainers">
+              <Image height={'2.2rem'} width={'2.2rem'} src="gainers.png" />
+            </UnstyledButton>
+          </Tooltip>
+          <Tooltip label="Programări" color="light" position="bottom" offset={-5}>
+            <UnstyledButton component="a" href="/appointments">
+              <Image height={'2.2rem'} width={'2.2rem'} src="appointments.png" />
+            </UnstyledButton>
+          </Tooltip>
+          <Tooltip label="Date personale" color="light" position="bottom" offset={-5}>
+            <UnstyledButton component="a" href="/personal-data-admin">
+              <Image height={'1.8rem'} width={'1.8rem'} src="personal-data.png" />
+            </UnstyledButton>
+          </Tooltip>
         </Navbar.Section>
-        {links}
-        <Navbar.Section className={classes.footer}>
-          <Group></Group>
+
+        <Navbar.Section>
+          <Tooltip label="Ieșire cont" color="light" position="bottom" offset={-10}>
+            <UnstyledButton onClick={logOut}>
+              <Image height={'1.7rem'} width={'1.7rem'} src="logOut.png" />
+            </UnstyledButton>
+          </Tooltip>
         </Navbar.Section>
       </Navbar>
     </Container>

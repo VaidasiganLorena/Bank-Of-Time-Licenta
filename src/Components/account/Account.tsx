@@ -29,7 +29,7 @@ const useStyles = createStyles((theme: any) => ({
     },
   },
   progress: {
-    backgroundColor: theme.colors.background[0],
+    backgroundColor: '#ffffff80',
     paddingTop: 15,
     borderRadius: 30,
     width: '100%',

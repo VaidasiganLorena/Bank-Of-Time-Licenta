@@ -26,7 +26,7 @@ const useStyles = createStyles((theme: any) => ({
   },
 
   form: {
-    backgroundColor: theme.colors.background[0],
+    backgroundColor: '#ffffff80',
     paddingTop: 80,
     paddingBottom: 30,
     borderRadius: 30,

@@ -35,7 +35,7 @@ const useStyles = createStyles((theme: any) => ({
     },
   },
   introContainer: {
-    backgroundColor: theme.colors.background[0],
+    backgroundColor: 'light',
     paddingTop: 80,
     paddingBottom: 30,
     borderRadius: 30,
@@ -57,7 +57,6 @@ const useStyles = createStyles((theme: any) => ({
     },
   },
   buttonLogin: {
-    backgroundColor: '#28886f',
     '&:hover': {
       backgroundColor: '#154639',
     },

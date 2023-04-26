@@ -1,7 +1,7 @@
 import { BackgroundImage, Container, createStyles, Paper, Title } from '@mantine/core'
-import { useGetInfoGainers } from '../../../api/gainer/useGetGainers'
-import { dataGainers } from '../../dataGainers'
-import { NavigationBarAdmin } from '../NavbarAdmin'
+import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
+import { dataGainers } from '../dataGainers'
+import { NavbarAdmin } from '../HomepageAdmin.tsx/NavbarAdmin'
 import { TableGainers } from './TableGainers'
 
 const useStyles = createStyles((theme: any) => ({
@@ -49,7 +49,7 @@ const PageGainers = () => {
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
         <Paper className={classes.paper}>
-          <NavigationBarAdmin />
+          <NavbarAdmin />
           <Paper className={classes.paperTable}>
             <Title mx={20} mt={10}>
               Aici poți vizualiza persoanele beneficiare...

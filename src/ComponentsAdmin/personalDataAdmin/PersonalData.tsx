@@ -16,7 +16,6 @@ import {
   Stack,
 } from '@mantine/core'
 import { useEffect, useState } from 'react'
-import { NavigationBar } from '../Navbar'
 import { IconHeart, IconKey, IconTrash } from '@tabler/icons-react'
 import { AvaibleFormPersonalData } from './AvaibleFormPersonalData'
 import { DisableFormPersonalData } from './DisableFormPersonalData'
@@ -26,6 +25,7 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { useChangePassword } from '../../api/user/useChangePassword'
 import { useForm } from '@mantine/form'
 import { useNavigate } from 'react-router-dom'
+import { NavbarAdmin } from '../HomepageAdmin.tsx/NavbarAdmin'
 const ICON_SIZE = rem(60)
 export const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -75,7 +75,7 @@ export const useStyles = createStyles((theme: any) => ({
     paddingTop: `calc(${theme.spacing.xl} * 1.5 + ${ICON_SIZE} / 3)`,
   },
   containerImage: {
-    backgroundColor: '#ffffff80',
+    backgroundColor: '#ffffff85',
     borderRadius: 30,
     width: '100%',
     height: 'fit-content',
@@ -205,7 +205,7 @@ export const useStyles = createStyles((theme: any) => ({
   },
 }))
 
-const PersonalData = () => {
+const PersonalDataAdmin = () => {
   const { classes } = useStyles()
   const [editMode, setEditMode] = useState<boolean>(false)
   const userUuid = localStorage.getItem('userUuid')
@@ -251,7 +251,7 @@ const PersonalData = () => {
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
         <Paper withBorder className={classes.paper}>
-          <NavigationBar />
+          <NavbarAdmin />
           <Flex mr={20} direction={tablet ? 'column' : 'row'} className={classes.flex}>
             <Paper className={classes.containerImage} radius={0} p={15} withBorder>
               <Group position="center" spacing="xl">
@@ -444,4 +444,4 @@ const PersonalData = () => {
     </BackgroundImage>
   )
 }
-export default PersonalData
+export default PersonalDataAdmin

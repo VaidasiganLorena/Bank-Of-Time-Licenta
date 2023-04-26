@@ -1,6 +1,6 @@
 import { BackgroundImage, Container, createStyles, Paper } from '@mantine/core'
 import { useGetInfoUser } from '../../api/user/useGetInfoUser'
-import { NavigationBarAdmin } from './NavbarAdmin'
+import { NavbarAdmin } from './NavbarAdmin'
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
     height: '100%',
@@ -37,7 +37,7 @@ const Homepage = () => {
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
         <Paper className={classes.paper}>
-          <NavigationBarAdmin />
+          <NavbarAdmin />
         </Paper>
       </Container>
     </BackgroundImage>

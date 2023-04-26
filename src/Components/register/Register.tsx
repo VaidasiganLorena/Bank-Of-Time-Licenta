@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
     },
   },
   form: {
-    backgroundColor: theme.colors.background[0],
+    backgroundColor: '#ffffff80',
     paddingTop: 80,
     borderRadius: 30,
     width: '100%',

@@ -12,6 +12,7 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import React, { FunctionComponent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { usePostAppointment } from '../api/appointment/usePostAppointment'
 
 const useStyles = createStyles((theme) => ({
@@ -60,10 +61,12 @@ type TInfoGainerCard = {
   helpTypeUuid?: string
   helpTypeName: string
   listOfDates: string
+  photo: string
 }
 export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
-  const { name, description, city, age, gainerUuid, helpTypeName, listOfDates } = props
+  const { name, description, city, age, gainerUuid, helpTypeName, listOfDates, photo } = props
   const [opened, { open, close }] = useDisclosure(false)
+  const navigate = useNavigate()
   const [dateOfAppointment, setDateOfAppointment] = useState<string | null>('')
   const userUuid = localStorage.getItem('userUuid')
   const { classes } = useStyles()
@@ -86,12 +89,13 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
       dateOfAppointment: dateOfAppointment ? dateOfAppointment : '',
       status: 'În așteptare',
     })
+    navigate('/account')
   }
   return (
     <>
       <Card radius="lg" p={0} className={classes.card} key={gainerUuid}>
         <Group noWrap spacing={0}>
-          <Image src={'/solidarity.png'} height={200} width={200} />
+          <Image src={photo} height={200} width={200} />
           <div className={classes.body}>
             <Group mb={10}>
               <Text className={classes.title} size="xl">

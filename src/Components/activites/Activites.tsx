@@ -93,6 +93,7 @@ export type TInfoGainer = {
   name: string
   numberPhone: string
   listOfDates: string
+  photo: string
 }
 export const Activites = () => {
   const { classes } = useStyles()
@@ -123,6 +124,7 @@ export const Activites = () => {
       age={age(card.dateOfBirth)}
       helpTypeName={card.nameHelpType}
       listOfDates={card.listOfDates}
+      photo={card.photo}
     />
   ))
   const selectLocation = (city: string) => {

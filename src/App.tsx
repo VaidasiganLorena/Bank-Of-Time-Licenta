@@ -10,7 +10,8 @@ import PersonalData from './Components/personalData/PersonalData'
 import Account from './Components/account/Account'
 import { Activites } from './Components/activites/Activites'
 import HomepageAdmin from './ComponentsAdmin/HomepageAdmin.tsx/HomepageAdmin'
-import PageGainers from './ComponentsAdmin/HomepageAdmin.tsx/pageGainers/PageGainers'
+import PageGainers from './ComponentsAdmin/pageGainers/PageGainers'
+import PersonalDataAdmin from './ComponentsAdmin/personalDataAdmin/PersonalData'
 
 const queryClient = new QueryClient()
 function App() {
@@ -20,11 +21,22 @@ function App() {
       withNormalizeCSS
       theme={{
         fontFamily: 'Gill Sans, sans-serif',
-        colorScheme: 'light',
         colors: {
-          primary: ['#28886f', '#e5dcca', '#154639'],
-          background: ['#ffffff'],
+          brand: [
+            '#c1d2ad', //light
+            '#8dae6b', //hover light
+            '#f8f2ee', //background light
+            '#c8c7a9', //green lighter
+            '#9ab091', //green light
+            '#28886f', //normal
+            '#1c6350', //hover normal
+            '#689983', //primary green
+            '#044e3a', //green dark
+            '#212529', //dark write
+          ],
         },
+        primaryColor: 'brand',
+        primaryShade: 5,
         headings: {
           fontFamily: 'Gill Sans, sans-serif',
         },
@@ -42,6 +54,8 @@ function App() {
             <Route path="/account" element={<Account />} />
             <Route path="/homepage-admin" element={<HomepageAdmin />} />
             <Route path="/gainers" element={<PageGainers />} />
+            <Route path="/appointments" element={<PageGainers />} />
+            <Route path="/personal-data-admin" element={<PersonalDataAdmin />} />
           </Routes>
         </div>
       </QueryClientProvider>

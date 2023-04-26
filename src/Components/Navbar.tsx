@@ -74,9 +74,9 @@ export const NavigationBar = () => {
         </Navbar.Section>
 
         <Navbar.Section>
-          <Tooltip label="Ieșire cont" color="light" position="bottom" offset={-15}>
+          <Tooltip label="Ieșire cont" color="light" position="bottom" offset={-10}>
             <UnstyledButton onClick={logOut}>
-              <IconLogout color="white" size="2rem" />
+              <Image height={'1.7rem'} width={'1.7rem'} src="logOut.png" />
             </UnstyledButton>
           </Tooltip>
         </Navbar.Section>
