@@ -21,7 +21,6 @@ import { IconUpload } from '@tabler/icons-react'
 
 const useStyles = createStyles((theme: any) => ({
   form: {
-    backgroundColor: '#ffffff80',
     paddingTop: 15,
     borderRadius: 30,
     width: '100%',
@@ -37,7 +36,6 @@ const useStyles = createStyles((theme: any) => ({
   saveButton: {
     marginTop: 10,
     width: '35%',
-    backgroundColor: '#28886f',
     borderRadius: 10,
     [theme.fn.smallerThan('md')]: {
       width: 'auto',

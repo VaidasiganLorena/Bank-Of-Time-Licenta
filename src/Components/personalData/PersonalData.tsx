@@ -9,7 +9,6 @@ import {
   ThemeIcon,
   Text,
   rem,
-  Progress,
   Flex,
   Button,
   PasswordInput,
@@ -17,7 +16,7 @@ import {
 } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { NavigationBar } from '../Navbar'
-import { IconHeart, IconKey, IconTrash } from '@tabler/icons-react'
+import { IconKey, IconTrash } from '@tabler/icons-react'
 import { AvaibleFormPersonalData } from './AvaibleFormPersonalData'
 import { DisableFormPersonalData } from './DisableFormPersonalData'
 import { useGetInfoUser } from '../../api/user/useGetInfoUser'
@@ -75,7 +74,7 @@ export const useStyles = createStyles((theme: any) => ({
     paddingTop: `calc(${theme.spacing.xl} * 1.5 + ${ICON_SIZE} / 3)`,
   },
   containerImage: {
-    backgroundColor: '#ffffff80',
+    backgroundColor: 'withe',
     borderRadius: 30,
     width: '100%',
     height: 'fit-content',
@@ -178,14 +177,14 @@ export const useStyles = createStyles((theme: any) => ({
     width: '35%',
     borderRadius: 10,
     color: 'white',
-    backgroundColor: '#617a78',
+    //backgroundColor: '#617a78',
     borderColor: '#28886f',
     [theme.fn.smallerThan('md')]: {
       width: 'auto',
     },
-    '&:hover': {
-      backgroundColor: '#3d4146',
-    },
+    // '&:hover': {
+    //   backgroundColor: '#3d4146',
+    // },
   },
 
   editButton: {
@@ -301,41 +300,6 @@ const PersonalData = () => {
               </Group>
             </Paper>
             <Container>
-              {/* <Paper radius="md" withBorder className={classes.card} mt={`calc(${ICON_SIZE} / 2)`}>
-                <ThemeIcon
-                  className={classes.icon}
-                  size={ICON_SIZE}
-                  color={'#28886f'}
-                  radius={ICON_SIZE}
-                >
-                  <IconHeart size="2rem" stroke={1.5} />
-                </ThemeIcon>
-
-                <Text ta="center" fw={700} className={classes.title}>
-                  Timpul tău în care ai ales să ajuți comunitatea
-                </Text>
-                <Text c="dimmed" ta="center" fz="sm">
-                  20 ore/ lună
-                </Text>
-
-                <Group position="apart" mt="xs">
-                  <Text fz="sm" color="dimmed">
-                    Progresul tău
-                  </Text>
-                  <Text fz="sm" color="dimmed">
-                    62%
-                  </Text>
-                </Group>
-
-                <Progress value={62} mt={5} color={'#28886f'} />
-
-                <Group position="apart" mt="md">
-                  <Text fz="sm">65 / 100 ore</Text>
-                </Group>
-                <Text c="dimmed" ta="center" fz="sm">
-                  Noi suntem mândri de tine continuă tot așa și vei fi răsplătit!
-                </Text>
-              </Paper> */}
               <Group>
                 <Paper
                   radius="md"
@@ -396,6 +360,7 @@ const PersonalData = () => {
                         size="sm"
                         className={classes.changePasswordButton}
                         onClick={onChangePassword}
+                        color="gray"
                       >
                         Schimbă parola
                       </Button>
@@ -427,6 +392,7 @@ const PersonalData = () => {
                   <Center>
                     <Button
                       size="sm"
+                      color={'red'}
                       onClick={() => setOpenModal(true)}
                       className={classes.deleteButton}
                     >

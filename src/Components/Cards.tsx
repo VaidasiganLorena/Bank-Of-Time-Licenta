@@ -41,16 +41,6 @@ const useStyles = createStyles((theme) => ({
     height: 200,
     width: 'auto',
   },
-
-  item: {
-    '&:hover': {
-      backgroundColor: '#28886f',
-    },
-    '&:active': {
-      backgroundColor: '#28886f',
-      borderColor: '#28886f',
-    },
-  },
 }))
 type TInfoGainerCard = {
   city: string
@@ -146,10 +136,9 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
           data={dates}
           maxDropdownHeight={280}
           zIndex={100}
-          classNames={{ item: classes.item }}
         />
         <Flex w="100%" justify={'flex-end'}>
-          <Button onClick={onAppointment} my={20} radius={'xl'} bg="#28886f">
+          <Button onClick={onAppointment} my={20} radius={'xl'}>
             Programează
           </Button>
         </Flex>

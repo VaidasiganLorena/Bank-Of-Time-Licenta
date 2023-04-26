@@ -1,7 +1,17 @@
-import { BackgroundImage, Container, createStyles, Flex, Paper, Text } from '@mantine/core'
+import {
+  BackgroundImage,
+  Badge,
+  Container,
+  createStyles,
+  Flex,
+  Paper,
+  Tabs,
+  Text,
+} from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useGetAppointment } from '../../api/appointment/useGetAppointmentOfUser'
 import { NavigationBar } from '../Navbar'
 import { CardAppointment } from './CardAppointment'
@@ -48,7 +58,6 @@ const useStyles = createStyles((theme: any) => ({
   },
 
   paperAppointments: {
-    backgroundColor: '#689983',
     paddingLeft: 15,
     borderRadius: 30,
     marginRight: 15,
@@ -62,7 +71,8 @@ const useStyles = createStyles((theme: any) => ({
   },
 }))
 function Account() {
-  const { classes } = useStyles()
+  const { classes, theme } = useStyles()
+  const [numberCardPending, setNumbercardsPending] = useState(0)
   const tablet = useMediaQuery('(max-width: 800px)')
   const userUuid = localStorage.getItem('userUuid')
   const authToken = localStorage.getItem('authToken')
@@ -70,18 +80,52 @@ function Account() {
     console.log(data)
   }
   const { data } = useGetAppointment(successCallBack, userUuid, authToken)
-  const cardsAppointment = data?.data.response.map((card: any) => (
-    <CardAppointment
-      key={card.appointmentUuid}
-      name={card.name}
-      city={card.city}
-      gainerUuid={card.gainerUuid}
-      dateOfAppointment={card.dateOfAppointment}
-      phoneNumber={card.numberPhone}
-      status={card.status}
-      photo={card.photo}
-    />
-  ))
+  const cardsAppointmentFinished = data?.data.response.map(
+    (card: any) =>
+      card.status === 'Finalizat' && (
+        <CardAppointment
+          key={card.appointmentUuid}
+          name={card.name}
+          city={card.city}
+          gainerUuid={card.gainerUuid}
+          dateOfAppointment={card.dateOfAppointment}
+          phoneNumber={card.numberPhone}
+          status={card.status}
+          photo={card.photo}
+        />
+      ),
+  )
+  const cardsAppointmentCancel = data?.data.response.map(
+    (card: any, index: number) =>
+      card.status === 'Anulat' && (
+        <CardAppointment
+          key={card.appointmentUuid}
+          name={card.name}
+          city={card.city}
+          gainerUuid={card.gainerUuid}
+          dateOfAppointment={card.dateOfAppointment}
+          phoneNumber={card.numberPhone}
+          status={card.status}
+          photo={card.photo}
+        />
+      ),
+  )
+  const cardsAppointmentPending = data?.data.response.map(
+    (card: any) =>
+      card.status === 'În așteptare' && (
+        <CardAppointment
+          key={card.appointmentUuid}
+          name={card.name}
+          city={card.city}
+          gainerUuid={card.gainerUuid}
+          dateOfAppointment={card.dateOfAppointment}
+          phoneNumber={card.numberPhone}
+          status={card.status}
+          photo={card.photo}
+        />
+      ),
+  )
+
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
@@ -89,21 +133,49 @@ function Account() {
           <NavigationBar />
           <Flex p={10} w={'100%'} direction={tablet ? 'column' : 'row'}>
             <Paper className={classes.paperAppointments}>
-              <Text ta="center" fw={700} c="white" size={'xl'} mt={5}>
+              <Text ta="center" fw={700} c={theme.colors.brand[6]} size={'xl'} mt={5}>
                 Activitatea ta
               </Text>
-              {cardsAppointment}
-            </Paper>
-            <Paper radius={'xl'}>
-              <CardAppointment
-                name={''}
-                city={''}
-                gainerUuid={''}
-                dateOfAppointment={''}
-                phoneNumber={''}
-                status={''}
-                photo={''}
-              />
+              <Tabs defaultValue="pending">
+                <Tabs.List>
+                  <Tabs.Tab
+                    value="pending"
+                    icon={<IconRotate2 size="0.8rem" />}
+                    rightSection={
+                      <Badge
+                        w={16}
+                        h={16}
+                        sx={{ pointerEvents: 'none' }}
+                        variant="filled"
+                        size="xs"
+                        p={0}
+                      >
+                        2
+                      </Badge>
+                    }
+                  >
+                    În așteptare
+                  </Tabs.Tab>
+                  <Tabs.Tab value="finished" icon={<IconCheck size="0.8rem" />}>
+                    Finalizate
+                  </Tabs.Tab>
+                  <Tabs.Tab value="cancel" icon={<IconX size="0.8rem" />}>
+                    Anulate
+                  </Tabs.Tab>
+                </Tabs.List>
+
+                <Tabs.Panel value="pending" pt="xs">
+                  {cardsAppointmentPending}
+                </Tabs.Panel>
+
+                <Tabs.Panel value="finished" pt="xs">
+                  {cardsAppointmentFinished}
+                </Tabs.Panel>
+
+                <Tabs.Panel value="cancel" pt="xs">
+                  {cardsAppointmentCancel}
+                </Tabs.Panel>
+              </Tabs>
             </Paper>
           </Flex>
         </Paper>

@@ -7,7 +7,7 @@ import {
   Tooltip,
   UnstyledButton,
 } from '@mantine/core'
-import { IconLogout } from '@tabler/icons-react'
+
 import { useNavigate } from 'react-router-dom'
 const useStyles = createStyles((theme: any) => ({
   navbar: {
@@ -60,15 +60,16 @@ export const NavigationBar = () => {
               <Image height={'2.5rem'} width={'2.5rem'} src="activities.png" />
             </UnstyledButton>
           </Tooltip>
-          <Tooltip label="Date personale" color="light" position="bottom" offset={-5}>
-            <UnstyledButton component="a" href="/personal-data">
-              <Image height={'2rem'} width={'2rem'} src="personal-data.png" />
-            </UnstyledButton>
-          </Tooltip>
 
           <Tooltip label="Activitatea ta" color="light" position="bottom" offset={-5}>
             <UnstyledButton component="a" href="/account">
               <Image height={'2rem'} width={'2rem'} src="notification.png" />
+            </UnstyledButton>
+          </Tooltip>
+
+          <Tooltip label="Date personale" color="light" position="bottom" offset={-5}>
+            <UnstyledButton component="a" href="/personal-data">
+              <Image height={'2rem'} width={'2rem'} src="personal-data.png" />
             </UnstyledButton>
           </Tooltip>
         </Navbar.Section>
