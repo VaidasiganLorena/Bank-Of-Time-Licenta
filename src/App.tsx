@@ -9,9 +9,10 @@ import Homepage from './Components/homepage/Homepage'
 import PersonalData from './Components/personalData/PersonalData'
 import Account from './Components/account/Account'
 import { Activites } from './Components/activites/Activites'
-import HomepageAdmin from './ComponentsAdmin/HomepageAdmin.tsx/HomepageAdmin'
+import HomepageAdmin from './ComponentsAdmin/HomepageAdmin/HomepageAdmin'
 import PageGainers from './ComponentsAdmin/pageGainers/PageGainers'
 import PersonalDataAdmin from './ComponentsAdmin/personalDataAdmin/PersonalData'
+import Appointments from './ComponentsAdmin/pageAppointments/Appointments'
 
 const queryClient = new QueryClient()
 function App() {
@@ -54,7 +55,7 @@ function App() {
             <Route path="/account" element={<Account />} />
             <Route path="/homepage-admin" element={<HomepageAdmin />} />
             <Route path="/gainers" element={<PageGainers />} />
-            <Route path="/appointments" element={<PageGainers />} />
+            <Route path="/appointments" element={<Appointments />} />
             <Route path="/personal-data-admin" element={<PersonalDataAdmin />} />
           </Routes>
         </div>

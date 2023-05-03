@@ -9,10 +9,14 @@ import {
   Center,
   TextInput,
   rem,
-  Checkbox,
+  Flex,
+  Stack,
 } from '@mantine/core'
 import { keys } from '@mantine/utils'
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react'
+import { useMediaQuery } from '@mantine/hooks'
+import format from 'date-fns/format'
+import ButtonsAction from './ButtonsAction'
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -20,24 +24,14 @@ const useStyles = createStyles((theme) => ({
   },
 
   control: {
-    width: '100%',
+    width: 'auto',
     padding: `${theme.spacing.xs} ${theme.spacing.md}`,
-
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-    },
   },
 
   icon: {
     width: rem(21),
     height: rem(21),
     borderRadius: rem(21),
-  },
-  rowSelected: {
-    // backgroundColor:
-    //   theme.colorScheme === 'dark'
-    //     ? theme.fn.rgba(theme.colors[theme.primaryColor][7], 0.2)
-    //     : theme.colors[theme.primaryColor][0],
   },
 }))
 
@@ -72,7 +66,7 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
   return (
     <th className={classes.th}>
       <UnstyledButton onClick={onSort} className={classes.control}>
-        <Group position="apart">
+        <Group position="apart" spacing={5}>
           <Text fw={500} fz="sm">
             {children}
           </Text>
@@ -117,6 +111,9 @@ export function TableGainers({ data }: TableSortProps) {
   const [sortedData, setSortedData] = useState(data)
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null)
   const [reverseSortDirection, setReverseSortDirection] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 30em)')
+  const isTablet = useMediaQuery('(max-width: 64em)')
+  const isLaptopS = useMediaQuery('(max-width: 75em)')
 
   const setSorting = (field: keyof RowData) => {
     const reversed = field === sortBy ? !reverseSortDirection : false
@@ -130,111 +127,199 @@ export function TableGainers({ data }: TableSortProps) {
     setSearch(value)
     setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search: value }))
   }
-
-  const [selection, setSelection] = useState(['1'])
-  const toggleRow = (id: string) =>
-    setSelection((current) =>
-      current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
-    )
-  const toggleAll = () =>
-    setSelection((current) =>
-      current.length === data.length ? [] : data.map((item) => item.dateOfBirth),
-    )
-  // const selected = selection.includes(item.dateOfBirth)
+  const formatterDateOfBirth = (date: string) => {
+    const dob = new Date(date)
+    return String(format(dob, 'dd/MM/yyyy'))
+  }
   const rows =
     sortedData &&
-    sortedData.map((row) => (
-      <tr key={row.gainerUuid}>
-        <td>
-          <Checkbox
-            checked={selection.includes(row.gainerUuid)}
-            onChange={() => toggleRow(row.gainerUuid)}
-            transitionDuration={0}
-          />
-        </td>
-        <td>{row.name}</td>
-        <td>{row.description}</td>
-        <td>{row.nameHelpType}</td>
-        <td>{row.city}</td>
-        <td>{row.adress}</td>
-        <td>{row.numberPhone}</td>
-        <td>{row.dateOfBirth}</td>
-        <td>{row.gender}</td>
-      </tr>
-    ))
+    sortedData.map((row) =>
+      isMobile ? (
+        <tr key={row.gainerUuid}>
+          <td>
+            <Flex direction={'column'}>
+              <Group position="apart">
+                <Stack spacing={0}>
+                  <b>{row.name}</b>
+                  <Group>
+                    <Text>Id beneficiar:</Text> {row.gainerUuid}
+                  </Group>
+                </Stack>
+
+                <ButtonsAction />
+              </Group>
+              <Group>
+                <Text fw={500}>Gen:</Text> {row.gender}
+              </Group>
+              <Group>
+                <Text>Data nașterii:</Text>
+                {formatterDateOfBirth(row.dateOfBirth)}
+              </Group>
+
+              <Group>
+                <Text>Nr. telefon:</Text>
+                {row.numberPhone}
+              </Group>
+              <Group>
+                <Text>Adresă:</Text>
+                {row.adress},{row.city}
+              </Group>
+            </Flex>
+            <Stack spacing={0} my={5}>
+              <Text>Descriere:</Text>
+              <Text lineClamp={2}>{row.description}</Text>
+            </Stack>
+
+            <Group>
+              <Text>Tipul de ajutor:</Text>
+              {row.nameHelpType}
+            </Group>
+          </td>
+        </tr>
+      ) : isLaptopS ? (
+        <tr key={row.gainerUuid}>
+          <td>{row.gainerUuid}</td>
+          <td>
+            <Flex direction={'column'}>
+              <b>{row.name}</b>
+              <Text>{formatterDateOfBirth(row.dateOfBirth)}</Text>
+              <Text>{row.gender}</Text>
+              <Text>{row.numberPhone}</Text>
+            </Flex>
+          </td>
+          <td>
+            {row.adress},{row.city}
+          </td>
+
+          <td>
+            <Text lineClamp={2}>{row.description}</Text>
+          </td>
+          <td>{row.nameHelpType}</td>
+          <td>
+            <ButtonsAction />
+          </td>
+        </tr>
+      ) : (
+        <tr key={row.gainerUuid}>
+          <td>{row.gainerUuid}</td>
+          <td>{row.name}</td>
+          <td>{formatterDateOfBirth(row.dateOfBirth)}</td>
+          <td width={'2rem'}>{row.gender}</td>
+          <td>{row.numberPhone}</td>
+          <td>
+            {row.adress},{row.city}
+          </td>
+          <td>
+            <Text lineClamp={2}>{row.description}</Text>
+          </td>
+          <td>{row.nameHelpType}</td>
+          <td>
+            <ButtonsAction />
+          </td>
+        </tr>
+      ),
+    )
 
   return (
     <>
       <TextInput
-        placeholder="Cauare în tabelă"
+        w="100%"
+        placeholder="Căutare în tabelă "
+        radius={'md'}
         mt={15}
         px={20}
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={search}
         onChange={handleSearchChange}
       />
-      <ScrollArea px={20} h={'85%'}>
-        <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} sx={{ tableLayout: 'fixed' }}>
+      <ScrollArea px={20}>
+        <Table horizontalSpacing="md" sx={{ tableLayout: 'fixed' }} width="max-content">
           <thead>
-            <tr>
-              <th style={{ width: rem(40) }}>
-                <Checkbox
-                  onChange={toggleAll}
-                  checked={data && selection.length === data.length}
-                  indeterminate={data && selection.length > 0 && selection.length !== data.length}
-                  transitionDuration={0}
-                />
-              </th>
-              <Th
-                sorted={sortBy === 'name'}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting('name')}
-              >
-                Nume
-              </Th>
-              <th style={{ fontWeight: 500, color: 'black' }}>Descriere</th>
-              <Th
-                sorted={sortBy === 'nameHelpType'}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting('nameHelpType')}
-              >
-                Tip ajutor
-              </Th>
-              <Th
-                sorted={sortBy === 'city'}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting('city')}
-              >
-                Oraș
-              </Th>
-              <Th
-                sorted={sortBy === 'adress'}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting('adress')}
-              >
-                Adresă
-              </Th>
-              <th style={{ fontWeight: 500, color: 'black' }}>Nr de telefon</th>
-              <Th
-                sorted={sortBy === 'dateOfBirth'}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting('dateOfBirth')}
-              >
-                Data nașterii
-              </Th>
-              <th style={{ fontWeight: 500, color: 'black' }}>Gen</th>
-            </tr>
+            {isMobile ? (
+              <tr>
+                <Th
+                  sorted={sortBy === 'name'}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting('name')}
+                >
+                  Beneficiar
+                </Th>
+              </tr>
+            ) : isLaptopS ? (
+              <tr>
+                <th style={{ fontWeight: 500, color: 'black', width: '4rem' }}>Id </th>
+                <Th
+                  sorted={sortBy === 'name'}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting('name')}
+                >
+                  Beneficiar
+                </Th>
+
+                <Th
+                  sorted={sortBy === 'city'}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting('city')}
+                >
+                  Adresă
+                </Th>
+                <th style={{ fontWeight: 500, color: 'black' }}>Descriere</th>
+                <Th
+                  sorted={sortBy === 'nameHelpType'}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting('nameHelpType')}
+                >
+                  Tip ajutor
+                </Th>
+                <th style={{ fontWeight: 500, color: 'black' }}>Acțiuni</th>
+              </tr>
+            ) : (
+              <tr>
+                <th style={{ fontWeight: 500, color: 'black', width: '4rem' }}>Id </th>
+                <Th
+                  sorted={sortBy === 'name'}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting('name')}
+                >
+                  Nume
+                </Th>
+                <Th
+                  sorted={sortBy === 'dateOfBirth'}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting('dateOfBirth')}
+                >
+                  Data nașterii
+                </Th>
+                <th style={{ fontWeight: 500, color: 'black', width: '5rem' }}>Gen</th>
+                <th style={{ fontWeight: 500, color: 'black' }}>Nr. de telefon</th>
+
+                <Th
+                  sorted={sortBy === 'city'}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting('city')}
+                >
+                  Adresă
+                </Th>
+                <th style={{ fontWeight: 500, color: 'black' }}>Descriere</th>
+                <Th
+                  sorted={sortBy === 'nameHelpType'}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting('nameHelpType')}
+                >
+                  Tip ajutor
+                </Th>
+                <th style={{ fontWeight: 500, color: 'black' }}>Acțiuni</th>
+              </tr>
+            )}
           </thead>
           <tbody>
             {rows && rows.length > 0 ? (
               rows
             ) : (
               <tr>
-                <td colSpan={data && Object.keys(data[0]).length}>
-                  <Text weight={500} align="center">
-                    Nu s-a găsit nimic
-                  </Text>
-                </td>
+                <Text weight={500} align="center" w={'80vw'} m="md">
+                  Nu s-a găsit nimic
+                </Text>
               </tr>
             )}
           </tbody>

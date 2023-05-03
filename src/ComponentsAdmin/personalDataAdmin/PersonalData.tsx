@@ -25,7 +25,7 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { useChangePassword } from '../../api/user/useChangePassword'
 import { useForm } from '@mantine/form'
 import { useNavigate } from 'react-router-dom'
-import { NavbarAdmin } from '../HomepageAdmin.tsx/NavbarAdmin'
+import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
 const ICON_SIZE = rem(60)
 export const useStyles = createStyles((theme: any) => ({
   wrapper: {

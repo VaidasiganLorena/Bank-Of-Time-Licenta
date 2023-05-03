@@ -11,7 +11,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
 
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
 import { useGetAppointment } from '../../api/appointment/useGetAppointmentOfUser'
 import { NavigationBar } from '../Navbar'
 import { CardAppointment } from './CardAppointment'
@@ -72,7 +72,7 @@ const useStyles = createStyles((theme: any) => ({
 }))
 function Account() {
   const { classes, theme } = useStyles()
-  const [numberCardPending, setNumbercardsPending] = useState(0)
+  // const [numberCardPending, setNumbercardsPending] = useState(0)
   const tablet = useMediaQuery('(max-width: 800px)')
   const userUuid = localStorage.getItem('userUuid')
   const authToken = localStorage.getItem('authToken')

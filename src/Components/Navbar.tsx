@@ -45,6 +45,7 @@ export const NavigationBar = () => {
     localStorage.clear()
     navigate('/')
   }
+
   return (
     <Container fluid p={5} m={0}>
       <Navbar height={'98%'} m={5} p={10} className={classes.navbar}>
