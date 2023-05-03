@@ -313,7 +313,7 @@ export function TableGainers({ data }: TableSortProps) {
             )}
           </thead>
           <tbody>
-            {rows && rows.length > 0 ? (
+            {rows ? (
               rows
             ) : (
               <tr>
