@@ -9,14 +9,13 @@ import {
   ThemeIcon,
   Text,
   rem,
-  Progress,
   Flex,
   Button,
   PasswordInput,
   Stack,
 } from '@mantine/core'
 import { useEffect, useState } from 'react'
-import { IconHeart, IconKey, IconTrash } from '@tabler/icons-react'
+import { IconKey, IconTrash } from '@tabler/icons-react'
 import { AvaibleFormPersonalData } from './AvaibleFormPersonalData'
 import { DisableFormPersonalData } from './DisableFormPersonalData'
 import { useGetInfoUser } from '../../api/user/useGetInfoUser'
@@ -26,6 +25,7 @@ import { useChangePassword } from '../../api/user/useChangePassword'
 import { useForm } from '@mantine/form'
 import { useNavigate } from 'react-router-dom'
 import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
+
 const ICON_SIZE = rem(60)
 export const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -75,7 +75,6 @@ export const useStyles = createStyles((theme: any) => ({
     paddingTop: `calc(${theme.spacing.xl} * 1.5 + ${ICON_SIZE} / 3)`,
   },
   containerImage: {
-    backgroundColor: '#ffffff85',
     borderRadius: 30,
     width: '100%',
     height: 'fit-content',
@@ -119,7 +118,6 @@ export const useStyles = createStyles((theme: any) => ({
     },
   },
   form: {
-    backgroundColor: '#ffffff80',
     paddingTop: 15,
     borderRadius: 30,
     width: '100%',

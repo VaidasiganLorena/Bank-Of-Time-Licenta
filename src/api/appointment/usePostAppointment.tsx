@@ -15,6 +15,7 @@ export const usePostAppointment = (
       gainerUuid: string
       dateOfAppointment: string
       status: string
+      timeVolunteering: number
     }) => axios.post('http://localhost:3306/appointment', dataAppointment),
     {
       onSuccess: (data) => {

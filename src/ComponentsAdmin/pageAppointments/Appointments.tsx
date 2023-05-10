@@ -5,13 +5,15 @@ import {
   createStyles,
   Flex,
   Paper,
+  ScrollArea,
   Tabs,
   Text,
 } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
 import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
-import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
+import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
+import { useSendMail } from '../../api/useSendMail'
 import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
+import { CardAppoimentAdmin, TInfoAppCard } from './CardsAppoimentAdmin'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -49,7 +51,61 @@ const useStyles = createStyles((theme: any) => ({
 
 const Appointments = () => {
   const { classes, theme } = useStyles()
+  const successCallback = () => {}
+  const { data } = useGetAllAppointment(successCallback)
 
+  console.log(data?.data.response)
+  const cardsAppointmentCheck = data?.data.response.map(
+    (card: TInfoAppCard) =>
+      card.status === 'În pregătire' && (
+        <CardAppoimentAdmin
+          adress={card.adress}
+          appointmentUuid={card.appointmentUuid}
+          city={card.city}
+          dateOfAppointment={card.dateOfAppointment}
+          email={card.email}
+          firstname={card.firstname}
+          gainerUuid={card.gainerUuid}
+          helpTypeUuid={card.helpTypeUuid}
+          lastname={card.lastname}
+          nameGainer={card.nameGainer}
+          phoneNumberGainer={card.phoneNumberGainer}
+          phoneNumber={card.phoneNumber}
+          photo={card.photo}
+          photoGainer={card.photoGainer}
+          status={card.status}
+          userUuid={card.userUuid}
+          timeVolunteering={card.timeVolunteering}
+          cityGainer={card.cityGainer}
+        />
+      ),
+  )
+
+  const cardsAppointmentPending = data?.data.response.map(
+    (card: TInfoAppCard) =>
+      card.status === 'În așteptare' && (
+        <CardAppoimentAdmin
+          adress={card.adress}
+          appointmentUuid={card.appointmentUuid}
+          city={card.city}
+          dateOfAppointment={card.dateOfAppointment}
+          email={card.email}
+          firstname={card.firstname}
+          gainerUuid={card.gainerUuid}
+          helpTypeUuid={card.helpTypeUuid}
+          lastname={card.lastname}
+          nameGainer={card.nameGainer}
+          phoneNumberGainer={card.phoneNumberGainer}
+          phoneNumber={card.phoneNumber}
+          photo={card.photo}
+          photoGainer={card.photoGainer}
+          status={card.status}
+          userUuid={card.userUuid}
+          timeVolunteering={card.timeVolunteering}
+          cityGainer={card.cityGainer}
+        />
+      ),
+  )
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
@@ -74,30 +130,25 @@ const Appointments = () => {
                         size="xs"
                         p={0}
                       >
-                        2
+                        {data && data.data.numberPendingCards}
                       </Badge>
                     }
                   >
-                    În așteptare
+                    Verificare
                   </Tabs.Tab>
                   <Tabs.Tab value="finished" icon={<IconCheck size="0.8rem" />}>
-                    Finalizate
-                  </Tabs.Tab>
-                  <Tabs.Tab value="cancel" icon={<IconX size="0.8rem" />}>
-                    Anulate
+                    În așteptare
                   </Tabs.Tab>
                 </Tabs.List>
 
                 <Tabs.Panel value="pending" pt="xs">
-                  jj
+                  <ScrollArea type="auto" h={'77vh'}>
+                    {cardsAppointmentPending}
+                  </ScrollArea>
                 </Tabs.Panel>
 
                 <Tabs.Panel value="finished" pt="xs">
-                  kk
-                </Tabs.Panel>
-
-                <Tabs.Panel value="cancel" pt="xs">
-                  yy
+                  {cardsAppointmentCheck}
                 </Tabs.Panel>
               </Tabs>
             </Flex>

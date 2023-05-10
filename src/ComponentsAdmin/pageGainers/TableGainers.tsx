@@ -36,11 +36,11 @@ const useStyles = createStyles((theme) => ({
 }))
 
 interface RowData {
-  name: string
+  nameGainer: string
   description: string
-  city: string
+  cityGainer: string
   adress: string
-  numberPhone: string
+  phoneNumberGainer: string
   gender: string
   dateOfBirth: string
   nameHelpType: string
@@ -112,7 +112,6 @@ export function TableGainers({ data }: TableSortProps) {
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null)
   const [reverseSortDirection, setReverseSortDirection] = useState(false)
   const isMobile = useMediaQuery('(max-width: 30em)')
-  const isTablet = useMediaQuery('(max-width: 64em)')
   const isLaptopS = useMediaQuery('(max-width: 75em)')
 
   const setSorting = (field: keyof RowData) => {
@@ -140,7 +139,7 @@ export function TableGainers({ data }: TableSortProps) {
             <Flex direction={'column'}>
               <Group position="apart">
                 <Stack spacing={0}>
-                  <b>{row.name}</b>
+                  <b>{row.nameGainer}</b>
                   <Group>
                     <Text>Id beneficiar:</Text> {row.gainerUuid}
                   </Group>
@@ -158,11 +157,11 @@ export function TableGainers({ data }: TableSortProps) {
 
               <Group>
                 <Text>Nr. telefon:</Text>
-                {row.numberPhone}
+                {row.phoneNumberGainer}
               </Group>
               <Group>
                 <Text>Adresă:</Text>
-                {row.adress},{row.city}
+                {row.adress},{row.cityGainer}
               </Group>
             </Flex>
             <Stack spacing={0} my={5}>
@@ -181,14 +180,14 @@ export function TableGainers({ data }: TableSortProps) {
           <td>{row.gainerUuid}</td>
           <td>
             <Flex direction={'column'}>
-              <b>{row.name}</b>
+              <b>{row.nameGainer}</b>
               <Text>{formatterDateOfBirth(row.dateOfBirth)}</Text>
               <Text>{row.gender}</Text>
-              <Text>{row.numberPhone}</Text>
+              <Text>{row.phoneNumberGainer}</Text>
             </Flex>
           </td>
           <td>
-            {row.adress},{row.city}
+            {row.adress},{row.cityGainer}
           </td>
 
           <td>
@@ -202,12 +201,12 @@ export function TableGainers({ data }: TableSortProps) {
       ) : (
         <tr key={row.gainerUuid}>
           <td>{row.gainerUuid}</td>
-          <td>{row.name}</td>
+          <td>{row.nameGainer}</td>
           <td>{formatterDateOfBirth(row.dateOfBirth)}</td>
           <td width={'2rem'}>{row.gender}</td>
-          <td>{row.numberPhone}</td>
+          <td>{row.phoneNumberGainer}</td>
           <td>
-            {row.adress},{row.city}
+            {row.adress},{row.cityGainer}
           </td>
           <td>
             <Text lineClamp={2}>{row.description}</Text>
@@ -233,14 +232,19 @@ export function TableGainers({ data }: TableSortProps) {
         onChange={handleSearchChange}
       />
       <ScrollArea px={20}>
-        <Table horizontalSpacing="md" sx={{ tableLayout: 'fixed' }} width="max-content">
+        <Table
+          horizontalSpacing="md"
+          sx={{ tableLayout: 'fixed' }}
+          width="max-content"
+          highlightOnHover
+        >
           <thead>
             {isMobile ? (
               <tr>
                 <Th
-                  sorted={sortBy === 'name'}
+                  sorted={sortBy === 'nameGainer'}
                   reversed={reverseSortDirection}
-                  onSort={() => setSorting('name')}
+                  onSort={() => setSorting('nameGainer')}
                 >
                   Beneficiar
                 </Th>
@@ -249,17 +253,17 @@ export function TableGainers({ data }: TableSortProps) {
               <tr>
                 <th style={{ fontWeight: 500, color: 'black', width: '4rem' }}>Id </th>
                 <Th
-                  sorted={sortBy === 'name'}
+                  sorted={sortBy === 'nameGainer'}
                   reversed={reverseSortDirection}
-                  onSort={() => setSorting('name')}
+                  onSort={() => setSorting('nameGainer')}
                 >
                   Beneficiar
                 </Th>
 
                 <Th
-                  sorted={sortBy === 'city'}
+                  sorted={sortBy === 'cityGainer'}
                   reversed={reverseSortDirection}
-                  onSort={() => setSorting('city')}
+                  onSort={() => setSorting('cityGainer')}
                 >
                   Adresă
                 </Th>
@@ -277,9 +281,9 @@ export function TableGainers({ data }: TableSortProps) {
               <tr>
                 <th style={{ fontWeight: 500, color: 'black', width: '4rem' }}>Id </th>
                 <Th
-                  sorted={sortBy === 'name'}
+                  sorted={sortBy === 'nameGainer'}
                   reversed={reverseSortDirection}
-                  onSort={() => setSorting('name')}
+                  onSort={() => setSorting('nameGainer')}
                 >
                   Nume
                 </Th>
@@ -294,9 +298,9 @@ export function TableGainers({ data }: TableSortProps) {
                 <th style={{ fontWeight: 500, color: 'black' }}>Nr. de telefon</th>
 
                 <Th
-                  sorted={sortBy === 'city'}
+                  sorted={sortBy === 'cityGainer'}
                   reversed={reverseSortDirection}
-                  onSort={() => setSorting('city')}
+                  onSort={() => setSorting('cityGainer')}
                 >
                   Adresă
                 </Th>

@@ -1,8 +1,8 @@
 import { BackgroundImage, Button, Container, createStyles, Flex, Paper, Title } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
-
 import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
+
 import { TableGainers } from './TableGainers'
 
 const useStyles = createStyles((theme: any) => ({

@@ -101,14 +101,14 @@ const Homepage = () => {
                   Progresul tău
                 </Text>
                 <Text fz="sm" color="dimmed">
-                  62%
+                  {(data?.data.response[0].countTime * 100) / 100}%
                 </Text>
               </Group>
 
-              <Progress value={62} mt={5} color={'#28886f'} />
+              <Progress value={data?.data.response[0].countTime} mt={5} color={'#28886f'} />
 
               <Group position="apart" mt="md">
-                <Text fz="sm">65 / 100 ore</Text>
+                <Text fz="sm">{data?.data.response[0].countTime} / 100 ore</Text>
               </Group>
               <Text c="dimmed" ta="center" fz="sm">
                 Noi suntem mândri de tine continuă tot așa și vei fi răsplătit!

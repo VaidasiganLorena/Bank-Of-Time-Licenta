@@ -3,6 +3,7 @@ import { Card, createStyles, Group, Text, Avatar, Badge, Grid, Stack } from '@ma
 import {
   IconCalendarTime,
   IconCheck,
+  IconClock,
   IconHome,
   IconPhoneCall,
   IconRotate2,
@@ -31,16 +32,25 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 type IAppointment = {
-  name: string
-  city: string
+  nameGainer: string
+  cityGainer: string
   gainerUuid: string
   dateOfAppointment: string
-  phoneNumber: string
+  phoneNumberGainer: string
   status: string
-  photo: string
+  photoGainer: string
+  timeVolunteering: number
 }
 export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
-  const { name, phoneNumber, city, dateOfAppointment, status, photo } = props
+  const {
+    nameGainer,
+    phoneNumberGainer,
+    cityGainer,
+    dateOfAppointment,
+    status,
+    photoGainer,
+    timeVolunteering,
+  } = props
   const { classes } = useStyles()
 
   return (
@@ -49,25 +59,24 @@ export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
         <div>
           <Grid align={'center'}>
             <Grid.Col span={2}>
-              <Avatar src={photo} size={94} radius="md" />
+              <Avatar src={photoGainer} size={94} radius="md" />
             </Grid.Col>
-
-            <Grid.Col span={6}>
+            <Grid.Col span={4}>
               <Text fz="lg" fw={500} align={'center'}>
-                {name}
+                {nameGainer}
               </Text>
               <Group position="center">
                 <Group noWrap spacing={10} mt={5}>
                   <IconPhoneCall stroke={1.5} size="1rem" />
                   <Text fz="xs" c="dimmed">
-                    {phoneNumber}
+                    {phoneNumberGainer}
                   </Text>
                 </Group>
 
                 <Group noWrap spacing={10} mt={5}>
                   <IconHome stroke={1.5} size="1rem" />
                   <Text fz="xs" c="dimmed">
-                    {city}
+                    {cityGainer}
                   </Text>
                 </Group>
               </Group>
@@ -80,25 +89,33 @@ export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
                     {dateOfAppointment}
                   </Text>
                 </Group>
-                <Badge
-                  color={
-                    status === 'În așteptare' ? 'orange' : status === 'Anulat' ? 'red' : 'green'
-                  }
-                  variant="outline"
-                  rightSection={
-                    status === 'În așteptare' ? (
-                      <IconRotate2 size={'1rem'} />
-                    ) : status === 'Anulat' ? (
-                      <IconX size={'0.9rem'} />
-                    ) : (
-                      <IconCheck size={'1rem'} />
-                    )
-                  }
-                  classNames={{ rightSection: classes.rightSection }}
-                >
-                  {status}
-                </Badge>
+
+                <Group noWrap spacing={10} mt={5}>
+                  <IconClock stroke={1.5} size="1.2rem" />
+                  <Text fz="sm" c="dimmed">
+                    {timeVolunteering} ore
+                  </Text>
+                </Group>
               </Stack>
+            </Grid.Col>
+
+            <Grid.Col span={2}>
+              <Badge
+                color={status === 'În așteptare' ? 'orange' : status === 'Anulat' ? 'red' : 'green'}
+                variant="outline"
+                rightSection={
+                  status === 'În așteptare' ? (
+                    <IconRotate2 size={'1rem'} />
+                  ) : status === 'Anulat' ? (
+                    <IconX size={'0.9rem'} />
+                  ) : (
+                    <IconCheck size={'1rem'} />
+                  )
+                }
+                classNames={{ rightSection: classes.rightSection }}
+              >
+                {status}
+              </Badge>
             </Grid.Col>
           </Grid>
         </div>

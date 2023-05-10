@@ -10,8 +10,6 @@ import {
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
-
-// import React, { useState } from 'react'
 import { useGetAppointment } from '../../api/appointment/useGetAppointmentOfUser'
 import { NavigationBar } from '../Navbar'
 import { CardAppointment } from './CardAppointment'
@@ -85,13 +83,14 @@ function Account() {
       card.status === 'Finalizat' && (
         <CardAppointment
           key={card.appointmentUuid}
-          name={card.name}
-          city={card.city}
+          nameGainer={card.nameGainer}
+          cityGainer={card.cityGainer}
           gainerUuid={card.gainerUuid}
           dateOfAppointment={card.dateOfAppointment}
-          phoneNumber={card.numberPhone}
+          phoneNumberGainer={card.phoneNumberGainer}
           status={card.status}
-          photo={card.photo}
+          photoGainer={card.photoGainer}
+          timeVolunteering={card.timeVolunteering}
         />
       ),
   )
@@ -100,13 +99,14 @@ function Account() {
       card.status === 'Anulat' && (
         <CardAppointment
           key={card.appointmentUuid}
-          name={card.name}
-          city={card.city}
+          nameGainer={card.nameGainer}
+          cityGainer={card.cityGainer}
           gainerUuid={card.gainerUuid}
           dateOfAppointment={card.dateOfAppointment}
-          phoneNumber={card.numberPhone}
+          phoneNumberGainer={card.phoneNumberGainer}
           status={card.status}
-          photo={card.photo}
+          photoGainer={card.photoGainer}
+          timeVolunteering={card.timeVolunteering}
         />
       ),
   )
@@ -115,13 +115,14 @@ function Account() {
       card.status === 'În așteptare' && (
         <CardAppointment
           key={card.appointmentUuid}
-          name={card.name}
-          city={card.city}
+          nameGainer={card.nameGainer}
+          cityGainer={card.cityGainer}
           gainerUuid={card.gainerUuid}
           dateOfAppointment={card.dateOfAppointment}
-          phoneNumber={card.numberPhone}
+          phoneNumberGainer={card.phoneNumberGainer}
           status={card.status}
-          photo={card.photo}
+          photoGainer={card.photoGainer}
+          timeVolunteering={card.timeVolunteering}
         />
       ),
   )

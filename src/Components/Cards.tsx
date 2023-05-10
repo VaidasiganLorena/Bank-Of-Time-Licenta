@@ -11,6 +11,7 @@ import {
   Select,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { IconCalendarEvent, IconClock } from '@tabler/icons-react'
 import React, { FunctionComponent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePostAppointment } from '../api/appointment/usePostAppointment'
@@ -37,33 +38,40 @@ const useStyles = createStyles((theme) => ({
   body: {
     padding: theme.spacing.md,
   },
-  modalCard: {
-    height: 200,
-    width: 'auto',
-  },
 }))
 type TInfoGainerCard = {
-  city: string
+  cityGainer: string
   description: string
   gainerUuid: string
-  name: string
+  nameGainer: string
   age: number
   helpTypeUuid?: string
   helpTypeName: string
   listOfDates: string
-  photo: string
+  photoGainer: string
 }
 export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
-  const { name, description, city, age, gainerUuid, helpTypeName, listOfDates, photo } = props
+  const {
+    nameGainer,
+    description,
+    cityGainer,
+    age,
+    gainerUuid,
+    helpTypeName,
+    listOfDates,
+    photoGainer,
+  } = props
   const [opened, { open, close }] = useDisclosure(false)
   const navigate = useNavigate()
   const [dateOfAppointment, setDateOfAppointment] = useState<string | null>('')
+  const [timeVolunteering, setTimeVolunteering] = useState<string | null>('')
   const userUuid = localStorage.getItem('userUuid')
   const { classes } = useStyles()
   const dates = listOfDates.split(',')
+
   const succesCallBack = (data: string, status: number) => {
     if (status === 200) {
-      console.log(data)
+      navigate('/account')
     }
   }
   const errorCallBack = (data: any) => {
@@ -78,24 +86,24 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
       gainerUuid: gainerUuid,
       dateOfAppointment: dateOfAppointment ? dateOfAppointment : '',
       status: 'În așteptare',
+      timeVolunteering: timeVolunteering ? parseInt(timeVolunteering) : 0,
     })
-    navigate('/account')
   }
   return (
     <>
       <Card radius="lg" p={0} className={classes.card} key={gainerUuid}>
         <Group noWrap spacing={0}>
-          <Image src={photo} height={200} width={200} />
+          <Image src={photoGainer} height={200} width={200} />
           <div className={classes.body}>
             <Group mb={10}>
               <Text className={classes.title} size="xl">
-                {name}
+                {nameGainer}
               </Text>
               <Flex align={'center'} justify="space-around" w={'20%'}>
                 <Text size="sm">•</Text>
                 <Text size="sm">{age}</Text>
                 <Text size="sm">•</Text>
-                <Text size="sm">{city}</Text>
+                <Text size="sm">{cityGainer}</Text>
                 <Text size="sm">•</Text>
               </Flex>
             </Group>
@@ -117,7 +125,7 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
               </Button>
             </Group>
           </div>
-        </Group>{' '}
+        </Group>
       </Card>
       <Modal
         opened={opened}
@@ -125,7 +133,6 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
         radius="lg"
         title="Alege când ești disponibil să ajuți.."
         centered
-        classNames={{ body: classes.modalCard }}
       >
         <Select
           radius={'xl'}
@@ -134,9 +141,20 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
           value={dateOfAppointment}
           onChange={setDateOfAppointment}
           data={dates}
-          maxDropdownHeight={280}
-          zIndex={100}
+          icon={<IconCalendarEvent size="1rem" />}
+          maxDropdownHeight={100}
         />
+        <Select
+          radius={'xl'}
+          label="Numărul de ore"
+          placeholder="Alege îm funcție de disponibilitatea ta"
+          value={timeVolunteering}
+          onChange={setTimeVolunteering}
+          data={['2', '3', '4', '5', '6', '7', '8']}
+          icon={<IconClock size="1rem" />}
+          maxDropdownHeight={100}
+        />
+
         <Flex w="100%" justify={'flex-end'}>
           <Button onClick={onAppointment} my={20} radius={'xl'}>
             Programează

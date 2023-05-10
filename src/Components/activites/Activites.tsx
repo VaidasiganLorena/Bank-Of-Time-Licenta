@@ -83,17 +83,17 @@ const useStyles = createStyles((theme: any) => ({
 }))
 export type TInfoGainer = {
   adress: string
-  city: string
+  cityGainer: string
   dateOfBirth?: Date
   description: string
   gainerUuid: string
   gender: string
   helpTypeUuid: string
   nameHelpType: string
-  name: string
+  nameGainer: string
   numberPhone: string
   listOfDates: string
-  photo: string
+  photoGainer: string
 }
 export const Activites = () => {
   const { classes } = useStyles()
@@ -115,16 +115,17 @@ export const Activites = () => {
     return age_now
   }
 
-  const cardsGainer = data?.data.response.map((card: TInfoGainer) => (
+  const cardsGainer = data?.data.response.map((card: TInfoGainer, index: number) => (
     <Cards
-      city={card.city}
+      key={index}
+      cityGainer={card.cityGainer}
       description={card.description}
       gainerUuid={card.gainerUuid}
-      name={card.name}
+      nameGainer={card.nameGainer}
       age={age(card.dateOfBirth)}
       helpTypeName={card.nameHelpType}
       listOfDates={card.listOfDates}
-      photo={card.photo}
+      photoGainer={card.photoGainer}
     />
   ))
   const selectLocation = (city: string) => {
