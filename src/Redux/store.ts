@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
-import filterReducer from './slice'
+import filterReducer from './filter/slice'
+import gainersReducer from './gainersDate/slice'
 
 const rootReducer = combineReducers({
   filters: filterReducer,
+  gainers: gainersReducer,
 })
 
 export const store = configureStore({

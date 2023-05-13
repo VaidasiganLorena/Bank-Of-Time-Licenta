@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from './store'
+import { RootState } from '../store'
 
 export type IFilterSlice = {
   helpTypes?: number
@@ -41,8 +41,7 @@ export const filterSlice = createSlice({
 export const { setHelpTypeId, setLocation, setStartDate, setEndDate, resetActions } =
   filterSlice.actions
 export const selectFilters = (state: RootState) => {
-  // eslint-disable-next-line no-sequences
-  return state.filters.helpTypes, state.filters.city, state.filters.periods
+  return state.filters
 }
 
 export default filterSlice.reducer

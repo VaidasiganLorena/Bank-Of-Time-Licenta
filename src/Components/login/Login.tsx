@@ -92,7 +92,7 @@ export function Login() {
     setErrorBackend('')
     if (data.role === 'admin') {
       localStorage.setItem('userUuid', data.userUuid)
-      navigate('/homepage-admin')
+      navigate('/appointments')
     } else {
       localStorage.setItem('userUuid', data.userUuid)
       localStorage.setItem('userToken', data.authToken)

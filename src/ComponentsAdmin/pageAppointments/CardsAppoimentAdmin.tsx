@@ -1,5 +1,8 @@
 import { Card, Group, Text, Image, createStyles, Flex, Button, Stack } from '@mantine/core'
-import React, { FunctionComponent, useEffect } from 'react'
+import { IconSend } from '@tabler/icons-react'
+import moment from 'moment'
+import 'moment/locale/ro'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useSendMail } from '../../api/useSendMail'
 
 const useStyles = createStyles((theme) => ({
@@ -53,10 +56,27 @@ export type TInfoAppCard = {
 export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) => {
   const { classes } = useStyles()
   const succesCallbackMail = () => {}
+  const [isDisable, setDisable] = useState(false)
   const { mutate } = useSendMail(succesCallbackMail)
+  useEffect(() => {}, [dataApp])
+  const currentDate = new Date(moment().format())
+  const dateOfAppointmentRemainder = moment(dataApp?.dateOfAppointment)
+    .subtract(7, 'days')
+    .calendar()
+  //const dateOfApp = new Date(moment(dataApp?.dateOfAppointment).format('DD-MM-YYYY'))
+  const [mesageTimeChangeStatus, setMessageTimeChangeStatus] = useState('')
+
+  const changeStatusButtonSendEmail = () => {
+    if (new Date(dateOfAppointmentRemainder) <= currentDate) {
+      setDisable(false)
+    } else {
+      setDisable(true)
+      setMessageTimeChangeStatus(moment(dateOfAppointmentRemainder, 'L').endOf('day').fromNow())
+    }
+  }
   useEffect(() => {
-    console.log(dataApp)
-  }, [dataApp])
+    changeStatusButtonSendEmail()
+  }, [currentDate])
   return (
     <>
       <Card radius="lg" mx={'xs'} className={classes.card} key={dataApp.appointmentUuid} mt={'xs'}>
@@ -132,32 +152,41 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
           </Flex>
 
           <Group position="right">
-            {dataApp?.status === 'În așteptare' ? (
-              <Button
-                radius={'xl'}
-                bg="#28886f"
-                onClick={() => {
-                  mutate({
-                    email: dataApp.email,
-                    adress: dataApp.adress,
-                    firstName: dataApp.firstname,
-                    nameGainer: dataApp.nameGainer,
-                    dateOfAppointment: dataApp.dateOfAppointment,
-                    cityGainer: dataApp.cityGainer,
-                  })
-                }}
-              >
-                Trimitre email
-              </Button>
+            {dataApp?.status === 'În procesare' ? (
+              <Stack spacing={5}>
+                <Button
+                  radius={'xl'}
+                  onClick={() => {
+                    mutate({
+                      email: dataApp.email,
+                      adress: dataApp.adress,
+                      firstName: dataApp.firstname,
+                      nameGainer: dataApp.nameGainer,
+                      dateOfAppointment: dataApp.dateOfAppointment,
+                      cityGainer: dataApp.cityGainer,
+                    })
+                  }}
+                  disabled={isDisable}
+                  leftIcon={<IconSend size={'1rem'} />}
+                >
+                  Trimite email
+                </Button>
+                {isDisable ? (
+                  <Text size={'xs'} c="dimmed">
+                    Butonul se va activa {mesageTimeChangeStatus}
+                  </Text>
+                ) : null}
+              </Stack>
+            ) : dataApp?.status === 'În confirmare' ? (
+              <Button radius={'xl'}>Aprobat</Button>
             ) : (
-              <Button radius={'xl'} bg="#28886f">
-                Aprobă
+              <Button radius={'xl'}>Verificat</Button>
+            )}
+            {dataApp?.status === 'În procesare' ? null : (
+              <Button variant={'outline'} radius={'xl'}>
+                Anulat
               </Button>
             )}
-
-            <Button radius={'xl'} bg="#28886f">
-              Anulează
-            </Button>
           </Group>
         </Flex>
       </Card>

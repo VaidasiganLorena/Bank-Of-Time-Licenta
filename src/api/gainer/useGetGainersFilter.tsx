@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import queryString from 'query-string'
-import { store } from '../../Redux/filters/store'
+import { store } from '../../Redux/store'
 
 export const useGetGainersFilter = () => {
   const state = store.getState()

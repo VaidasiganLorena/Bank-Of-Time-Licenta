@@ -68,9 +68,14 @@ export const NavbarAdmin = () => {
                 mx="auto"
                 mb={isTablet ? 0 : 20}
               />
-              <Tooltip label="Acasă" color="light" position="bottom" offset={-5}>
+              {/* <Tooltip label="Acasă" color="light" position="bottom" offset={-5}>
                 <UnstyledButton component="a" href="/homepage-admin">
                   <Image height={'2.5rem'} width={'2.5rem'} src="home.png" />
+                </UnstyledButton>
+              </Tooltip> */}
+              <Tooltip label="Programări" color="light" position="bottom" offset={-5}>
+                <UnstyledButton component="a" href="/appointments">
+                  <Image height={'2.2rem'} width={'2.2rem'} src="appointments.png" />
                 </UnstyledButton>
               </Tooltip>
               <Tooltip label="Beneficiari" color="light" position="bottom" offset={-5}>
@@ -78,11 +83,7 @@ export const NavbarAdmin = () => {
                   <Image height={'2.2rem'} width={'2.2rem'} src="gainers.png" />
                 </UnstyledButton>
               </Tooltip>
-              <Tooltip label="Programări" color="light" position="bottom" offset={-5}>
-                <UnstyledButton component="a" href="/appointments">
-                  <Image height={'2.2rem'} width={'2.2rem'} src="appointments.png" />
-                </UnstyledButton>
-              </Tooltip>
+
               <Tooltip label="Date personale" color="light" position="bottom" offset={-5}>
                 <UnstyledButton component="a" href="/personal-data-admin">
                   <Image height={'1.8rem'} width={'1.8rem'} src="personal-data.png" />

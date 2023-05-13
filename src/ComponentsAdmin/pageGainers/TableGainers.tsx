@@ -15,8 +15,11 @@ import {
 import { keys } from '@mantine/utils'
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
-import format from 'date-fns/format'
-import ButtonsAction from './ButtonsAction'
+import { ButtonsAction } from './ButtonsAction'
+import moment from 'moment'
+import { RootState } from '../../Redux/store'
+import { useSelector } from 'react-redux'
+import { IGainer } from '../../type'
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -34,24 +37,6 @@ const useStyles = createStyles((theme) => ({
     borderRadius: rem(21),
   },
 }))
-
-interface RowData {
-  nameGainer: string
-  description: string
-  cityGainer: string
-  adress: string
-  phoneNumberGainer: string
-  gender: string
-  dateOfBirth: string
-  nameHelpType: string
-  helpTypeUuid: string
-  gainerUuid: string
-  listOfDates: string
-}
-
-interface TableSortProps {
-  data: RowData[]
-}
 
 interface ThProps {
   children?: React.ReactNode
@@ -79,14 +64,14 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
   )
 }
 
-function filterData(data: RowData[], search: string) {
+function filterData(data: IGainer[], search: string) {
   const query = search.toLowerCase().trim()
   return data.filter((item) => keys(data[0]).some((key) => item[key].toLowerCase().includes(query)))
 }
 
 function sortData(
-  data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string },
+  data: IGainer[],
+  payload: { sortBy: keyof IGainer | null; reversed: boolean; search: string },
 ) {
   const { sortBy } = payload
 
@@ -106,30 +91,30 @@ function sortData(
   )
 }
 
-export function TableGainers({ data }: TableSortProps) {
+export function TableGainers() {
   const [search, setSearch] = useState('')
-  const [sortedData, setSortedData] = useState(data)
-  const [sortBy, setSortBy] = useState<keyof RowData | null>(null)
+  const { gainersEntriesData } = useSelector((state: RootState) => state.gainers)
+  const [sortedData, setSortedData] = useState(gainersEntriesData)
+  const [sortBy, setSortBy] = useState<keyof IGainer | null>(null)
   const [reverseSortDirection, setReverseSortDirection] = useState(false)
   const isMobile = useMediaQuery('(max-width: 30em)')
   const isLaptopS = useMediaQuery('(max-width: 75em)')
 
-  const setSorting = (field: keyof RowData) => {
+  const setSorting = (field: keyof IGainer) => {
     const reversed = field === sortBy ? !reverseSortDirection : false
     setReverseSortDirection(reversed)
     setSortBy(field)
-    setSortedData(sortData(data, { sortBy: field, reversed, search }))
+    setSortedData(sortData(gainersEntriesData, { sortBy: field, reversed, search }))
   }
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget
     setSearch(value)
-    setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search: value }))
+    setSortedData(
+      sortData(gainersEntriesData, { sortBy, reversed: reverseSortDirection, search: value }),
+    )
   }
-  const formatterDateOfBirth = (date: string) => {
-    const dob = new Date(date)
-    return String(format(dob, 'dd/MM/yyyy'))
-  }
+
   const rows =
     sortedData &&
     sortedData.map((row) =>
@@ -145,14 +130,14 @@ export function TableGainers({ data }: TableSortProps) {
                   </Group>
                 </Stack>
 
-                <ButtonsAction />
+                <ButtonsAction gainerUuid={row.gainerUuid} />
               </Group>
               <Group>
                 <Text fw={500}>Gen:</Text> {row.gender}
               </Group>
               <Group>
                 <Text>Data nașterii:</Text>
-                {formatterDateOfBirth(row.dateOfBirth)}
+                {moment(row.dateOfBirth).format('L')}
               </Group>
 
               <Group>
@@ -181,7 +166,7 @@ export function TableGainers({ data }: TableSortProps) {
           <td>
             <Flex direction={'column'}>
               <b>{row.nameGainer}</b>
-              <Text>{formatterDateOfBirth(row.dateOfBirth)}</Text>
+              <Text>{moment(row.dateOfBirth).format('L')}</Text>
               <Text>{row.gender}</Text>
               <Text>{row.phoneNumberGainer}</Text>
             </Flex>
@@ -195,14 +180,14 @@ export function TableGainers({ data }: TableSortProps) {
           </td>
           <td>{row.nameHelpType}</td>
           <td>
-            <ButtonsAction />
+            <ButtonsAction gainerUuid={row.gainerUuid} />
           </td>
         </tr>
       ) : (
         <tr key={row.gainerUuid}>
           <td>{row.gainerUuid}</td>
           <td>{row.nameGainer}</td>
-          <td>{formatterDateOfBirth(row.dateOfBirth)}</td>
+          <td>{moment(row.dateOfBirth).format('L')}</td>
           <td width={'2rem'}>{row.gender}</td>
           <td>{row.phoneNumberGainer}</td>
           <td>
@@ -213,7 +198,7 @@ export function TableGainers({ data }: TableSortProps) {
           </td>
           <td>{row.nameHelpType}</td>
           <td>
-            <ButtonsAction />
+            <ButtonsAction gainerUuid={row.gainerUuid} />
           </td>
         </tr>
       ),

@@ -9,9 +9,8 @@ import {
   Tabs,
   Text,
 } from '@mantine/core'
-import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
+import { IconCheck, IconChecks, IconRotate2, IconX } from '@tabler/icons-react'
 import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
-import { useSendMail } from '../../api/useSendMail'
 import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
 import { CardAppoimentAdmin, TInfoAppCard } from './CardsAppoimentAdmin'
 
@@ -53,11 +52,9 @@ const Appointments = () => {
   const { classes, theme } = useStyles()
   const successCallback = () => {}
   const { data } = useGetAllAppointment(successCallback)
-
-  console.log(data?.data.response)
   const cardsAppointmentCheck = data?.data.response.map(
     (card: TInfoAppCard) =>
-      card.status === 'În pregătire' && (
+      card.status === 'În verificare' && (
         <CardAppoimentAdmin
           adress={card.adress}
           appointmentUuid={card.appointmentUuid}
@@ -81,9 +78,9 @@ const Appointments = () => {
       ),
   )
 
-  const cardsAppointmentPending = data?.data.response.map(
+  const cardsAppointmentProcess = data?.data.response.map(
     (card: TInfoAppCard) =>
-      card.status === 'În așteptare' && (
+      card.status === 'În procesare' && (
         <CardAppoimentAdmin
           adress={card.adress}
           appointmentUuid={card.appointmentUuid}
@@ -106,6 +103,32 @@ const Appointments = () => {
         />
       ),
   )
+  const cardsAppointmentInCofimation = data?.data.response.map(
+    (card: TInfoAppCard) =>
+      card.status === 'În confirmare' && (
+        <CardAppoimentAdmin
+          adress={card.adress}
+          appointmentUuid={card.appointmentUuid}
+          city={card.city}
+          dateOfAppointment={card.dateOfAppointment}
+          email={card.email}
+          firstname={card.firstname}
+          gainerUuid={card.gainerUuid}
+          helpTypeUuid={card.helpTypeUuid}
+          lastname={card.lastname}
+          nameGainer={card.nameGainer}
+          phoneNumberGainer={card.phoneNumberGainer}
+          phoneNumber={card.phoneNumber}
+          photo={card.photo}
+          photoGainer={card.photoGainer}
+          status={card.status}
+          userUuid={card.userUuid}
+          timeVolunteering={card.timeVolunteering}
+          cityGainer={card.cityGainer}
+        />
+      ),
+  )
+  console.log(data?.data)
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
@@ -116,11 +139,11 @@ const Appointments = () => {
               <Text ta="center" fw={700} c={theme.colors.brand[6]} size={'xl'} mt={5}>
                 Programări
               </Text>
-              <Tabs defaultValue="pending">
+              <Tabs defaultValue="check">
                 <Tabs.List>
                   <Tabs.Tab
-                    value="pending"
-                    icon={<IconRotate2 size="0.8rem" />}
+                    value="check"
+                    icon={<IconCheck size="0.8rem" />}
                     rightSection={
                       <Badge
                         w={16}
@@ -130,25 +153,35 @@ const Appointments = () => {
                         size="xs"
                         p={0}
                       >
-                        {data && data.data.numberPendingCards}
+                        {data && data.data.numberCheckCards}
                       </Badge>
                     }
                   >
-                    Verificare
+                    În verificare
                   </Tabs.Tab>
-                  <Tabs.Tab value="finished" icon={<IconCheck size="0.8rem" />}>
-                    În așteptare
+                  <Tabs.Tab value="progress" icon={<IconRotate2 size="0.8rem" />}>
+                    În procesare
+                  </Tabs.Tab>
+                  <Tabs.Tab value="inConfirmation" icon={<IconChecks size="0.8rem" />}>
+                    În confirmare
                   </Tabs.Tab>
                 </Tabs.List>
 
-                <Tabs.Panel value="pending" pt="xs">
+                <Tabs.Panel value="check" pt="xs">
                   <ScrollArea type="auto" h={'77vh'}>
-                    {cardsAppointmentPending}
+                    {cardsAppointmentCheck}
                   </ScrollArea>
                 </Tabs.Panel>
 
-                <Tabs.Panel value="finished" pt="xs">
-                  {cardsAppointmentCheck}
+                <Tabs.Panel value="progress" pt="xs">
+                  <ScrollArea type="auto" h={'77vh'}>
+                    {cardsAppointmentProcess}
+                  </ScrollArea>
+                </Tabs.Panel>
+                <Tabs.Panel value="inConfirmation" pt="xs">
+                  <ScrollArea type="auto" h={'77vh'}>
+                    {cardsAppointmentInCofimation}
+                  </ScrollArea>
                 </Tabs.Panel>
               </Tabs>
             </Flex>

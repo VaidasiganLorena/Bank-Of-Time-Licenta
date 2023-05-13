@@ -27,7 +27,7 @@ import {
   setLocation,
   setHelpTypeId,
   resetActions,
-} from '../../Redux/filters/slice'
+} from '../../Redux/filter/slice'
 import { cities } from '../../aseert/city'
 
 const useStyles = createStyles((theme: any) => ({

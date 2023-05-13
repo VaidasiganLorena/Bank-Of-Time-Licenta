@@ -1,7 +1,11 @@
 import { BackgroundImage, Button, Container, createStyles, Flex, Paper, Title } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
+import { setGainers } from '../../Redux/gainersDate/slice'
 import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
+import { FormGainersData } from './FormGainer'
 
 import { TableGainers } from './TableGainers'
 
@@ -49,11 +53,13 @@ const useStyles = createStyles((theme: any) => ({
 const PageGainers = () => {
   const { classes, theme } = useStyles()
   const isMobile = useMediaQuery('(max-width: 30em)')
-  const succesCallBackGetGainers = () => {
-    //console.log(data)
-  }
+  const [openModalAddGainer, setOpenModalAddGainer] = useState(false)
+  const dispatch = useDispatch()
+  const succesCallBackGetGainers = () => {}
   const { data } = useGetInfoGainers(succesCallBackGetGainers)
-
+  useEffect(() => {
+    dispatch(setGainers(data?.data.response))
+  }, [data])
   return (
     <BackgroundImage src="/backround.png" h={'100%'}>
       <Container className={classes.wrapper} fluid p={16}>
@@ -64,15 +70,19 @@ const PageGainers = () => {
               <Title order={2} c={theme.colors.brand[5]} mx={20} mt={10}>
                 Aici poți vizualiza persoanele beneficiare...
               </Title>
-
-              <Button radius="xl" mt={15}>
+              <Button radius="xl" mt={15} onClick={() => setOpenModalAddGainer(true)}>
                 Adaugare beneficiar
               </Button>
             </Flex>
-            <TableGainers data={data?.data.response} />
+            <TableGainers />
           </Paper>
         </Paper>
       </Container>
+      <FormGainersData
+        isOpenModal={openModalAddGainer}
+        setOpenModal={setOpenModalAddGainer}
+        isModEdit={false}
+      />
     </BackgroundImage>
   )
 }
