@@ -13,6 +13,7 @@ import HomepageAdmin from './ComponentsAdmin/HomepageAdmin/HomepageAdmin'
 import PageGainers from './ComponentsAdmin/pageGainers/PageGainers'
 import PersonalDataAdmin from './ComponentsAdmin/personalDataAdmin/PersonalData'
 import Appointments from './ComponentsAdmin/pageAppointments/Appointments'
+import GainerAllAppointments from './ComponentsAdmin/pageGainerAllAppointments/pageGainerAllAppointments'
 
 const queryClient = new QueryClient()
 function App() {
@@ -57,6 +58,7 @@ function App() {
             <Route path="/gainers" element={<PageGainers />} />
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/personal-data-admin" element={<PersonalDataAdmin />} />
+            <Route path="/gainer-appointments/:gainerUuid" element={<GainerAllAppointments />} />
           </Routes>
         </div>
       </QueryClientProvider>

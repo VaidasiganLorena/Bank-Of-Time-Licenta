@@ -2,20 +2,21 @@ import { Button, Group, Modal, TextInput, Flex, Textarea, Select, FileInput } fr
 import { useForm } from '@mantine/form'
 import React, { FunctionComponent, useEffect } from 'react'
 import { usePostGainer } from '../../api/gainer/usePostGainer'
+import { useUpdateInfoGainer } from '../../api/gainer/useUpdateGainer'
 import { cities } from '../../aseert/city'
-import { IGainer } from '../../type'
+import { IGainerUpdate } from '../../type'
 import { InitialValueDataGainers, ValidateForm } from './UtilsForm'
 
 export const FormGainersData: FunctionComponent<{
   isOpenModal: boolean
   setOpenModal?: React.Dispatch<React.SetStateAction<boolean>>
   isModEdit: boolean
-  dataGainer?: IGainer
+  dataGainer?: IGainerUpdate
   gainerUuid?: string
 }> = (props) => {
   const { isOpenModal, setOpenModal, isModEdit, dataGainer } = props
 
-  const formGainerData = useForm<IGainer>({
+  const formGainerData = useForm<IGainerUpdate>({
     initialValues:
       isModEdit && dataGainer
         ? {
@@ -30,7 +31,6 @@ export const FormGainersData: FunctionComponent<{
             description: dataGainer.description,
             helpTypeUuid: dataGainer.helpTypeUuid,
             gainerUuid: dataGainer.gainerUuid,
-            nameHelpType: dataGainer.nameHelpType,
           }
         : InitialValueDataGainers,
     validate: ValidateForm,
@@ -47,18 +47,20 @@ export const FormGainersData: FunctionComponent<{
     formGainerData.clearErrors()
   }
 
-  const onUpdateGainer = () => {
-    if (formGainerData.isValid()) {
-    }
-  }
   const successCallBack = () => {
     onCloseModal()
   }
   const errorCallBack = () => {}
   const { mutate } = usePostGainer(successCallBack, errorCallBack)
+  const { mutate: mutateUpdate } = useUpdateInfoGainer(successCallBack, dataGainer?.gainerUuid)
   const onCreateGainer = () => {
     if (formGainerData.isValid()) {
       mutate(formGainerData.values)
+    }
+  }
+  const onUpdateGainer = () => {
+    if (formGainerData.isValid()) {
+      mutateUpdate(formGainerData.values)
     }
   }
 

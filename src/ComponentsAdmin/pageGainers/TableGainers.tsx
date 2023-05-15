@@ -125,9 +125,6 @@ export function TableGainers() {
               <Group position="apart">
                 <Stack spacing={0}>
                   <b>{row.nameGainer}</b>
-                  <Group>
-                    <Text>Id beneficiar:</Text> {row.gainerUuid}
-                  </Group>
                 </Stack>
 
                 <ButtonsAction gainerUuid={row.gainerUuid} />
@@ -162,7 +159,6 @@ export function TableGainers() {
         </tr>
       ) : isLaptopS ? (
         <tr key={row.gainerUuid}>
-          <td>{row.gainerUuid}</td>
           <td>
             <Flex direction={'column'}>
               <b>{row.nameGainer}</b>
@@ -185,7 +181,6 @@ export function TableGainers() {
         </tr>
       ) : (
         <tr key={row.gainerUuid}>
-          <td>{row.gainerUuid}</td>
           <td>{row.nameGainer}</td>
           <td>{moment(row.dateOfBirth).format('L')}</td>
           <td width={'2rem'}>{row.gender}</td>
@@ -236,7 +231,6 @@ export function TableGainers() {
               </tr>
             ) : isLaptopS ? (
               <tr>
-                <th style={{ fontWeight: 500, color: 'black', width: '4rem' }}>Id </th>
                 <Th
                   sorted={sortBy === 'nameGainer'}
                   reversed={reverseSortDirection}
@@ -264,7 +258,6 @@ export function TableGainers() {
               </tr>
             ) : (
               <tr>
-                <th style={{ fontWeight: 500, color: 'black', width: '4rem' }}>Id </th>
                 <Th
                   sorted={sortBy === 'nameGainer'}
                   reversed={reverseSortDirection}

@@ -31,7 +31,13 @@ export const ButtonsAction: FunctionComponent<{ gainerUuid: string }> = (props) 
           color={'transparent'}
           style={{ color: '#1c6350' }}
         >
-          <ActionIcon radius="xl" variant="subtle" style={{ color: '#1c6350' }}>
+          <ActionIcon
+            radius="xl"
+            variant="subtle"
+            style={{ color: '#1c6350' }}
+            component="a"
+            href={`/gainer-appointments/${gainerUuid}`}
+          >
             <IconCalendarTime size="1.125rem" />
           </ActionIcon>
         </Tooltip>

@@ -10,7 +10,6 @@ export const InitialValueDataGainers = {
   description: '',
   helpTypeUuid: '',
   gainerUuid: '',
-  nameHelpType: '',
 }
 
 export const ValidateForm = {
