@@ -3,8 +3,8 @@ import axios from 'axios'
 
 export const useGetInfoUser = (
   successCallBack: (data: any) => void,
-  userUuid: string | null,
-  authToken: string | null,
+  userUuid?: string | null,
+  authToken?: string | null,
 ) => {
   let config = {
     headers: { authToken: authToken },

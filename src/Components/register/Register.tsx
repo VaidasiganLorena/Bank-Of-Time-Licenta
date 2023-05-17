@@ -141,7 +141,7 @@ const Register = () => {
     if (data.status === 400) {
     }
   }
-  const { mutate } = usePostRegister(succesCallBack, errorCallBack)
+  const { mutate, isLoading } = usePostRegister(succesCallBack, errorCallBack)
 
   const onPressCreateAcount = () => {
     if (formRegistration.validate().hasErrors === false && validCity === true) {
@@ -290,6 +290,7 @@ const Register = () => {
                 onClick={onPressCreateAcount}
                 type="submit"
                 className={classes.submitButton}
+                loading={isLoading}
               >
                 Creează cont
               </Button>

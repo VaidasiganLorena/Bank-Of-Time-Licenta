@@ -102,7 +102,7 @@ export function Login() {
   const errorCallBack = (data: any) => {
     setErrorBackend(data.response)
   }
-  const { mutate } = usePostLogin(successCallBack, errorCallBack)
+  const { mutate, isLoading } = usePostLogin(successCallBack, errorCallBack)
 
   const onPressLogin = () => {
     if (
@@ -159,6 +159,7 @@ export function Login() {
                 className={classes.buttonLogin}
                 mt={errorBackend.length === 0 ? 30 : 15}
                 onClick={() => onPressLogin()}
+                loading={isLoading}
               >
                 Autentificare
               </Button>

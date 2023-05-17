@@ -27,7 +27,6 @@ const Homepage = () => {
   const userUUid = localStorage.getItem('userUuid')
   const authToken = localStorage.getItem('userToken')
   const successCallBack = (data: any) => {
-    console.log(data)
     localStorage.setItem('firstName', data.data.response[0].firstname)
     localStorage.setItem('lastName', data.data.response[0].lastname)
   }

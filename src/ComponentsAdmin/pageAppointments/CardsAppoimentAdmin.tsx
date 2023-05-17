@@ -63,7 +63,6 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
   const dateOfAppointmentRemainder = moment(dataApp?.dateOfAppointment)
     .subtract(7, 'days')
     .calendar()
-  //const dateOfApp = new Date(moment(dataApp?.dateOfAppointment).format('DD-MM-YYYY'))
   const [mesageTimeChangeStatus, setMessageTimeChangeStatus] = useState('')
 
   const changeStatusButtonSendEmail = () => {
@@ -78,118 +77,116 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
     changeStatusButtonSendEmail()
   }, [currentDate])
   return (
-    <>
-      <Card radius="lg" mx={'xs'} className={classes.card} key={dataApp.appointmentUuid} mt={'xs'}>
-        <Flex direction={'column'}>
-          <Flex justify={'space-around'}>
-            <Group noWrap>
-              <Image src={dataApp.photo} height={100} width={100} radius={'md'} />
-              <Stack spacing={5}>
-                <Group spacing={5}>
-                  <Text className={classes.title} size="xl">
-                    {dataApp?.lastname}
-                  </Text>
-                  <Text className={classes.title} size="xl">
-                    {dataApp?.firstname}
-                  </Text>
-                </Group>
-
-                <Stack spacing={0}>
-                  <Group>
-                    <Text size="sm">Localitea:</Text>
-                    <Text size="sm">{dataApp.city}</Text>
-                  </Group>
-                  <Group>
-                    <Text size="sm">Număr de telefon:</Text>
-                    <Text size="sm">{dataApp?.phoneNumber}</Text>
-                  </Group>
-                  <Group>
-                    <Text size="sm">Email:</Text>
-                    <Text size="sm">{dataApp?.email}</Text>
-                  </Group>
-                </Stack>
-              </Stack>
-            </Group>
-            <Stack spacing={0}>
-              <Group>
-                <Text size="sm">Ajutor pentru:</Text>
-                <Text size="sm">{dataApp.helpTypeUuid === '1' ? 'Companie' : 'Cumparaturi'}</Text>
-              </Group>
-              <Group>
-                <Text size="sm">In data de:</Text>
-                <Text size="sm">{dataApp?.dateOfAppointment}</Text>
-              </Group>
-              <Group>
-                <Text size="sm">Durata:</Text>
-                <Text size="sm">{dataApp?.timeVolunteering}</Text>
-                <Text size="sm">ore</Text>
-              </Group>
-            </Stack>
-
-            <Group noWrap>
-              <Image src={dataApp?.photoGainer} height={100} width={100} radius={'md'} />
-              <Stack spacing={5}>
+    <Card radius="lg" mx={'xs'} className={classes.card} key={dataApp.appointmentUuid} mt={'xs'}>
+      <Flex direction={'column'}>
+        <Flex justify={'space-around'}>
+          <Group noWrap>
+            <Image src={dataApp.photo} height={100} width={100} radius={'md'} />
+            <Stack spacing={5}>
+              <Group spacing={5}>
                 <Text className={classes.title} size="xl">
-                  {dataApp?.nameGainer}
+                  {dataApp?.lastname}
                 </Text>
+                <Text className={classes.title} size="xl">
+                  {dataApp?.firstname}
+                </Text>
+              </Group>
 
-                <Stack spacing={0}>
-                  <Group>
-                    <Text size="sm">Localitea:</Text>
-                    <Text size="sm">{dataApp.city}</Text>
-                  </Group>
-                  <Group>
-                    <Text size="sm">Număr de telefon:</Text>
-                    <Text size="sm">{dataApp?.phoneNumberGainer}</Text>
-                  </Group>
-                  <Group>
-                    <Text size="sm">Adresa:</Text>
-                    <Text size="sm">{dataApp?.adress}</Text>
-                  </Group>
-                </Stack>
+              <Stack spacing={0}>
+                <Group>
+                  <Text size="sm">Localitea:</Text>
+                  <Text size="sm">{dataApp.city}</Text>
+                </Group>
+                <Group>
+                  <Text size="sm">Număr de telefon:</Text>
+                  <Text size="sm">{dataApp?.phoneNumber}</Text>
+                </Group>
+                <Group>
+                  <Text size="sm">Email:</Text>
+                  <Text size="sm">{dataApp?.email}</Text>
+                </Group>
               </Stack>
+            </Stack>
+          </Group>
+          <Stack spacing={0}>
+            <Group>
+              <Text size="sm">Ajutor pentru:</Text>
+              <Text size="sm">{dataApp.helpTypeUuid === '1' ? 'Companie' : 'Cumparaturi'}</Text>
             </Group>
-          </Flex>
+            <Group>
+              <Text size="sm">In data de:</Text>
+              <Text size="sm">{dataApp?.dateOfAppointment}</Text>
+            </Group>
+            <Group>
+              <Text size="sm">Durata:</Text>
+              <Text size="sm">{dataApp?.timeVolunteering}</Text>
+              <Text size="sm">ore</Text>
+            </Group>
+          </Stack>
 
-          <Group position="right">
-            {dataApp?.status === 'În procesare' ? (
-              <Stack spacing={5}>
-                <Button
-                  radius={'xl'}
-                  onClick={() => {
-                    mutate({
-                      email: dataApp.email,
-                      adress: dataApp.adress,
-                      firstName: dataApp.firstname,
-                      nameGainer: dataApp.nameGainer,
-                      dateOfAppointment: dataApp.dateOfAppointment,
-                      cityGainer: dataApp.cityGainer,
-                    })
-                  }}
-                  disabled={isDisable}
-                  leftIcon={<IconSend size={'1rem'} />}
-                >
-                  Trimite email
-                </Button>
-                {isDisable ? (
-                  <Text size={'xs'} c="dimmed">
-                    Butonul se va activa {mesageTimeChangeStatus}
-                  </Text>
-                ) : null}
+          <Group noWrap>
+            <Image src={dataApp?.photoGainer} height={100} width={100} radius={'md'} />
+            <Stack spacing={5}>
+              <Text className={classes.title} size="xl">
+                {dataApp?.nameGainer}
+              </Text>
+
+              <Stack spacing={0}>
+                <Group>
+                  <Text size="sm">Localitea:</Text>
+                  <Text size="sm">{dataApp.city}</Text>
+                </Group>
+                <Group>
+                  <Text size="sm">Număr de telefon:</Text>
+                  <Text size="sm">{dataApp?.phoneNumberGainer}</Text>
+                </Group>
+                <Group>
+                  <Text size="sm">Adresa:</Text>
+                  <Text size="sm">{dataApp?.adress}</Text>
+                </Group>
               </Stack>
-            ) : dataApp?.status === 'În confirmare' ? (
-              <Button radius={'xl'}>Aprobat</Button>
-            ) : (
-              <Button radius={'xl'}>Verificat</Button>
-            )}
-            {dataApp?.status === 'În procesare' ? null : (
-              <Button variant={'outline'} radius={'xl'}>
-                Anulat
-              </Button>
-            )}
+            </Stack>
           </Group>
         </Flex>
-      </Card>
-    </>
+
+        <Group position="right">
+          {dataApp?.status === 'În procesare' ? (
+            <Stack spacing={5}>
+              <Button
+                radius={'xl'}
+                onClick={() => {
+                  mutate({
+                    email: dataApp.email,
+                    adress: dataApp.adress,
+                    firstName: dataApp.firstname,
+                    nameGainer: dataApp.nameGainer,
+                    dateOfAppointment: dataApp.dateOfAppointment,
+                    cityGainer: dataApp.cityGainer,
+                  })
+                }}
+                disabled={isDisable}
+                leftIcon={<IconSend size={'1rem'} />}
+              >
+                Trimite email
+              </Button>
+              {isDisable ? (
+                <Text size={'xs'} c="dimmed">
+                  Butonul se va activa {mesageTimeChangeStatus}
+                </Text>
+              ) : null}
+            </Stack>
+          ) : dataApp?.status === 'În confirmare' ? (
+            <Button radius={'xl'}>Aprobat</Button>
+          ) : (
+            <Button radius={'xl'}>Verificat</Button>
+          )}
+          {dataApp?.status === 'În procesare' ? null : (
+            <Button variant={'outline'} radius={'xl'}>
+              Anulat
+            </Button>
+          )}
+        </Group>
+      </Flex>
+    </Card>
   )
 }

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import {
   createStyles,
   Table,
-  ScrollArea,
   UnstyledButton,
   Group,
   Text,
@@ -11,6 +10,7 @@ import {
   rem,
   Flex,
   Stack,
+  ScrollArea,
 } from '@mantine/core'
 import { keys } from '@mantine/utils'
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react'
@@ -35,6 +35,24 @@ const useStyles = createStyles((theme) => ({
     width: rem(21),
     height: rem(21),
     borderRadius: rem(21),
+  },
+  header: {
+    zIndex: 10,
+    position: 'sticky',
+    top: 0,
+    backgroundColor: theme.white,
+    transition: 'box-shadow 150ms ease',
+
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderBottom: `${rem(1)} solid ${
+        theme.colorScheme === 'dark' ? theme.colors.dark[3] : theme.colors.gray[2]
+      }`,
+    },
   },
 }))
 
@@ -92,6 +110,7 @@ function sortData(
 }
 
 export function TableGainers() {
+  const { classes } = useStyles()
   const [search, setSearch] = useState('')
   const { gainersEntriesData } = useSelector((state: RootState) => state.gainers)
   const [sortedData, setSortedData] = useState(gainersEntriesData)
@@ -143,7 +162,7 @@ export function TableGainers() {
               </Group>
               <Group>
                 <Text>Adresă:</Text>
-                {row.adress},{row.cityGainer}
+                {row.adress.concat(', ').concat(`${row.cityGainer}`)}
               </Group>
             </Flex>
             <Stack spacing={0} my={5}>
@@ -167,9 +186,7 @@ export function TableGainers() {
               <Text>{row.phoneNumberGainer}</Text>
             </Flex>
           </td>
-          <td>
-            {row.adress},{row.cityGainer}
-          </td>
+          <td>{row.adress.concat(', ').concat(`${row.cityGainer}`)}</td>
 
           <td>
             <Text lineClamp={2}>{row.description}</Text>
@@ -185,9 +202,7 @@ export function TableGainers() {
           <td>{moment(row.dateOfBirth).format('L')}</td>
           <td width={'2rem'}>{row.gender}</td>
           <td>{row.phoneNumberGainer}</td>
-          <td>
-            {row.adress},{row.cityGainer}
-          </td>
+          <td>{row.adress.concat(', ').concat(`${row.cityGainer}`)}</td>
           <td>
             <Text lineClamp={2}>{row.description}</Text>
           </td>
@@ -211,14 +226,15 @@ export function TableGainers() {
         value={search}
         onChange={handleSearchChange}
       />
-      <ScrollArea px={20}>
+      <ScrollArea h={'77vh'} type="auto" scrollbarSize={6} px={'md'}>
         <Table
           horizontalSpacing="md"
           sx={{ tableLayout: 'fixed' }}
-          width="max-content"
+          width="100%"
+          p="xs"
           highlightOnHover
         >
-          <thead>
+          <thead className={classes.header}>
             {isMobile ? (
               <tr>
                 <Th

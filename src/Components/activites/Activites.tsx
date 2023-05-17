@@ -19,7 +19,7 @@ import { IconPin } from '@tabler/icons-react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
-import { Cards } from '../Cards'
+import { Cards } from './Cards'
 import { NavigationBar } from '../Navbar'
 import {
   setStartDate,

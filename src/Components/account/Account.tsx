@@ -74,9 +74,7 @@ function Account() {
   const tablet = useMediaQuery('(max-width: 800px)')
   const userUuid = localStorage.getItem('userUuid')
   const authToken = localStorage.getItem('authToken')
-  const successCallBack = (data: any) => {
-    console.log(data)
-  }
+  const successCallBack = (data: any) => {}
   const { data } = useGetAppointment(successCallBack, userUuid, authToken)
   const cardsAppointmentFinished = data?.data.response.map(
     (card: any) =>
@@ -110,21 +108,20 @@ function Account() {
         />
       ),
   )
-  const cardsAppointmentPending = data?.data.response.map(
-    (card: any) =>
-      card.status === 'În așteptare' && (
-        <CardAppointment
-          key={card.appointmentUuid}
-          nameGainer={card.nameGainer}
-          cityGainer={card.cityGainer}
-          gainerUuid={card.gainerUuid}
-          dateOfAppointment={card.dateOfAppointment}
-          phoneNumberGainer={card.phoneNumberGainer}
-          status={card.status}
-          photoGainer={card.photoGainer}
-          timeVolunteering={card.timeVolunteering}
-        />
-      ),
+  const cardsAppointmentPending = data?.data.response.map((card: any) =>
+    card.status === 'În verificare' || card.status === 'În procesare' ? (
+      <CardAppointment
+        key={card.appointmentUuid}
+        nameGainer={card.nameGainer}
+        cityGainer={card.cityGainer}
+        gainerUuid={card.gainerUuid}
+        dateOfAppointment={card.dateOfAppointment}
+        phoneNumberGainer={card.phoneNumberGainer}
+        status={card.status}
+        photoGainer={card.photoGainer}
+        timeVolunteering={card.timeVolunteering}
+      />
+    ) : null,
   )
 
   return (

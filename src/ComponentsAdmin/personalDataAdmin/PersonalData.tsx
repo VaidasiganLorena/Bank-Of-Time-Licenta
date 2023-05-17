@@ -13,6 +13,7 @@ import {
   Button,
   PasswordInput,
   Stack,
+  LoadingOverlay,
 } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { IconKey, IconTrash } from '@tabler/icons-react'
@@ -215,7 +216,11 @@ const PersonalDataAdmin = () => {
   const succesInfoUserCallBack = () => {}
   const succesChangePasswordCallBack = () => {}
   const { mutate } = useChangePassword(succesChangePasswordCallBack, userUuid, authToken)
-  const { data, refetch, isLoading } = useGetInfoUser(succesInfoUserCallBack, userUuid, authToken)
+  const { data, refetch, isLoading, isRefetching } = useGetInfoUser(
+    succesInfoUserCallBack,
+    userUuid,
+    authToken,
+  )
   // const succesCallBack = () => {
   //   // setEditMode(false)
   // }
@@ -252,6 +257,7 @@ const PersonalDataAdmin = () => {
           <NavbarAdmin />
           <Flex mr={20} direction={tablet ? 'column' : 'row'} className={classes.flex}>
             <Paper className={classes.containerImage} radius={0} p={15} withBorder>
+              <LoadingOverlay visible={isLoading || isRefetching} />
               <Group position="center" spacing="xl">
                 <div>
                   {editMode ? (
@@ -299,41 +305,6 @@ const PersonalDataAdmin = () => {
               </Group>
             </Paper>
             <Container>
-              {/* <Paper radius="md" withBorder className={classes.card} mt={`calc(${ICON_SIZE} / 2)`}>
-                <ThemeIcon
-                  className={classes.icon}
-                  size={ICON_SIZE}
-                  color={'#28886f'}
-                  radius={ICON_SIZE}
-                >
-                  <IconHeart size="2rem" stroke={1.5} />
-                </ThemeIcon>
-
-                <Text ta="center" fw={700} className={classes.title}>
-                  Timpul tău în care ai ales să ajuți comunitatea
-                </Text>
-                <Text c="dimmed" ta="center" fz="sm">
-                  20 ore/ lună
-                </Text>
-
-                <Group position="apart" mt="xs">
-                  <Text fz="sm" color="dimmed">
-                    Progresul tău
-                  </Text>
-                  <Text fz="sm" color="dimmed">
-                    62%
-                  </Text>
-                </Group>
-
-                <Progress value={62} mt={5} color={'#28886f'} />
-
-                <Group position="apart" mt="md">
-                  <Text fz="sm">65 / 100 ore</Text>
-                </Group>
-                <Text c="dimmed" ta="center" fz="sm">
-                  Noi suntem mândri de tine continuă tot așa și vei fi răsplătit!
-                </Text>
-              </Paper> */}
               <Group>
                 <Paper
                   radius="md"

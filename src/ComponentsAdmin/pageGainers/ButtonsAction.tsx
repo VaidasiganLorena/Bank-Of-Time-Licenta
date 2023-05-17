@@ -2,6 +2,8 @@ import { ActionIcon, Button, Group, Modal, Paper, Tooltip, Text } from '@mantine
 import { IconCalendarTime, IconEdit, IconTrash } from '@tabler/icons-react'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useDeleteGainer } from '../../api/gainer/useDeleteGainer'
+import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { RootState } from '../../Redux/store'
 import { IGainer } from '../../type'
 import { FormGainersData } from './FormGainer'
@@ -12,9 +14,14 @@ export const ButtonsAction: FunctionComponent<{ gainerUuid: string }> = (props) 
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentGainer, setCurrentGainer] = useState<IGainer>()
   const { gainersEntriesData } = useSelector((state: RootState) => state.gainers)
+  const succesCallback = () => {}
+  const errorCallback = () => {}
+  const { refetch } = useGetInfoGainers(succesCallback)
+  const { mutate } = useDeleteGainer(succesCallback, errorCallback)
   const onDeleteGainer = () => {
-    console.log(gainerUuid)
-    console.log(currentGainer)
+    mutate({ gainerUuid })
+    setShowDeleteModal(false)
+    refetch()
   }
   useEffect(() => {
     const currGainer = gainersEntriesData.find((gainer) => gainer.gainerUuid.includes(gainerUuid))

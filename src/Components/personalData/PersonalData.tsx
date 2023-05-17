@@ -13,6 +13,7 @@ import {
   Button,
   PasswordInput,
   Stack,
+  LoadingOverlay,
 } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { NavigationBar } from '../Navbar'
@@ -177,14 +178,9 @@ export const useStyles = createStyles((theme: any) => ({
     width: '35%',
     borderRadius: 10,
     color: 'white',
-    //backgroundColor: '#617a78',
-    borderColor: '#28886f',
     [theme.fn.smallerThan('md')]: {
       width: 'auto',
     },
-    // '&:hover': {
-    //   backgroundColor: '#3d4146',
-    // },
   },
 
   editButton: {
@@ -216,7 +212,11 @@ const PersonalData = () => {
   const succesInfoUserCallBack = () => {}
   const succesChangePasswordCallBack = () => {}
   const { mutate } = useChangePassword(succesChangePasswordCallBack, userUuid, authToken)
-  const { data, refetch, isLoading } = useGetInfoUser(succesInfoUserCallBack, userUuid, authToken)
+  const { data, refetch, isLoading, isRefetching } = useGetInfoUser(
+    succesInfoUserCallBack,
+    userUuid,
+    authToken,
+  )
   // const succesCallBack = () => {
   //   // setEditMode(false)
   // }
@@ -253,6 +253,7 @@ const PersonalData = () => {
           <NavigationBar />
           <Flex mr={20} direction={tablet ? 'column' : 'row'} className={classes.flex}>
             <Paper className={classes.containerImage} radius={0} p={15} withBorder>
+              <LoadingOverlay visible={isLoading || isRefetching} />
               <Group position="center" spacing="xl">
                 <div>
                   {editMode ? (

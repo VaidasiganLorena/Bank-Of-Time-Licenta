@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useRef, useState } from 'react'
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react'
 import { useForm } from '@mantine/form'
 import {
   Autocomplete,
@@ -17,7 +17,8 @@ import {
 } from '@mantine/core'
 import { cities } from '../../aseert/city'
 import { useUpdateInfoUser } from '../../api/user/useUpdateInfoUser'
-import { IconUpload } from '@tabler/icons-react'
+import { IconRefreshOff, IconUpload } from '@tabler/icons-react'
+import { useGetInfoUser } from '../../api/user/useGetInfoUser'
 
 const useStyles = createStyles((theme: any) => ({
   form: {
@@ -163,10 +164,9 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   })
   const userUuid = localStorage.getItem('userUuid')
   const authToken = localStorage.getItem('authToken')
-  const succesCallBack = () => {
-    // setEditMode(false)
-  }
+  const succesCallBack = () => {}
   const { mutate } = useUpdateInfoUser(succesCallBack, userUuid, authToken)
+
   const onSave = () => {
     if (formPersonalData.validate().hasErrors === false && validCity === true) {
       mutate({
@@ -183,6 +183,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
       setErrorCity(isValidCity(city))
       setValidCity(false)
     }
+    window.location.reload()
   }
   const onCancel = () => {
     setEditMode(false)
@@ -214,6 +215,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   const uploadFile = (e: any) => {
     setFile(e)
   }
+
   return (
     <form onSubmit={formPersonalData.onSubmit(onSave)}>
       <Flex direction={'column'} align="center">

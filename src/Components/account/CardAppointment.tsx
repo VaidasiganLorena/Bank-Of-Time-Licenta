@@ -9,6 +9,7 @@ import {
   IconRotate2,
   IconX,
 } from '@tabler/icons-react'
+import moment from 'moment'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -86,7 +87,7 @@ export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
                 <Group noWrap spacing={10} mt={5}>
                   <IconCalendarTime stroke={1.5} size="1.2rem" />
                   <Text fz="sm" c="dimmed">
-                    {dateOfAppointment}
+                    {moment(dateOfAppointment).format('L')}
                   </Text>
                 </Group>
 
@@ -101,7 +102,15 @@ export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
 
             <Grid.Col span={2}>
               <Badge
-                color={status === 'În așteptare' ? 'orange' : status === 'Anulat' ? 'red' : 'green'}
+                color={
+                  status === 'În verificare'
+                    ? 'orange'
+                    : status === 'În procesare'
+                    ? 'yellow'
+                    : status === 'Anulat'
+                    ? 'red'
+                    : 'green'
+                }
                 variant="outline"
                 rightSection={
                   status === 'În așteptare' ? (

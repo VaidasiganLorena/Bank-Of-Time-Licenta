@@ -1,4 +1,14 @@
-import { BackgroundImage, Button, Container, createStyles, Flex, Paper, Title } from '@mantine/core'
+import {
+  BackgroundImage,
+  Button,
+  Container,
+  createStyles,
+  Flex,
+  LoadingOverlay,
+  Paper,
+  ScrollArea,
+  Title,
+} from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -56,10 +66,10 @@ const PageGainers = () => {
   const [openModalAddGainer, setOpenModalAddGainer] = useState(false)
   const dispatch = useDispatch()
   const succesCallBackGetGainers = () => {}
-  const { data } = useGetInfoGainers(succesCallBackGetGainers)
+  const { data, isLoading, isRefetching } = useGetInfoGainers(succesCallBackGetGainers)
   useEffect(() => {
     dispatch(setGainers(data?.data.response))
-  }, [data])
+  }, [data, isRefetching, isLoading])
   return (
     <BackgroundImage src="/backround.png" h={'100%'}>
       <Container className={classes.wrapper} fluid p={16}>
@@ -74,6 +84,7 @@ const PageGainers = () => {
                 Adaugare beneficiar
               </Button>
             </Flex>
+            <LoadingOverlay visible={isLoading || isRefetching} />
             <TableGainers />
           </Paper>
         </Paper>

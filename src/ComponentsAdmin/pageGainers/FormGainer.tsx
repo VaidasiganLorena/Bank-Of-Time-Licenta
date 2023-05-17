@@ -1,11 +1,23 @@
-import { Button, Group, Modal, TextInput, Flex, Textarea, Select, FileInput } from '@mantine/core'
+import {
+  Button,
+  Group,
+  Modal,
+  TextInput,
+  Flex,
+  Textarea,
+  Select,
+  FileInput,
+  MultiSelect,
+} from '@mantine/core'
 import { useForm } from '@mantine/form'
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
+import { focusManager } from 'react-query'
+import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { usePostGainer } from '../../api/gainer/usePostGainer'
 import { useUpdateInfoGainer } from '../../api/gainer/useUpdateGainer'
 import { cities } from '../../aseert/city'
 import { IGainerUpdate } from '../../type'
-import { InitialValueDataGainers, ValidateForm } from './UtilsForm'
+import { convertBase64, InitialValueDataGainers, ValidateForm } from './UtilsForm'
 
 export const FormGainersData: FunctionComponent<{
   isOpenModal: boolean
@@ -15,7 +27,8 @@ export const FormGainersData: FunctionComponent<{
   gainerUuid?: string
 }> = (props) => {
   const { isOpenModal, setOpenModal, isModEdit, dataGainer } = props
-
+  const succesCallBackGetGainers = () => {}
+  const { refetch } = useGetInfoGainers(succesCallBackGetGainers)
   const formGainerData = useForm<IGainerUpdate>({
     initialValues:
       isModEdit && dataGainer
@@ -37,14 +50,15 @@ export const FormGainersData: FunctionComponent<{
   })
 
   useEffect(() => {
-    console.log(formGainerData.values, dataGainer)
     if (dataGainer && isModEdit) formGainerData.setValues(dataGainer)
+    setListOfDates(dataOfListConverted)
   }, [dataGainer, isModEdit])
 
   const onCloseModal = () => {
     setOpenModal && setOpenModal(false)
     formGainerData.reset()
     formGainerData.clearErrors()
+    refetch()
   }
 
   const successCallBack = () => {
@@ -53,17 +67,42 @@ export const FormGainersData: FunctionComponent<{
   const errorCallBack = () => {}
   const { mutate } = usePostGainer(successCallBack, errorCallBack)
   const { mutate: mutateUpdate } = useUpdateInfoGainer(successCallBack, dataGainer?.gainerUuid)
+
   const onCreateGainer = () => {
     if (formGainerData.isValid()) {
       mutate(formGainerData.values)
+      console.log(formGainerData.values)
+      onCloseModal()
+      refetch()
     }
   }
   const onUpdateGainer = () => {
     if (formGainerData.isValid()) {
-      mutateUpdate(formGainerData.values)
+      mutateUpdate({
+        nameGainer: formGainerData.values.nameGainer,
+        dateOfBirth: formGainerData.values.dateOfBirth,
+        phoneNumberGainer: formGainerData.values.phoneNumberGainer,
+        adress: formGainerData.values.adress,
+        cityGainer: formGainerData.values.cityGainer,
+        gender: formGainerData.values.gender,
+        photoGainer: formGainerData.values.photoGainer,
+        listOfDates: String(listOfDates),
+        description: formGainerData.values.description,
+        helpTypeUuid: formGainerData.values.helpTypeUuid,
+        gainerUuid: formGainerData.values.gainerUuid,
+      })
+      onCloseModal()
     }
   }
-
+  const dataOfListConverted = dataGainer ? dataGainer.listOfDates.split(',') : []
+  const [listOfDates, setListOfDates] = useState<any>(dataOfListConverted)
+  const onUploadFile = (event: File | null) => {
+    convertBase64(event)
+      .then((e: any) => {
+        formGainerData.setFieldValue('photoGainer', e)
+      })
+      .catch((err) => console.log('Eroare incarcare fisier', err))
+  }
   return (
     <Modal
       //size={isMobile ? 'calc(100vw - 5vw)' : isLaptopS ? '65%' : '45%'}
@@ -73,6 +112,7 @@ export const FormGainersData: FunctionComponent<{
       centered
       xOffset={0}
       zIndex={2000}
+      styles={{ header: { zIndex: 20 } }}
     >
       <form onSubmit={formGainerData.onSubmit(() => {})}>
         <Flex direction={'column'} gap="md">
@@ -89,6 +129,9 @@ export const FormGainersData: FunctionComponent<{
             placeholder="Introduceți câteva detalii despre noul beneficiar.."
             variant="filled"
             size="md"
+            autosize
+            minRows={2}
+            maxRows={4}
             radius={10}
             {...formGainerData.getInputProps('description')}
           />
@@ -109,7 +152,7 @@ export const FormGainersData: FunctionComponent<{
             variant="filled"
             size="md"
             radius={10}
-            {...formGainerData.getInputProps('photoGainer')}
+            onChange={(e) => onUploadFile(e)}
           />
           <Select
             data={['Feminin', 'Masculin', 'Altul']}
@@ -146,13 +189,20 @@ export const FormGainersData: FunctionComponent<{
             radius={10}
             {...formGainerData.getInputProps('cityGainer')}
           />
-          <TextInput
+
+          <MultiSelect
             label="Lista de date"
-            placeholder="Introduceti datele disponibile"
-            variant="filled"
-            size="md"
-            radius={10}
-            {...formGainerData.getInputProps('listOfDates')}
+            data={listOfDates}
+            defaultValue={listOfDates}
+            placeholder="Introduceți datele disponibile"
+            searchable
+            creatable
+            getCreateLabel={(query) => `+ Adaugă data de:  ${query}`}
+            onCreate={(query) => {
+              const item = { value: query, label: query }
+              setListOfDates((oldArray: any) => [...oldArray, query])
+              return item
+            }}
           />
           <Select
             data={[

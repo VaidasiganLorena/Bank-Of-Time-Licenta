@@ -14,7 +14,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconCalendarEvent, IconClock } from '@tabler/icons-react'
 import React, { FunctionComponent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { usePostAppointment } from '../api/appointment/usePostAppointment'
+import { usePostAppointment } from '../../api/appointment/usePostAppointment'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -37,6 +37,7 @@ const useStyles = createStyles((theme) => ({
 
   body: {
     padding: theme.spacing.md,
+    width: '100%',
   },
 }))
 type TInfoGainerCard = {
@@ -85,7 +86,7 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
       userUuid: userUuid ? userUuid : '',
       gainerUuid: gainerUuid,
       dateOfAppointment: dateOfAppointment ? dateOfAppointment : '',
-      status: 'În așteptare',
+      status: 'În verificare',
       timeVolunteering: timeVolunteering ? parseInt(timeVolunteering) : 0,
     })
   }
@@ -99,7 +100,7 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
               <Text className={classes.title} size="xl">
                 {nameGainer}
               </Text>
-              <Flex align={'center'} justify="space-around" w={'20%'}>
+              <Flex align={'center'} justify="space-around" w={'auto'} gap={5}>
                 <Text size="sm">•</Text>
                 <Text size="sm">{age}</Text>
                 <Text size="sm">•</Text>

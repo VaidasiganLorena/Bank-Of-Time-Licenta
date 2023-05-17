@@ -9,7 +9,7 @@ import {
   Tabs,
   Text,
 } from '@mantine/core'
-import { IconCheck, IconChecks, IconRotate2, IconX } from '@tabler/icons-react'
+import { IconCheck, IconChecks, IconRotate2 } from '@tabler/icons-react'
 import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
 import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
 import { CardAppoimentAdmin, TInfoAppCard } from './CardsAppoimentAdmin'
@@ -128,7 +128,7 @@ const Appointments = () => {
         />
       ),
   )
-  console.log(data?.data)
+
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>

@@ -6,7 +6,6 @@ export const useGetAllAppointment = (successCallBack: (data: any) => void) => {
     retry: false,
     staleTime: 18 * 100000,
     onSuccess: (data) => {
-      console.log(data)
       successCallBack(data)
     },
   })
