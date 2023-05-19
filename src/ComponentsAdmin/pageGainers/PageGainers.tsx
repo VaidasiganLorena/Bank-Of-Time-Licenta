@@ -6,7 +6,6 @@ import {
   Flex,
   LoadingOverlay,
   Paper,
-  ScrollArea,
   Title,
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'

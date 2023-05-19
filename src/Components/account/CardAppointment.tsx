@@ -56,7 +56,7 @@ export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
 
   return (
     <>
-      <Card radius="lg" p={0} className={classes.card} my={20}>
+      <Card radius="lg" p={0} className={classes.card} my={20} ml={10}>
         <div>
           <Grid align={'center'}>
             <Grid.Col span={2}>

@@ -7,17 +7,22 @@ import {
   Textarea,
   Select,
   FileInput,
-  MultiSelect,
+  rem,
+  Image,
+  Avatar,
+  Box,
+  Center,
 } from '@mantine/core'
+import { DatePickerInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
+import { IconCalendar, IconUpload } from '@tabler/icons-react'
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { focusManager } from 'react-query'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { usePostGainer } from '../../api/gainer/usePostGainer'
 import { useUpdateInfoGainer } from '../../api/gainer/useUpdateGainer'
 import { cities } from '../../aseert/city'
 import { IGainerUpdate } from '../../type'
-import { convertBase64, InitialValueDataGainers, ValidateForm } from './UtilsForm'
+import { base64ToFile, convertBase64, InitialValueDataGainers, ValidateForm } from './UtilsForm'
 
 export const FormGainersData: FunctionComponent<{
   isOpenModal: boolean
@@ -29,6 +34,10 @@ export const FormGainersData: FunctionComponent<{
   const { isOpenModal, setOpenModal, isModEdit, dataGainer } = props
   const succesCallBackGetGainers = () => {}
   const { refetch } = useGetInfoGainers(succesCallBackGetGainers)
+
+  const listConverted: Date[] = []
+  const dataOfListConverted = dataGainer ? dataGainer.listOfDates.split(',') : []
+
   const formGainerData = useForm<IGainerUpdate>({
     initialValues:
       isModEdit && dataGainer
@@ -48,12 +57,16 @@ export const FormGainersData: FunctionComponent<{
         : InitialValueDataGainers,
     validate: ValidateForm,
   })
-
+  const [dates, setDates] = useState<Date[]>(listConverted)
   useEffect(() => {
     if (dataGainer && isModEdit) formGainerData.setValues(dataGainer)
-    setListOfDates(dataOfListConverted)
+    dataOfListConverted.map((dateConverted) => listConverted.push(new Date(dateConverted)))
+    if (dates.length === 0) {
+      setDates(listConverted)
+    }
   }, [dataGainer, isModEdit])
 
+  useEffect(() => {}, [dates])
   const onCloseModal = () => {
     setOpenModal && setOpenModal(false)
     formGainerData.reset()
@@ -70,11 +83,23 @@ export const FormGainersData: FunctionComponent<{
 
   const onCreateGainer = () => {
     if (formGainerData.isValid()) {
-      mutate(formGainerData.values)
-      console.log(formGainerData.values)
+      mutate({
+        nameGainer: formGainerData.values.nameGainer,
+        dateOfBirth: formGainerData.values.dateOfBirth,
+        phoneNumberGainer: formGainerData.values.phoneNumberGainer,
+        adress: formGainerData.values.adress,
+        cityGainer: formGainerData.values.cityGainer,
+        gender: formGainerData.values.gender,
+        photoGainer: formGainerData.values.photoGainer,
+        listOfDates: String(dates),
+        description: formGainerData.values.description,
+        helpTypeUuid: formGainerData.values.helpTypeUuid,
+        gainerUuid: formGainerData.values.gainerUuid,
+      })
       onCloseModal()
       refetch()
     }
+    console.log(formGainerData.errors)
   }
   const onUpdateGainer = () => {
     if (formGainerData.isValid()) {
@@ -86,7 +111,7 @@ export const FormGainersData: FunctionComponent<{
         cityGainer: formGainerData.values.cityGainer,
         gender: formGainerData.values.gender,
         photoGainer: formGainerData.values.photoGainer,
-        listOfDates: String(listOfDates),
+        listOfDates: String(dates),
         description: formGainerData.values.description,
         helpTypeUuid: formGainerData.values.helpTypeUuid,
         gainerUuid: formGainerData.values.gainerUuid,
@@ -94,8 +119,7 @@ export const FormGainersData: FunctionComponent<{
       onCloseModal()
     }
   }
-  const dataOfListConverted = dataGainer ? dataGainer.listOfDates.split(',') : []
-  const [listOfDates, setListOfDates] = useState<any>(dataOfListConverted)
+
   const onUploadFile = (event: File | null) => {
     convertBase64(event)
       .then((e: any) => {
@@ -103,6 +127,7 @@ export const FormGainersData: FunctionComponent<{
       })
       .catch((err) => console.log('Eroare incarcare fisier', err))
   }
+
   return (
     <Modal
       //size={isMobile ? 'calc(100vw - 5vw)' : isLaptopS ? '65%' : '45%'}
@@ -116,6 +141,9 @@ export const FormGainersData: FunctionComponent<{
     >
       <form onSubmit={formGainerData.onSubmit(() => {})}>
         <Flex direction={'column'} gap="md">
+          <Center w={'100%'}>
+            <Avatar radius={'xl'} h={'10rem'} w={'10rem'} src={formGainerData.values.photoGainer} />
+          </Center>
           <TextInput
             label="Nume și prenume"
             placeholder="Introduceți numele și prenumele noului beneficiar"
@@ -145,12 +173,21 @@ export const FormGainersData: FunctionComponent<{
             radius={10}
             {...formGainerData.getInputProps('dateOfBirth')}
           />
+
           <FileInput
             label="Fotografie"
             placeholder="Încarcă fotografie cu beneficiarul"
             accept="image/png,image/jpeg"
             variant="filled"
             size="md"
+            icon={<IconUpload size={rem(14)} />}
+            defaultValue={
+              dataGainer &&
+              base64ToFile(
+                dataGainer.photoGainer,
+                dataGainer?.nameGainer.replace(' ', '').concat('.jpeg'),
+              )
+            }
             radius={10}
             onChange={(e) => onUploadFile(e)}
           />
@@ -189,8 +226,19 @@ export const FormGainersData: FunctionComponent<{
             radius={10}
             {...formGainerData.getInputProps('cityGainer')}
           />
-
-          <MultiSelect
+          <DatePickerInput
+            icon={<IconCalendar size="1.1rem" stroke={1.5} />}
+            valueFormat="DD.MM.YYYY"
+            variant="filled"
+            size="md"
+            radius={10}
+            type="multiple"
+            label="Lista de date"
+            placeholder="Introduceți datele disponibile"
+            value={dates}
+            onChange={setDates}
+          />
+          {/* <MultiSelect
             label="Lista de date"
             data={listOfDates}
             defaultValue={listOfDates}
@@ -203,7 +251,7 @@ export const FormGainersData: FunctionComponent<{
               setListOfDates((oldArray: any) => [...oldArray, query])
               return item
             }}
-          />
+          /> */}
           <Select
             data={[
               { value: '1', label: 'Curățenie' },

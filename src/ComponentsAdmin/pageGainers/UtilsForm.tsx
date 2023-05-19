@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 export const InitialValueDataGainers = {
   nameGainer: '',
   dateOfBirth: '',
@@ -22,8 +23,6 @@ export const ValidateForm = {
   adress: (value: string) =>
     value.length < 5 ? 'Adresa trebuie să conțină cel puțin 5 caractere' : null,
   gender: (value: string) => (value.length < 2 ? 'Trebuie să alegeți genul' : null),
-  listOfDates: (value: string) =>
-    value.length < 2 ? 'Lista cu date trebuie să conțină cel putin o dată' : null,
   description: (value: string) =>
     value.length < 50 ? 'Descrierea trebuie să conțină cel puțin 50 de caractere' : null,
   helpTypeUuid: (value: string) =>
@@ -41,4 +40,26 @@ export const convertBase64 = (file: any) => {
       reject(error)
     }
   })
+}
+const decodeBase64 = (base64: string) => {
+  const decodedString = Buffer.from(base64, 'base64').toString('binary')
+  const byteNumbers = new Uint8Array(decodedString.length)
+  for (let i = 0; i < decodedString.length; i++) {
+    byteNumbers[i] = decodedString.charCodeAt(i)
+  }
+  return byteNumbers
+}
+const createBlob = (byteArray: BlobPart) => {
+  return new Blob([byteArray], { type: 'image/png,image/jpeg' })
+}
+
+const createFile = (blob: BlobPart, fileName: string) => {
+  return new File([blob], fileName)
+}
+
+export const base64ToFile = (base64: string, fileName: string) => {
+  const byteArray = decodeBase64(base64)
+  const blob = createBlob(byteArray)
+  const file = createFile(blob, fileName)
+  return file
 }

@@ -56,7 +56,9 @@ const GainerAllAppointments = () => {
   const { data } = useGetGainerAllAppointment(successCallback, gainerUuid)
   const cardsAppointmentInProgress = data?.data.response.map(
     (card: TInfoAppForGainer) =>
-      card.status === 'În procesare' && (
+      (card.status === 'În procesare' ||
+        card.status === 'În confirmare' ||
+        card.status === 'În verificare') && (
         <CardAppoimentForGainer
           appointmentUuid={card.appointmentUuid}
           city={card.city}

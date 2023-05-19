@@ -5,6 +5,7 @@ import {
   createStyles,
   Flex,
   Paper,
+  ScrollArea,
   Tabs,
   Text,
 } from '@mantine/core'
@@ -163,15 +164,21 @@ function Account() {
                 </Tabs.List>
 
                 <Tabs.Panel value="pending" pt="xs">
-                  {cardsAppointmentPending}
+                  <ScrollArea h={'80vh'} type="auto" scrollbarSize={6} px={'md'}>
+                    {cardsAppointmentPending}
+                  </ScrollArea>
                 </Tabs.Panel>
 
                 <Tabs.Panel value="finished" pt="xs">
-                  {cardsAppointmentFinished}
+                  <ScrollArea h={'80vh'} type="auto" scrollbarSize={6} px={'md'}>
+                    {cardsAppointmentFinished}
+                  </ScrollArea>
                 </Tabs.Panel>
 
                 <Tabs.Panel value="cancel" pt="xs">
-                  {cardsAppointmentCancel}
+                  <ScrollArea h={'80vh'} type="auto" scrollbarSize={6} px={'md'}>
+                    {cardsAppointmentCancel}
+                  </ScrollArea>
                 </Tabs.Panel>
               </Tabs>
             </Paper>

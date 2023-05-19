@@ -12,9 +12,11 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconCalendarEvent, IconClock } from '@tabler/icons-react'
-import React, { FunctionComponent, useState } from 'react'
+import moment from 'moment'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePostAppointment } from '../../api/appointment/usePostAppointment'
+import { useUpdateListOfDates } from '../../api/user/useUpdateListOfDates'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -68,7 +70,18 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
   const [timeVolunteering, setTimeVolunteering] = useState<string | null>('')
   const userUuid = localStorage.getItem('userUuid')
   const { classes } = useStyles()
-  const dates = listOfDates.split(',')
+
+  const valueDate = listOfDates.split(',')
+  const labelDate: string[] = []
+  valueDate.map((date) => labelDate.push(moment(date).format('L')))
+
+  const [dates, setDates] = useState([{ value: '', label: '' }])
+  const CreateDataSelect = () => {
+    valueDate.map((data) => {
+      const newObj = { value: data, label: moment(data).format('L') }
+      setDates((prevDates) => [...prevDates, newObj])
+    })
+  }
 
   const succesCallBack = (data: string, status: number) => {
     if (status === 200) {
@@ -80,6 +93,10 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
       console.log(data)
     }
   }
+
+  const updatedDates = valueDate.filter((element) => element !== dateOfAppointment)
+
+  const { mutate: mutateUpdate } = useUpdateListOfDates(succesCallBack, gainerUuid)
   const { mutate } = usePostAppointment(succesCallBack, errorCallBack)
   const onAppointment = () => {
     mutate({
@@ -89,7 +106,12 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
       status: 'În verificare',
       timeVolunteering: timeVolunteering ? parseInt(timeVolunteering) : 0,
     })
+    mutateUpdate({ listOfDates: String(updatedDates) })
   }
+  useEffect(() => {
+    CreateDataSelect()
+  }, [])
+
   return (
     <>
       <Card radius="lg" p={0} className={classes.card} key={gainerUuid}>
