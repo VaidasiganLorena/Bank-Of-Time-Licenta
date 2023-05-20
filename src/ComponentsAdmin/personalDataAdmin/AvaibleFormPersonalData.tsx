@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react'
+import React, { FunctionComponent, useRef, useState } from 'react'
 import { useForm } from '@mantine/form'
 import {
   Autocomplete,
@@ -17,8 +17,7 @@ import {
 } from '@mantine/core'
 import { cities } from '../../aseert/city'
 import { useUpdateInfoUser } from '../../api/user/useUpdateInfoUser'
-import { IconRefreshOff, IconUpload } from '@tabler/icons-react'
-import { useGetInfoUser } from '../../api/user/useGetInfoUser'
+import { IconUpload } from '@tabler/icons-react'
 
 const useStyles = createStyles((theme: any) => ({
   form: {

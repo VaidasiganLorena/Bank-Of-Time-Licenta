@@ -18,6 +18,7 @@ import {
 import { cities } from '../../aseert/city'
 import { useUpdateInfoUser } from '../../api/user/useUpdateInfoUser'
 import { IconUpload } from '@tabler/icons-react'
+import { convertBase64 } from '../../ComponentsAdmin/pageGainers/UtilsForm'
 
 const useStyles = createStyles((theme: any) => ({
   form: {
@@ -131,7 +132,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   const [location, setLocation] = useState<string>('')
   const [validCity, setValidCity] = useState(true)
   const [errorCity, setErrorCity] = useState<string>('')
-  const [file, setFile] = useState<File | undefined>(undefined)
+  const [file, setFile] = useState(photo)
 
   const isValidCity: (location: string) => string = (location: string) => {
     return location.length < 3 ? 'Locația nu este validă!' : ''
@@ -175,7 +176,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
         phoneNumber: formPersonalData.values.phoneNumber,
         city: formPersonalData.values.city,
         gender: formPersonalData.values.gender,
-        photo: file ? file.name : photo,
+        photo: file,
       })
       setEditMode(false)
     } else {
@@ -211,8 +212,12 @@ export const AvaibleFormPersonalData: FunctionComponent<{
       formPersonalData.setErrors(formPersonalData.errors)
     }
   }
-  const uploadFile = (e: any) => {
-    setFile(e)
+  const uploadFile = (event: any) => {
+    convertBase64(event)
+      .then((e: any) => {
+        setFile(e)
+      })
+      .catch((err: any) => console.log('Eroare incarcare fisier', err))
   }
   return (
     <form onSubmit={formPersonalData.onSubmit(onSave)}>
@@ -226,7 +231,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
             )}
           </FileButton>
 
-          <Image src={file ? file.name : photo} radius="xl" width="15rem" height="13rem"></Image>
+          <Image src={file} radius="xl" width="15rem" height="13rem"></Image>
         </div>
         <Box my={15}>
           <Group position="center" spacing={20}>

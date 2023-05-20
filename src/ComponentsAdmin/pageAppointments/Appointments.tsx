@@ -4,6 +4,7 @@ import {
   Container,
   createStyles,
   Flex,
+  LoadingOverlay,
   Paper,
   ScrollArea,
   Tabs,
@@ -51,7 +52,7 @@ const useStyles = createStyles((theme: any) => ({
 const Appointments = () => {
   const { classes, theme } = useStyles()
   const successCallback = () => {}
-  const { data } = useGetAllAppointment(successCallback)
+  const { data, isLoading, isRefetching } = useGetAllAppointment(successCallback)
   const cardsAppointmentCheck = data?.data.response.map(
     (card: TInfoAppCard) =>
       card.status === 'În verificare' && (
@@ -132,6 +133,7 @@ const Appointments = () => {
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
+        <LoadingOverlay visible={isLoading || isRefetching} />
         <Paper className={classes.paper}>
           <NavbarAdmin />
           <Paper className={classes.paperTable}>
@@ -168,18 +170,18 @@ const Appointments = () => {
                 </Tabs.List>
 
                 <Tabs.Panel value="check" pt="xs">
-                  <ScrollArea type="auto" h={'77vh'}>
+                  <ScrollArea type="auto" h={'79vh'}>
                     {cardsAppointmentCheck}
                   </ScrollArea>
                 </Tabs.Panel>
 
                 <Tabs.Panel value="progress" pt="xs">
-                  <ScrollArea type="auto" h={'77vh'}>
+                  <ScrollArea type="auto" h={'79vh'}>
                     {cardsAppointmentProcess}
                   </ScrollArea>
                 </Tabs.Panel>
                 <Tabs.Panel value="inConfirmation" pt="xs">
-                  <ScrollArea type="auto" h={'77vh'}>
+                  <ScrollArea type="auto" h={'79vh'}>
                     {cardsAppointmentInCofimation}
                   </ScrollArea>
                 </Tabs.Panel>

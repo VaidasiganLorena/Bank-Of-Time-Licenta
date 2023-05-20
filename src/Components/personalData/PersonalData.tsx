@@ -311,7 +311,7 @@ const PersonalData = () => {
                   <ThemeIcon
                     className={classes.icon}
                     size={ICON_SIZE}
-                    color={'#617a78'}
+                    color="gray"
                     radius={ICON_SIZE}
                   >
                     <IconKey size="2rem" stroke={1.5} />

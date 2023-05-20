@@ -97,6 +97,7 @@ export const FormGainersData: FunctionComponent<{
         gainerUuid: formGainerData.values.gainerUuid,
       })
       onCloseModal()
+      formGainerData.clearErrors()
       refetch()
     }
     console.log(formGainerData.errors)
@@ -117,6 +118,8 @@ export const FormGainersData: FunctionComponent<{
         gainerUuid: formGainerData.values.gainerUuid,
       })
       onCloseModal()
+      formGainerData.clearErrors()
+      refetch()
     }
   }
 

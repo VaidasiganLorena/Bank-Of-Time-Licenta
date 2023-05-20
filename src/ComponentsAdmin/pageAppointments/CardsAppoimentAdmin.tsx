@@ -3,6 +3,9 @@ import { IconSend } from '@tabler/icons-react'
 import moment from 'moment'
 import 'moment/locale/ro'
 import React, { FunctionComponent, useEffect, useState } from 'react'
+import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
+import { useUpdateStatus } from '../../api/appointment/useUpdateStatus'
+import { useUpdateTimeVolunteering } from '../../api/user/useUpdateTimeVolunteering'
 import { useSendMail } from '../../api/useSendMail'
 
 const useStyles = createStyles((theme) => ({
@@ -56,27 +59,45 @@ export type TInfoAppCard = {
 export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) => {
   const { classes } = useStyles()
   const succesCallbackMail = () => {}
-  const [isDisable, setDisable] = useState(false)
+  const [isDisableButtonSendEmail, setDisableButtonSendEmail] = useState(false)
+  const [isDisableButtonConfimation, setDisableButtonConfimation] = useState(false)
   const { mutate } = useSendMail(succesCallbackMail)
-  useEffect(() => {}, [dataApp])
-  const currentDate = new Date(moment().format())
+  const currentDate = moment()
   const dateOfAppointmentRemainder = moment(dataApp?.dateOfAppointment)
     .subtract(7, 'days')
-    .calendar()
-  const [mesageTimeChangeStatus, setMessageTimeChangeStatus] = useState('')
+    .valueOf()
 
-  const changeStatusButtonSendEmail = () => {
-    if (new Date(dateOfAppointmentRemainder) <= currentDate) {
-      setDisable(false)
-    } else {
-      setDisable(true)
-      setMessageTimeChangeStatus(moment(dateOfAppointmentRemainder, 'L').endOf('day').fromNow())
-    }
-  }
+  const [mesageTimeChangeStatus, setMessageTimeChangeStatus] = useState('')
+  const [mesageTimeChangeStatusConfimationBtn, setMesageTimeChangeStatusConfimationBtn] =
+    useState('')
+
+  const succesCallback = () => {}
+  const { mutate: mutateUpdateStatus } = useUpdateStatus(succesCallback, dataApp?.appointmentUuid)
+  const { mutate: mutateUpdateTimeVounteering } = useUpdateTimeVolunteering(
+    succesCallback,
+    dataApp?.userUuid,
+  )
+  const { refetch } = useGetAllAppointment(succesCallback)
+
   useEffect(() => {
-    changeStatusButtonSendEmail()
+    if (dateOfAppointmentRemainder <= currentDate.valueOf()) {
+      setDisableButtonSendEmail(false)
+    } else {
+      setDisableButtonSendEmail(true)
+      setMessageTimeChangeStatus(moment(dateOfAppointmentRemainder).endOf('day').fromNow())
+    }
+    let timeStampAppDate = moment(dataApp?.dateOfAppointment).add(1, 'days').valueOf()
+
+    if (timeStampAppDate < currentDate.valueOf() && dataApp?.status === 'În confirmare') {
+      setDisableButtonConfimation(false)
+    } else {
+      setDisableButtonConfimation(true)
+
+      setMesageTimeChangeStatusConfimationBtn(moment(timeStampAppDate).endOf('day').fromNow())
+    }
   }, [currentDate])
-  return (
+
+  return dataApp?.status === 'Anulat' || dataApp?.status === 'Finalizat' ? null : (
     <Card radius="lg" mx={'xs'} className={classes.card} key={dataApp.appointmentUuid} mt={'xs'}>
       <Flex direction={'column'}>
         <Flex justify={'space-around'}>
@@ -115,7 +136,7 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
             </Group>
             <Group>
               <Text size="sm">In data de:</Text>
-              <Text size="sm">{dataApp?.dateOfAppointment}</Text>
+              <Text size="sm">{moment(dataApp?.dateOfAppointment).format('L')}</Text>
             </Group>
             <Group>
               <Text size="sm">Durata:</Text>
@@ -154,36 +175,84 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
             <Stack spacing={5}>
               <Button
                 radius={'xl'}
+                w="10rem"
                 onClick={() => {
                   mutate({
                     email: dataApp.email,
                     adress: dataApp.adress,
                     firstName: dataApp.firstname,
                     nameGainer: dataApp.nameGainer,
-                    dateOfAppointment: dataApp.dateOfAppointment,
+                    dateOfAppointment: moment(dataApp.dateOfAppointment).format('L'),
                     cityGainer: dataApp.cityGainer,
                   })
+                  mutateUpdateStatus({ status: 'În confirmare' })
+                  refetch()
                 }}
-                disabled={isDisable}
+                disabled={isDisableButtonSendEmail}
                 leftIcon={<IconSend size={'1rem'} />}
               >
                 Trimite email
               </Button>
-              {isDisable ? (
+              {isDisableButtonSendEmail ? (
                 <Text size={'xs'} c="dimmed">
                   Butonul se va activa {mesageTimeChangeStatus}
                 </Text>
               ) : null}
             </Stack>
           ) : dataApp?.status === 'În confirmare' ? (
-            <Button radius={'xl'}>Aprobat</Button>
+            <Stack spacing={5} align="center">
+              <Group align="flex-start">
+                <Button
+                  radius={'xl'}
+                  disabled={isDisableButtonConfimation}
+                  onClick={() => {
+                    mutateUpdateTimeVounteering({ timeVolunteering: dataApp.timeVolunteering })
+                    mutateUpdateStatus({ status: 'Finalizat' })
+                  }}
+                >
+                  Aprobat
+                </Button>
+
+                <Button
+                  variant={'outline'}
+                  radius={'xl'}
+                  disabled={isDisableButtonConfimation}
+                  onClick={() => {
+                    mutateUpdateStatus({ status: 'Anulat' })
+                    refetch()
+                  }}
+                >
+                  Anulat
+                </Button>
+              </Group>{' '}
+              {isDisableButtonConfimation ? (
+                <Text size={'xs'} c="dimmed">
+                  Butoanele se vor activa {mesageTimeChangeStatusConfimationBtn}
+                </Text>
+              ) : null}
+            </Stack>
           ) : (
-            <Button radius={'xl'}>Verificat</Button>
-          )}
-          {dataApp?.status === 'În procesare' ? null : (
-            <Button variant={'outline'} radius={'xl'}>
-              Anulat
-            </Button>
+            <Group>
+              <Button
+                radius={'xl'}
+                onClick={() => {
+                  mutateUpdateStatus({ status: 'În procesare' })
+                  refetch()
+                }}
+              >
+                Verificat
+              </Button>{' '}
+              <Button
+                variant={'outline'}
+                radius={'xl'}
+                onClick={() => {
+                  mutateUpdateStatus({ status: 'Anulat' })
+                  refetch()
+                }}
+              >
+                Anulat
+              </Button>
+            </Group>
           )}
         </Group>
       </Flex>

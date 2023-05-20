@@ -1,4 +1,5 @@
 import { Card, Group, Text, Image, createStyles, Flex, Stack } from '@mantine/core'
+import moment from 'moment'
 import 'moment/locale/ro'
 import React, { FunctionComponent } from 'react'
 
@@ -55,10 +56,10 @@ export const CardAppoimentForGainer: FunctionComponent<TInfoAppForGainer> = (dat
               <Stack spacing={5}>
                 <Group spacing={5}>
                   <Text className={classes.title} size="xl">
-                    {dataApp?.lastname}
+                    {dataApp.lastname}
                   </Text>
                   <Text className={classes.title} size="xl">
-                    {dataApp?.firstname}
+                    {dataApp.firstname}
                   </Text>
                 </Group>
 
@@ -69,11 +70,11 @@ export const CardAppoimentForGainer: FunctionComponent<TInfoAppForGainer> = (dat
                   </Group>
                   <Group>
                     <Text size="sm">Număr de telefon:</Text>
-                    <Text size="sm">{dataApp?.phoneNumber}</Text>
+                    <Text size="sm">{dataApp.phoneNumber}</Text>
                   </Group>
                   <Group>
                     <Text size="sm">Email:</Text>
-                    <Text size="sm">{dataApp?.email}</Text>
+                    <Text size="sm">{dataApp.email}</Text>
                   </Group>
                 </Stack>
               </Stack>
@@ -81,11 +82,11 @@ export const CardAppoimentForGainer: FunctionComponent<TInfoAppForGainer> = (dat
             <Stack spacing={0}>
               <Group>
                 <Text size="sm">In data de:</Text>
-                <Text size="sm">{dataApp?.dateOfAppointment}</Text>
+                <Text size="sm">{moment(dataApp.dateOfAppointment).format('L')}</Text>
               </Group>
               <Group>
                 <Text size="sm">Durata:</Text>
-                <Text size="sm">{dataApp?.timeVolunteering}</Text>
+                <Text size="sm">{dataApp.timeVolunteering}</Text>
                 <Text size="sm">ore</Text>
               </Group>
             </Stack>

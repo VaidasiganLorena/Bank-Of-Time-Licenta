@@ -8,12 +8,15 @@ import {
   ScrollArea,
   Tabs,
   Text,
+  Image,
 } from '@mantine/core'
-import { IconCheck, IconChecks, IconRotate2 } from '@tabler/icons-react'
+import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
+import { da } from 'date-fns/locale'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetGainerAllAppointment } from '../../api/appointment/useGetGainerAllAppointments'
 import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
-import { CardAppoimentForGainer, TInfoAppForGainer } from './CardAppoimentForAdmin'
+import { CardAppoimentForGainer, TInfoAppForGainer } from './CardAppoimentForGainer'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -52,8 +55,12 @@ const useStyles = createStyles((theme: any) => ({
 const GainerAllAppointments = () => {
   const { classes, theme } = useStyles()
   const { gainerUuid } = useParams()
-  const successCallback = () => {}
+  const successCallback = (data: any) => {}
+
   const { data } = useGetGainerAllAppointment(successCallback, gainerUuid)
+
+  useEffect(() => {}, [data])
+
   const cardsAppointmentInProgress = data?.data.response.map(
     (card: TInfoAppForGainer) =>
       (card.status === 'În procesare' ||
@@ -138,7 +145,7 @@ const GainerAllAppointments = () => {
                 <Tabs.List>
                   <Tabs.Tab
                     value="progress"
-                    icon={<IconCheck size="0.8rem" />}
+                    icon={<IconRotate2 size="0.8rem" />}
                     rightSection={
                       <Badge
                         w={16}
@@ -148,34 +155,46 @@ const GainerAllAppointments = () => {
                         size="xs"
                         p={0}
                       >
-                        {data && data.data.numberCheckCards}
+                        {}
                       </Badge>
                     }
                   >
-                    În procesare
+                    În așteptare
                   </Tabs.Tab>
-                  <Tabs.Tab value="cancel" icon={<IconRotate2 size="0.8rem" />}>
-                    Anulat
-                  </Tabs.Tab>
-                  <Tabs.Tab value="complete" icon={<IconChecks size="0.8rem" />}>
+                  <Tabs.Tab value="complete" icon={<IconCheck size="0.8rem" />}>
                     Finalizat
+                  </Tabs.Tab>
+                  <Tabs.Tab value="cancel" icon={<IconX size="0.8rem" />}>
+                    Anulat
                   </Tabs.Tab>
                 </Tabs.List>
 
                 <Tabs.Panel value="progress" pt="xs">
                   <ScrollArea type="auto" h={'77vh'}>
-                    {cardsAppointmentInProgress}
+                    {cardsAppointmentInProgress ? (
+                      cardsAppointmentInProgress
+                    ) : (
+                      <Text>Momentan nu există nicio o programre</Text>
+                    )}
                   </ScrollArea>
                 </Tabs.Panel>
 
                 <Tabs.Panel value="cancel" pt="xs">
+                  <>
+                    <Text>Momentan nu există nicio o programre</Text>
+                    <Image src={'attention.png'}></Image>
+                  </>
                   <ScrollArea type="auto" h={'77vh'}>
                     {cardsAppointmentCancel}
                   </ScrollArea>
                 </Tabs.Panel>
                 <Tabs.Panel value="complete" pt="xs">
                   <ScrollArea type="auto" h={'77vh'}>
-                    {cardsAppointmentComplete}
+                    {cardsAppointmentComplete ? (
+                      cardsAppointmentComplete
+                    ) : (
+                      <Image src={'attention.png'}></Image>
+                    )}
                   </ScrollArea>
                 </Tabs.Panel>
               </Tabs>

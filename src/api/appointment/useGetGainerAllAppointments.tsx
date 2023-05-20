@@ -12,7 +12,7 @@ export const useGetGainerAllAppointment = (
       retry: false,
       staleTime: 18 * 100000,
       onSuccess: (data) => {
-        successCallBack(data)
+        successCallBack(data.data.response)
       },
     },
   )
