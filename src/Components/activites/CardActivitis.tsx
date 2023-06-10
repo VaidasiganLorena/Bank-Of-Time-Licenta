@@ -9,6 +9,8 @@ import {
   Button,
   Modal,
   Select,
+  Overlay,
+  Stack,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconCalendarEvent, IconClock } from '@tabler/icons-react'
@@ -53,7 +55,7 @@ type TInfoGainerCard = {
   listOfDates: string
   photoGainer: string
 }
-export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
+export const CardActivities: FunctionComponent<TInfoGainerCard> = (props) => {
   const {
     nameGainer,
     description,
@@ -72,20 +74,13 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
   const { classes } = useStyles()
 
   const valueDate = listOfDates.split(',')
-  const labelDate: string[] = []
-  valueDate.map((date) => labelDate.push(moment(date).format('L')))
+  const selectDate: { value: string; label: string }[] = []
 
-  const [dates, setDates] = useState([{ value: '', label: '' }])
-  const CreateDataSelect = () => {
-    valueDate.map((data) => {
-      const newObj = { value: data, label: moment(data).format('L') }
-      setDates((prevDates) => [...prevDates, newObj])
-    })
-  }
+  valueDate.map((data) => selectDate.push({ value: data, label: moment(data).format('L') }))
 
   const succesCallBack = (data: string, status: number) => {
     if (status === 200) {
-      navigate('/account')
+      navigate('/my-activity')
     }
   }
   const errorCallBack = (data: any) => {
@@ -108,13 +103,23 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
     })
     mutateUpdate({ listOfDates: String(updatedDates) })
   }
-  useEffect(() => {
-    CreateDataSelect()
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <>
       <Card radius="lg" p={0} className={classes.card} key={gainerUuid}>
+        {listOfDates.length === 0 && (
+          <Overlay blur={2} color="#fff" opacity={0.43} center>
+            <Stack spacing={0} justify="center">
+              <Text size={16} c="#021812" fw="semibold" align="center">
+                Ne pare rău, această persoană este indisponibilă momentan.
+              </Text>
+              <Text size={13} c="dimmed" align="center">
+                Calendarul pentru programări necesită actualizare.
+              </Text>
+            </Stack>
+          </Overlay>
+        )}
         <Group noWrap spacing={0}>
           <Image src={photoGainer} height={200} width={200} />
           <div className={classes.body}>
@@ -163,7 +168,7 @@ export const Cards: FunctionComponent<TInfoGainerCard> = (props) => {
           placeholder="Alege data potrivită"
           value={dateOfAppointment}
           onChange={setDateOfAppointment}
-          data={dates}
+          data={selectDate}
           icon={<IconCalendarEvent size="1rem" />}
           maxDropdownHeight={100}
         />

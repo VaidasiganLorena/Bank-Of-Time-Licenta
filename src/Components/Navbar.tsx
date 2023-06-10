@@ -7,8 +7,9 @@ import {
   Tooltip,
   UnstyledButton,
 } from '@mantine/core'
+import { useEffect, useState } from 'react'
 
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 const useStyles = createStyles((theme: any) => ({
   navbar: {
     borderRadius: 30,
@@ -36,10 +37,27 @@ const useStyles = createStyles((theme: any) => ({
     alignItems: 'center',
     gap: 30,
   },
+
+  active: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '3.5rem',
+    width: '3.5rem',
+    backgroundColor: '#2f6e5dd1',
+    borderRadius: 20,
+  },
+
+  inactive: {
+    borderRadius: 20,
+  },
 }))
 
 export const NavigationBar = () => {
   const { classes } = useStyles()
+
+  const location = useLocation()
+
   const navigate = useNavigate()
   const logOut = () => {
     localStorage.clear()
@@ -52,24 +70,49 @@ export const NavigationBar = () => {
         <Navbar.Section className={classes.menu}>
           <Avatar src={'/logo.png'} size={80} radius={120} mx="auto" mb={20} />
           <Tooltip label="Acasă" color="light" position="bottom" offset={-5}>
-            <UnstyledButton component="a" href="/homepage">
+            <UnstyledButton
+              component="a"
+              href="/homepage"
+              className={
+                location.pathname.includes('/homepage') ? classes.active : classes.inactive
+              }
+            >
               <Image height={'2.5rem'} width={'2.5rem'} src="home.png" />
             </UnstyledButton>
           </Tooltip>
+
           <Tooltip label="Activități" color="light" position="bottom" offset={-5}>
-            <UnstyledButton component="a" href="/activites">
+            <UnstyledButton
+              component="a"
+              href="/activites"
+              className={
+                location.pathname.includes('/activites') ? classes.active : classes.inactive
+              }
+            >
               <Image height={'2.5rem'} width={'2.5rem'} src="activities.png" />
             </UnstyledButton>
           </Tooltip>
 
-          <Tooltip label="Activitatea ta" color="light" position="bottom" offset={-5}>
-            <UnstyledButton component="a" href="/account">
+          <Tooltip label="Activitatea mea" color="light" position="bottom" offset={-5}>
+            <UnstyledButton
+              component="a"
+              href="/my-activity"
+              className={
+                location.pathname.includes('/my-activity') ? classes.active : classes.inactive
+              }
+            >
               <Image height={'2rem'} width={'2rem'} src="notification.png" />
             </UnstyledButton>
           </Tooltip>
 
           <Tooltip label="Date personale" color="light" position="bottom" offset={-5}>
-            <UnstyledButton component="a" href="/personal-data">
+            <UnstyledButton
+              component="a"
+              href="/personal-data"
+              className={
+                location.pathname.includes('/personal-data') ? classes.active : classes.inactive
+              }
+            >
               <Image height={'2rem'} width={'2rem'} src="personal-data.png" />
             </UnstyledButton>
           </Tooltip>

@@ -13,22 +13,17 @@ import {
   Divider,
   Stack,
   Button,
+  LoadingOverlay,
 } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { IconPin } from '@tabler/icons-react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
-import { Cards } from './Cards'
+import { CardActivities } from './CardActivitis'
 import { NavigationBar } from '../Navbar'
-import {
-  setStartDate,
-  setEndDate,
-  setLocation,
-  setHelpTypeId,
-  resetActions,
-} from '../../Redux/filter/slice'
+import { setLocation, setHelpTypeId, resetActions, setIntervalDate } from '../../Redux/filter/slice'
 import { cities } from '../../aseert/city'
+import { useGetGainersFilter } from '../../api/gainer/useGetGainersFilter'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -98,11 +93,11 @@ export type TInfoGainer = {
 export const Activites = () => {
   const { classes } = useStyles()
   const dispatch = useDispatch()
-  // const { city, helpTypes, periods } = useAppSelector((state) => state.filters)
   const [date, setDate] = useState<[Date | null, Date | null]>([null, null])
+  const [helpTypeValue, setHelpTypeValue] = useState<string>('')
+  const [cityValue, setCityValue] = useState<string>('')
 
-  const succesCallBackGetGainers = () => {}
-  const { data } = useGetInfoGainers(succesCallBackGetGainers)
+  const { data, refetch, isLoading, isRefetching } = useGetGainersFilter()
 
   const age = (dateOfBirth: any) => {
     var today = new Date()
@@ -116,7 +111,7 @@ export const Activites = () => {
   }
 
   const cardsGainer = data?.data.response.map((card: TInfoGainer, index: number) => (
-    <Cards
+    <CardActivities
       key={index}
       cityGainer={card.cityGainer}
       description={card.description}
@@ -128,33 +123,30 @@ export const Activites = () => {
       photoGainer={card.photoGainer}
     />
   ))
-  const selectLocation = (city: string) => {
-    console.log(city)
-    dispatch(setLocation(city))
-    // refetch()
-  }
-  const selectHelptType = (idType: string) => {
-    dispatch(setHelpTypeId(idType))
-    // refetch()
-  }
-  const resetFilter = () => {
-    dispatch(resetActions())
-    // refetch()
-  }
-  const selectPeriods = (range: [Date | null, Date | null] | null) => {
-    setDate(range || [null, null])
-    const startDate = range ? range[0] || null : null
-    const endDate = range ? range[1] || null : null
-    dispatch(setStartDate(String(startDate)))
-    dispatch(setEndDate(String(endDate)))
-    // refetch()
+
+  const onFilter = () => {
+    dispatch(setHelpTypeId(helpTypeValue))
+    dispatch(setLocation(cityValue))
+    if (String(date).length > 5) {
+      dispatch(setIntervalDate(String(date)))
+    }
+    refetch()
   }
 
-  useEffect(() => {}, [])
+  const resetFilter = () => {
+    dispatch(resetActions())
+    setCityValue('')
+    setHelpTypeValue('')
+    setDate([null, null])
+    refetch()
+  }
+
+  // useEffect(() => {}, [])
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
         <Paper className={classes.paper}>
+          <LoadingOverlay visible={isLoading || isRefetching} />
           <NavigationBar />
           <Paper className={classes.paperActivites}>
             <Grid h={'100%'} p={0}>
@@ -162,19 +154,33 @@ export const Activites = () => {
                 <Title order={1} className={classes.title} my={10}>
                   Alege cui să faci bine ...
                 </Title>
-
-                <ScrollArea h={'95%'} offsetScrollbars>
-                  <Flex direction={'column'} gap={10} p={15}>
-                    {cardsGainer}
-                  </Flex>
-                </ScrollArea>
+                {data && data.data.response.length ? (
+                  <ScrollArea h={'93%'} offsetScrollbars>
+                    <Flex direction={'column'} gap={10} p={15}>
+                      {cardsGainer}
+                    </Flex>
+                  </ScrollArea>
+                ) : (
+                  <Stack align={'center'} spacing={0} h={'70%'} justify="center">
+                    <Image src="noResult.png" maw={'45%'} w="auto" p={'xl'} />
+                    <Text size={20} fw={700} align="center" c="white">
+                      Nu s-a găsit nici un rezultat.
+                    </Text>
+                    <Text size={13} align="center" c="white">
+                      Ne pare rău, nu am putut găsi ce cauți.
+                    </Text>
+                    <Text size={13} align="center" c="white">
+                      Încercă să cauți din nou.
+                    </Text>
+                  </Stack>
+                )}
               </Grid.Col>
               <Grid.Col span={3} p={0} h={'100%'}>
                 <Paper h={'100%'} mt={8} mr={5} radius={28} p={25}>
                   <DatePicker
                     type="range"
                     value={date}
-                    onChange={selectPeriods}
+                    onChange={setDate}
                     size={'xs'}
                     classNames={{ calendar: classes.calendar }}
                   />
@@ -188,7 +194,8 @@ export const Activites = () => {
                         classNames={{ input: classes.select }}
                         placeholder="Tipul ajutorului"
                         radius={'xl'}
-                        onChange={selectHelptType}
+                        value={helpTypeValue}
+                        onChange={(e: string) => setHelpTypeValue(e)}
                         data={[
                           { value: '1', label: 'Curățenie' },
                           { value: '2', label: 'Cumpărături' },
@@ -200,14 +207,18 @@ export const Activites = () => {
                       <Select
                         classNames={{ input: classes.select }}
                         radius={'xl'}
-                        onChange={(item: string) => selectLocation(item)}
+                        value={cityValue}
+                        onChange={(e: string) => setCityValue(e)}
                         searchable
                         placeholder="Locație"
                         data={cities}
                         icon={<IconPin size="1rem" />}
                       />
                     </Flex>
-                    <Button radius={'xl'} bg="#28886f" onClick={resetFilter}>
+                    <Button radius={'xl'} onClick={() => onFilter()}>
+                      Filtreză
+                    </Button>
+                    <Button radius={'xl'} variant="light" onClick={resetFilter}>
                       Resetează filtrele
                     </Button>
                   </Stack>

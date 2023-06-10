@@ -2,44 +2,39 @@ import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
 export type IFilterSlice = {
-  helpTypes?: number
+  helpTypeUuid?: string
   city?: string
-  periods?: string
-  startDate?: string
-  endDate?: string
+  dateInterval?: string
 }
 const initialState: IFilterSlice = {
-  helpTypes: undefined,
-  city: undefined,
-  startDate: undefined,
-  endDate: undefined,
+  helpTypeUuid: '',
+  city: '',
+  dateInterval: '',
 }
 export const filterSlice = createSlice({
   name: 'filters_slice',
   initialState,
   reducers: {
     setHelpTypeId(state, action) {
-      state.helpTypes = action.payload
+      state.helpTypeUuid = action.payload
     },
     setLocation(state, action) {
       state.city = action.payload
     },
-    setStartDate(state, action) {
-      state.periods = action.payload
-    },
-    setEndDate(state, action) {
-      state.periods = action.payload
+
+    setIntervalDate(state, action) {
+      state.dateInterval = action.payload
     },
     resetActions(state) {
-      state.helpTypes = undefined
-      state.city = undefined
-      state.periods = undefined
+      state.helpTypeUuid = initialState.helpTypeUuid
+      state.city = initialState.city
+      state.dateInterval = initialState.dateInterval
+      console.log(initialState.dateInterval)
     },
   },
 })
 
-export const { setHelpTypeId, setLocation, setStartDate, setEndDate, resetActions } =
-  filterSlice.actions
+export const { setHelpTypeId, setLocation, setIntervalDate, resetActions } = filterSlice.actions
 export const selectFilters = (state: RootState) => {
   return state.filters
 }

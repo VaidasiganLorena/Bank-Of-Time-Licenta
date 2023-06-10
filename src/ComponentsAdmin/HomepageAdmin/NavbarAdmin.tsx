@@ -9,7 +9,7 @@ import {
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 const useStyles = createStyles((theme: any) => ({
   navbar: {
     borderRadius: 30,
@@ -44,6 +44,20 @@ const useStyles = createStyles((theme: any) => ({
       flexDirection: 'row',
     },
   },
+
+  active: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '3.5rem',
+    width: '3.5rem',
+    backgroundColor: '#2f6e5dd1',
+    borderRadius: 20,
+  },
+
+  inactive: {
+    borderRadius: 20,
+  },
 }))
 
 export const NavbarAdmin = () => {
@@ -53,6 +67,7 @@ export const NavbarAdmin = () => {
     localStorage.clear()
     navigate('/')
   }
+  const location = useLocation()
   const isTablet = useMediaQuery('(max-width: 62em)')
   const isMobile = useMediaQuery('(max-width: 30em)')
   return (
@@ -70,19 +85,37 @@ export const NavbarAdmin = () => {
               />
 
               <Tooltip label="Programări" color="light" position="bottom" offset={-5}>
-                <UnstyledButton component="a" href="/appointments">
+                <UnstyledButton
+                  component="a"
+                  href="/appointments"
+                  className={
+                    location.pathname.includes('/appointments') ? classes.active : classes.inactive
+                  }
+                >
                   <Image height={'2.2rem'} width={'2.2rem'} src="appointments.png" />
                 </UnstyledButton>
               </Tooltip>
               <Tooltip label="Beneficiari" color="light" position="bottom" offset={-5}>
-                <UnstyledButton component="a" href="/gainers">
+                <UnstyledButton
+                  component="a"
+                  href="/gainers"
+                  className={
+                    location.pathname.includes('/gainers') ? classes.active : classes.inactive
+                  }
+                >
                   <Image height={'2.2rem'} width={'2.2rem'} src="gainers.png" />
                 </UnstyledButton>
               </Tooltip>
 
-              <Tooltip label="Date personale" color="light" position="bottom" offset={-5}>
-                <UnstyledButton component="a" href="/personal-data-admin">
-                  <Image height={'1.8rem'} width={'1.8rem'} src="personal-data.png" />
+              <Tooltip label="Statistici" color="light" position="bottom" offset={-5}>
+                <UnstyledButton
+                  component="a"
+                  href="/personal-data-admin"
+                  className={
+                    location.pathname.includes('/personal-data') ? classes.active : classes.inactive
+                  }
+                >
+                  <Image height={'1.8rem'} width={'1.8rem'} src="statistic.png" />
                 </UnstyledButton>
               </Tooltip>
             </Navbar.Section>

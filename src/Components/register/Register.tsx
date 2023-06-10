@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   BackgroundImage,
+  Box,
   Button,
   Center,
   Container,
@@ -12,8 +13,12 @@ import {
   Select,
   TextInput,
   Title,
+  Text,
+  Progress,
+  Stack,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { IconCheck, IconX } from '@tabler/icons-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePostRegister } from '../../api/usePostRegister'
@@ -88,6 +93,35 @@ const useStyles = createStyles((theme) => ({
     },
   },
 }))
+function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
+  return (
+    <Text color={meets ? 'teal' : 'red'} mt={5} size="sm">
+      <Center inline>
+        {meets ? <IconCheck size="0.9rem" stroke={1.5} /> : <IconX size="0.9rem" stroke={1.5} />}
+        <Box ml={7}>{label}</Box>
+      </Center>
+    </Text>
+  )
+}
+
+const requirements = [
+  { re: /[0-9]/, label: 'Trebuie să conțină cel puțin o cifră' },
+  { re: /[a-z]/, label: 'Trebuie să conțină cel puțin o literă' },
+  { re: /[A-Z]/, label: 'Trebuie să conțină cel puțin o literă cu majusculă' },
+  { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Trebuie să conțină cel puțin un simbol special' },
+]
+
+function getStrength(password: string) {
+  let multiplier = password.length > 5 ? 0 : 1
+
+  requirements.forEach((requirement) => {
+    if (!requirement.re.test(password)) {
+      multiplier += 1
+    }
+  })
+
+  return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 0)
+}
 const Register = () => {
   const { classes } = useStyles()
   const timeoutRef = useRef<number>(0)
@@ -109,6 +143,7 @@ const Register = () => {
       password: '',
       city: '',
       gender: '',
+      confirmPassword: '',
     },
     validate: {
       firstName: (value) =>
@@ -127,7 +162,8 @@ const Register = () => {
         value.length > 0
           ? null
           : 'Parolă invalidă!',
-
+      confirmPassword: (value, values) =>
+        value !== values.password ? 'Parolele nu se potrivesc' : null,
       gender: (value: string) => (value.length !== 0 ? null : 'Nu uita să alegi genul.'),
     },
   })
@@ -144,6 +180,7 @@ const Register = () => {
   const { mutate, isLoading } = usePostRegister(succesCallBack, errorCallBack)
 
   const onPressCreateAcount = () => {
+    console.log(validCity)
     if (formRegistration.validate().hasErrors === false && validCity === true) {
       mutate({
         firstName: formRegistration.values.firstName,
@@ -186,6 +223,31 @@ const Register = () => {
       formRegistration.setErrors(formRegistration.errors)
     }
   }
+  const strength = getStrength(formRegistration.values.password)
+  const checks = requirements.map((requirement, index) => (
+    <PasswordRequirement
+      key={index}
+      label={requirement.label}
+      meets={requirement.re.test(formRegistration.values.password)}
+    />
+  ))
+  const bars = Array(4)
+    .fill(0)
+    .map((_, index) => (
+      <Progress
+        styles={{ bar: { transitionDuration: '0ms' } }}
+        value={
+          formRegistration.values.password.length > 0 && index === 0
+            ? 100
+            : strength >= ((index + 1) / 4) * 100
+            ? 100
+            : 0
+        }
+        color={strength > 80 ? 'teal' : strength > 50 ? 'yellow' : 'red'}
+        key={index}
+        size={4}
+      />
+    ))
   useEffect(() => {})
   return (
     <BackgroundImage src="/backround.png" radius="sm">
@@ -237,16 +299,32 @@ const Register = () => {
               />
             </Group>
 
-            <Group position="center" mt={16}>
-              <PasswordInput
-                label="Parola"
-                variant="filled"
-                placeholder="Tastează parola dorită..."
-                size="md"
-                radius={10}
-                classNames={{ input: classes.input }}
-                {...formRegistration.getInputProps('password')}
-              />
+            <Group position="center" mt={16} align="flex-start">
+              <Stack>
+                <PasswordInput
+                  required
+                  label="Parola"
+                  variant="filled"
+                  placeholder="Tastează parola dorită..."
+                  size="md"
+                  radius={10}
+                  classNames={{ input: classes.input }}
+                  {...formRegistration.getInputProps('password')}
+                />
+                {formRegistration.values.password ? (
+                  <Paper bg={'#f3f5f7'} p="xs" radius={'md'}>
+                    <Group spacing={5} grow mt="xs" mb="md">
+                      {bars}
+                    </Group>
+                    <PasswordRequirement
+                      label="Trebuie să conțină minim 6 carcatere"
+                      meets={formRegistration.values.password.length > 5}
+                    />
+                    {checks}
+                  </Paper>
+                ) : null}
+              </Stack>
+
               <PasswordInput
                 label="Confirmare parolă"
                 variant="filled"

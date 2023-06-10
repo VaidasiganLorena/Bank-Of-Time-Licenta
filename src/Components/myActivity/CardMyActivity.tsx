@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { Card, createStyles, Group, Text, Avatar, Badge, Grid, Stack } from '@mantine/core'
+import { Card, createStyles, Group, Text, Avatar, Badge, Grid, Stack, Center } from '@mantine/core'
 import {
   IconCalendarTime,
   IconCheck,
@@ -42,7 +42,7 @@ type IAppointment = {
   photoGainer: string
   timeVolunteering: number
 }
-export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
+export const CardMyActivity: FunctionComponent<IAppointment> = (props) => {
   const {
     nameGainer,
     phoneNumberGainer,
@@ -57,50 +57,50 @@ export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
   return (
     <>
       <Card radius="lg" p={0} className={classes.card} my={20} ml={10}>
-        <div>
-          <Grid align={'center'}>
-            <Grid.Col span={2}>
-              <Avatar src={photoGainer} size={94} radius="md" />
-            </Grid.Col>
-            <Grid.Col span={4}>
-              <Text fz="lg" fw={500} align={'center'}>
-                {nameGainer}
-              </Text>
-              <Group position="center">
-                <Group noWrap spacing={10} mt={5}>
-                  <IconPhoneCall stroke={1.5} size="1rem" />
-                  <Text fz="xs" c="dimmed">
-                    {phoneNumberGainer}
-                  </Text>
-                </Group>
-
-                <Group noWrap spacing={10} mt={5}>
-                  <IconHome stroke={1.5} size="1rem" />
-                  <Text fz="xs" c="dimmed">
-                    {cityGainer}
-                  </Text>
-                </Group>
+        <Grid align={'center'}>
+          <Grid.Col span={2}>
+            <Avatar src={photoGainer} size={94} radius="md" />
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Text fz="lg" fw={500} align={'center'}>
+              {nameGainer}
+            </Text>
+            <Group position="center">
+              <Group noWrap spacing={10} mt={5}>
+                <IconPhoneCall stroke={1.5} size="1rem" />
+                <Text fz="xs" c="dimmed">
+                  {phoneNumberGainer}
+                </Text>
               </Group>
-            </Grid.Col>
-            <Grid.Col span={4}>
-              <Stack align={'center'} spacing={5}>
-                <Group noWrap spacing={10} mt={5}>
-                  <IconCalendarTime stroke={1.5} size="1.2rem" />
-                  <Text fz="sm" c="dimmed">
-                    {moment(dateOfAppointment).format('L')}
-                  </Text>
-                </Group>
 
-                <Group noWrap spacing={10} mt={5}>
-                  <IconClock stroke={1.5} size="1.2rem" />
-                  <Text fz="sm" c="dimmed">
-                    {timeVolunteering} ore
-                  </Text>
-                </Group>
-              </Stack>
-            </Grid.Col>
+              <Group noWrap spacing={10} mt={5}>
+                <IconHome stroke={1.5} size="1rem" />
+                <Text fz="xs" c="dimmed">
+                  {cityGainer}
+                </Text>
+              </Group>
+            </Group>
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Stack align={'center'} spacing={5}>
+              <Group noWrap spacing={10} mt={5}>
+                <IconCalendarTime stroke={1.5} size="1.2rem" />
+                <Text fz="sm" c="dimmed">
+                  {moment(dateOfAppointment).format('L')}
+                </Text>
+              </Group>
 
-            <Grid.Col span={2}>
+              <Group noWrap spacing={10} mt={5}>
+                <IconClock stroke={1.5} size="1.2rem" />
+                <Text fz="sm" c="dimmed">
+                  {timeVolunteering} ore
+                </Text>
+              </Group>
+            </Stack>
+          </Grid.Col>
+
+          <Grid.Col span={3}>
+            <Center>
               <Badge
                 color={
                   status === 'În verificare'
@@ -125,9 +125,9 @@ export const CardAppointment: FunctionComponent<IAppointment> = (props) => {
               >
                 {status}
               </Badge>
-            </Grid.Col>
-          </Grid>
-        </div>
+            </Center>
+          </Grid.Col>
+        </Grid>
       </Card>
     </>
   )
