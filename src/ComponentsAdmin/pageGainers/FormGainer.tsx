@@ -21,7 +21,7 @@ import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { usePostGainer } from '../../api/gainer/usePostGainer'
 import { useUpdateInfoGainer } from '../../api/gainer/useUpdateGainer'
 import { cities } from '../../aseert/city'
-import { IGainerUpdate } from '../../type'
+import { IGainerUpdate } from '../../types/typeGainer'
 import { base64ToFile, convertBase64, InitialValueDataGainers, ValidateForm } from './UtilsForm'
 
 export const FormGainersData: FunctionComponent<{

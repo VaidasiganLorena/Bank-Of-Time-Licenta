@@ -12,7 +12,7 @@ import {
 } from '@mantine/core'
 import { IconCheck, IconChecks, IconRotate2 } from '@tabler/icons-react'
 import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
-import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
+import { NavbarAdmin } from '../NavbarAdmin'
 import { CardAppoimentAdmin, TInfoAppCard } from './CardsAppoimentAdmin'
 
 const useStyles = createStyles((theme: any) => ({

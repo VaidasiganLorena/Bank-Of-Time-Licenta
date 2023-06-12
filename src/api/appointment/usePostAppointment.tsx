@@ -10,6 +10,7 @@ export const usePostAppointment = (
   errorCallBack: (data: IErrorRegister) => void,
 ) => {
   return useMutation(
+    ['post-appointment-key'],
     (dataAppointment: {
       userUuid: string
       gainerUuid: string

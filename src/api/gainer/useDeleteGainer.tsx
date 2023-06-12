@@ -9,6 +9,7 @@ export const useDeleteGainer = (
 ) => {
   const queryClient = useQueryClient()
   return useMutation(
+    ['delete-gainer-key'],
     (auth: IDeleteAuth) => axios.delete(`http://localhost:3306/gainer/${auth.gainerUuid}`),
     {
       onSuccess: (data) => {

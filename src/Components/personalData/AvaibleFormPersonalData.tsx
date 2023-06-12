@@ -19,6 +19,10 @@ import { cities } from '../../aseert/city'
 import { useUpdateInfoUser } from '../../api/user/useUpdateInfoUser'
 import { IconUpload } from '@tabler/icons-react'
 import { convertBase64 } from '../../ComponentsAdmin/pageGainers/UtilsForm'
+import { setMessageNotification } from '../../Redux/notification/slice'
+import { useDispatch } from 'react-redux'
+import { da } from 'date-fns/locale'
+import { useGetInfoUser } from '../../api/user/useGetInfoUser'
 
 const useStyles = createStyles((theme: any) => ({
   form: {
@@ -133,7 +137,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   const [validCity, setValidCity] = useState(true)
   const [errorCity, setErrorCity] = useState<string>('')
   const [file, setFile] = useState(photo)
-
+  const dispatch = useDispatch()
   const isValidCity: (location: string) => string = (location: string) => {
     return location.length < 3 ? 'Locația nu este validă!' : ''
   }
@@ -163,10 +167,11 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   })
   const userUuid = localStorage.getItem('userUuid')
   const authToken = localStorage.getItem('authToken')
-  const succesCallBack = () => {
-    // setEditMode(false)
+  const succesCallBackUpdate = (data: any) => {
+    dispatch(setMessageNotification(data))
   }
-  const { mutate } = useUpdateInfoUser(succesCallBack, userUuid, authToken)
+
+  const { mutate } = useUpdateInfoUser(succesCallBackUpdate, userUuid, authToken)
   const onSave = () => {
     if (formPersonalData.validate().hasErrors === false && validCity === true) {
       mutate({
@@ -183,6 +188,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
       setErrorCity(isValidCity(city))
       setValidCity(false)
     }
+
     window.location.reload()
   }
   const onCancel = () => {

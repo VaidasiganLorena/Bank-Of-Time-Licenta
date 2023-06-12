@@ -10,7 +10,7 @@ export const useGetAppointment = (
     headers: { authToken: authToken },
   }
   return useQuery(
-    [`http://localhost:3306/appointment/${userUuid}`],
+    ['read-applointment-key'],
     () => axios.get(`http://localhost:3306/appointment/${userUuid}`, config),
     {
       retry: false,

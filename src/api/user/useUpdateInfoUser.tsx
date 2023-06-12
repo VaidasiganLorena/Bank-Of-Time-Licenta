@@ -11,9 +11,13 @@ export const useUpdateInfoUser = (
     headers: { authToken: authToken },
   }
   const myAccount: string = `http://localhost:3306/user/update/${userUuid}`
-  return useMutation((dataMyAccount: TInfoUser) => axios.put(myAccount, dataMyAccount, config), {
-    onSuccess: (data) => {
-      successCallBack(data.data.response, data.data.status)
+  return useMutation(
+    ['update-info-user-key'],
+    (dataMyAccount: TInfoUser) => axios.put(myAccount, dataMyAccount, config),
+    {
+      onSuccess: (data) => {
+        successCallBack(data.data.response, data.data.status)
+      },
     },
-  })
+  )
 }

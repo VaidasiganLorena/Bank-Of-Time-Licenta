@@ -19,7 +19,7 @@ import { ButtonsAction } from './ButtonsAction'
 import moment from 'moment'
 import { RootState } from '../../Redux/store'
 import { useSelector } from 'react-redux'
-import { IGainer } from '../../type'
+import { IGainer } from '../../types/typeGainer'
 
 const useStyles = createStyles((theme) => ({
   th: {

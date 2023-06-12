@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { IGainer } from '../../type'
+import { IGainer } from '../../types/typeGainer'
 import type { RootState } from '../store'
 
 const initialState: {

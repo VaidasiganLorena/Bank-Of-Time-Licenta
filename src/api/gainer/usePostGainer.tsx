@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import { IGainerUpdate } from '../../type'
+import { IGainerUpdate } from '../../types/typeGainer'
 
 export type IErrorRegister = {
   response: string
@@ -11,6 +11,7 @@ export const usePostGainer = (
   errorCallBack: (data: IErrorRegister) => void,
 ) => {
   return useMutation(
+    ['post-gainer-key'],
     (dataGainer: IGainerUpdate) => axios.post('http://localhost:3306/newgainer', dataGainer),
     {
       onSuccess: (data) => {

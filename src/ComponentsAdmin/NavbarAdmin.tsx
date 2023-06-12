@@ -110,9 +110,9 @@ export const NavbarAdmin = () => {
               <Tooltip label="Statistici" color="light" position="bottom" offset={-5}>
                 <UnstyledButton
                   component="a"
-                  href="/personal-data-admin"
+                  href="/statistics"
                   className={
-                    location.pathname.includes('/personal-data') ? classes.active : classes.inactive
+                    location.pathname.includes('/statistics') ? classes.active : classes.inactive
                   }
                 >
                   <Image height={'1.8rem'} width={'1.8rem'} src="statistic.png" />

@@ -13,6 +13,10 @@ import { useMediaQuery, useSetState } from '@mantine/hooks'
 import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { useGetAppointment } from '../../api/appointment/useGetAppointmentOfUser'
+import { useGetAppointmentAll } from '../../api/statistic/useGetAppointmentAll'
+import { useGetAppointmentCancel } from '../../api/statistic/useGetAppointmentCancel'
+import { useGetAppointmentComplete } from '../../api/statistic/useGetAppointmentComplete'
+import { ErrorSuccesNotification } from '../../Notification/notification'
 import { NavigationBar } from '../Navbar'
 import { CardMyActivity } from './CardMyActivity'
 
@@ -71,14 +75,12 @@ const useStyles = createStyles((theme: any) => ({
 }))
 export const MyActivity = () => {
   const { classes, theme } = useStyles()
-  // const [numberCardPending, setNumbercardsPending] = useState(0)
+  const userUUid = localStorage.getItem('userUuid')
   const tablet = useMediaQuery('(max-width: 800px)')
   const userUuid = localStorage.getItem('userUuid')
   const authToken = localStorage.getItem('authToken')
-  const successCallBack = (data: any) => {
-    console.log(data.data.nrAppFinish)
-  }
-  // console.log(nrFinishCard, nrCancelCard, nrPendingCard)
+  const successCallBack = (data: any) => {}
+
   const { data, refetch } = useGetAppointment(successCallBack, userUuid, authToken)
   useEffect(() => {}, [])
   const cardsAppointmentFinished = data?.data.response.map(
@@ -115,7 +117,11 @@ export const MyActivity = () => {
   )
 
   const cardsAppointmentPending = data?.data.response.map((card: any) => {
-    if (card.status === 'În verificare' || card.status === 'În procesare') {
+    if (
+      card.status === 'În verificare' ||
+      card.status === 'În procesare' ||
+      card.status === 'În confirmare'
+    ) {
       return (
         <CardMyActivity
           key={card.appointmentUuid}
@@ -131,7 +137,9 @@ export const MyActivity = () => {
       )
     }
   })
-
+  const { data: dataCompleteAppointment } = useGetAppointmentComplete(userUUid, authToken)
+  const { data: dataCancelAppointment } = useGetAppointmentCancel(userUUid, authToken)
+  const { data: dataAllAppointment } = useGetAppointmentAll(userUUid, authToken)
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
@@ -156,7 +164,9 @@ export const MyActivity = () => {
                         size="xs"
                         p={0}
                       >
-                        2
+                        {dataAllAppointment?.data.response -
+                          dataCompleteAppointment?.data.response -
+                          dataCancelAppointment?.data.response}
                       </Badge>
                     }
                   >
@@ -192,6 +202,7 @@ export const MyActivity = () => {
           </Flex>
         </Paper>
       </Container>
+      <ErrorSuccesNotification />
     </BackgroundImage>
   )
 }

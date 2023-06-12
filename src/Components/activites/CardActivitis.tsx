@@ -16,9 +16,11 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconCalendarEvent, IconClock } from '@tabler/icons-react'
 import moment from 'moment'
 import React, { FunctionComponent, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { usePostAppointment } from '../../api/appointment/usePostAppointment'
 import { useUpdateListOfDates } from '../../api/user/useUpdateListOfDates'
+import { setErrorNotification, setMessageNotification } from '../../Redux/notification/slice'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -71,6 +73,7 @@ export const CardActivities: FunctionComponent<TInfoGainerCard> = (props) => {
   const [dateOfAppointment, setDateOfAppointment] = useState<string | null>('')
   const [timeVolunteering, setTimeVolunteering] = useState<string | null>('')
   const userUuid = localStorage.getItem('userUuid')
+  const dispatch = useDispatch()
   const { classes } = useStyles()
 
   const valueDate = listOfDates.split(',')
@@ -78,21 +81,21 @@ export const CardActivities: FunctionComponent<TInfoGainerCard> = (props) => {
 
   valueDate.map((data) => selectDate.push({ value: data, label: moment(data).format('L') }))
 
-  const succesCallBack = (data: string, status: number) => {
+  const succesCallBackCreateApp = (response: string, status: number) => {
     if (status === 200) {
+      dispatch(setMessageNotification(response))
       navigate('/my-activity')
     }
   }
-  const errorCallBack = (data: any) => {
-    if (data.status === 400) {
-      console.log(data)
-    }
+  const succesCallBack = () => {}
+  const errorCallBack = (error: any) => {
+    dispatch(setErrorNotification(`Te rog încearcă mai târziu! ${error}.`))
   }
 
   const updatedDates = valueDate.filter((element) => element !== dateOfAppointment)
 
   const { mutate: mutateUpdate } = useUpdateListOfDates(succesCallBack, gainerUuid)
-  const { mutate } = usePostAppointment(succesCallBack, errorCallBack)
+  const { mutate } = usePostAppointment(succesCallBackCreateApp, errorCallBack)
   const onAppointment = () => {
     mutate({
       userUuid: userUuid ? userUuid : '',

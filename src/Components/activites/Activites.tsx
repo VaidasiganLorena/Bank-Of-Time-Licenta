@@ -24,6 +24,7 @@ import { NavigationBar } from '../Navbar'
 import { setLocation, setHelpTypeId, resetActions, setIntervalDate } from '../../Redux/filter/slice'
 import { cities } from '../../aseert/city'
 import { useGetGainersFilter } from '../../api/gainer/useGetGainersFilter'
+import { ErrorSuccesNotification } from '../../Notification/notification'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -227,6 +228,7 @@ export const Activites = () => {
             </Grid>
           </Paper>
         </Paper>
+        <ErrorSuccesNotification />
       </Container>
     </BackgroundImage>
   )

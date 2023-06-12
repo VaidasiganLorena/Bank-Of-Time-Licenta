@@ -6,9 +6,13 @@ export const useUpdateTimeVolunteering = (
   userUuid: string | null,
 ) => {
   const pathUpdateTime: string = `http://localhost:3306/users/update/time-volunteering/${userUuid}`
-  return useMutation((body: { timeVolunteering: number }) => axios.put(pathUpdateTime, body), {
-    onSuccess: (data) => {
-      successCallBack(data.data.response, data.data.status)
+  return useMutation(
+    ['update-time-volunteering-key'],
+    (body: { timeVolunteering: number }) => axios.put(pathUpdateTime, body),
+    {
+      onSuccess: (data) => {
+        successCallBack(data.data.response, data.data.status)
+      },
     },
-  })
+  )
 }

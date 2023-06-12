@@ -16,20 +16,26 @@ import {
   Text,
   Progress,
   Stack,
+  Image,
+  Flex,
+  ScrollArea,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { usePostRegister } from '../../api/usePostRegister'
 import { cities } from '../../aseert/city'
+import { ErrorSuccesNotification } from '../../Notification/notification'
+import { setErrorNotification, setMessageNotification } from '../../Redux/notification/slice'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-
+    height: '100%',
     [theme.fn.largerThan('xs')]: {
       height: '100vh',
     },
@@ -130,6 +136,7 @@ const Register = () => {
   const [city, setCity] = useState<string>('')
   const [validCity, setValidCity] = useState(false)
   const [errorCity, setErrorCity] = useState<string>('')
+  const dispatch = useDispatch()
 
   const isValidCity: (city: string) => string = (city: string) => {
     return city.length < 3 ? 'Locația nu este validă!' : ''
@@ -169,13 +176,10 @@ const Register = () => {
   })
 
   const succesCallBack = (data: string, status: number) => {
-    if (status === 200) {
-      console.log(data)
-    }
+    dispatch(setMessageNotification(data))
   }
-  const errorCallBack = (data: any) => {
-    if (data.status === 400) {
-    }
+  const errorCallBack = (error: any) => {
+    dispatch(setErrorNotification(`Te rog încearcă mai târziu! ${error.message}.`))
   }
   const { mutate, isLoading } = usePostRegister(succesCallBack, errorCallBack)
 
@@ -252,129 +256,146 @@ const Register = () => {
   return (
     <BackgroundImage src="/backround.png" radius="sm">
       <Container className={classes.wrapper}>
-        <Paper className={classes.form} radius={0} p={30}>
-          <Title order={2} className={classes.title} align="center" mt="md" mb={30}>
-            Crează-ți contul pentru banca timpului
-          </Title>
-          <form onSubmit={formRegistration.onSubmit(onPressCreateAcount)}>
-            <Group position="center">
-              <TextInput
-                label="Nume"
-                variant="filled"
-                placeholder="Popescu"
-                size="md"
-                radius={10}
-                classNames={{ input: classes.input }}
-                {...formRegistration.getInputProps('lastName')}
-              />
+        <Flex direction={'column'}>
+          <Flex h={'100%'} align="center" justify={'center'}>
+            <Image
+              src="logoB.png"
+              height={'auto'}
+              width={'10rem'}
+              onClick={() => {
+                navigate('/login')
+              }}
+              style={{ cursor: 'pointer' }}
+            />
+          </Flex>
+          <Paper className={classes.form} radius={0} p={30}>
+            <Title order={2} className={classes.title} align="center" mt="md" mb={30}>
+              Crează-ți contul pentru banca timpului
+            </Title>
+            <form onSubmit={formRegistration.onSubmit(onPressCreateAcount)}>
+              <ScrollArea h={'50vh'} type="auto" scrollbarSize={6} px={'md'}>
+                <Group position="center">
+                  <TextInput
+                    label="Nume"
+                    variant="filled"
+                    placeholder="Popescu"
+                    size="md"
+                    radius={10}
+                    classNames={{ input: classes.input }}
+                    {...formRegistration.getInputProps('lastName')}
+                  />
 
-              <TextInput
-                label="Prenume"
-                variant="filled"
-                placeholder="Ana"
-                size="md"
-                radius={10}
-                classNames={{ input: classes.input }}
-                {...formRegistration.getInputProps('firstName')}
-              />
-            </Group>
-            <Group position="center" mt={16}>
-              <TextInput
-                label="Adresa de email"
-                variant="filled"
-                placeholder="hello@gmail.com"
-                size="md"
-                radius={10}
-                classNames={{ input: classes.input }}
-                {...formRegistration.getInputProps('email')}
-              />
-              <TextInput
-                label="Număr de telefon"
-                variant="filled"
-                placeholder="07653..."
-                size="md"
-                radius={10}
-                classNames={{ input: classes.input }}
-                {...formRegistration.getInputProps('numberPhone')}
-              />
-            </Group>
+                  <TextInput
+                    label="Prenume"
+                    variant="filled"
+                    placeholder="Ana"
+                    size="md"
+                    radius={10}
+                    classNames={{ input: classes.input }}
+                    {...formRegistration.getInputProps('firstName')}
+                  />
+                </Group>
+                <Group position="center" mt={16}>
+                  <TextInput
+                    label="Adresa de email"
+                    variant="filled"
+                    placeholder="hello@gmail.com"
+                    size="md"
+                    radius={10}
+                    classNames={{ input: classes.input }}
+                    {...formRegistration.getInputProps('email')}
+                  />
+                  <TextInput
+                    label="Număr de telefon"
+                    variant="filled"
+                    placeholder="07653..."
+                    size="md"
+                    radius={10}
+                    classNames={{ input: classes.input }}
+                    {...formRegistration.getInputProps('numberPhone')}
+                  />
+                </Group>
 
-            <Group position="center" mt={16} align="flex-start">
-              <Stack>
-                <PasswordInput
-                  required
-                  label="Parola"
-                  variant="filled"
-                  placeholder="Tastează parola dorită..."
-                  size="md"
-                  radius={10}
-                  classNames={{ input: classes.input }}
-                  {...formRegistration.getInputProps('password')}
-                />
-                {formRegistration.values.password ? (
-                  <Paper bg={'#f3f5f7'} p="xs" radius={'md'}>
-                    <Group spacing={5} grow mt="xs" mb="md">
-                      {bars}
-                    </Group>
-                    <PasswordRequirement
-                      label="Trebuie să conțină minim 6 carcatere"
-                      meets={formRegistration.values.password.length > 5}
+                <Group position="center" mt={16} align="flex-start">
+                  <Stack>
+                    <PasswordInput
+                      required
+                      label="Parola"
+                      variant="filled"
+                      placeholder="Tastează parola dorită..."
+                      size="md"
+                      radius={10}
+                      classNames={{ input: classes.input }}
+                      {...formRegistration.getInputProps('password')}
                     />
-                    {checks}
-                  </Paper>
-                ) : null}
-              </Stack>
+                    {formRegistration.values.password ? (
+                      <Paper bg={'#f3f5f7'} p="xs" radius={'md'}>
+                        <Group spacing={5} grow mt="xs" mb="md">
+                          {bars}
+                        </Group>
+                        <PasswordRequirement
+                          label="Trebuie să conțină minim 6 carcatere"
+                          meets={formRegistration.values.password.length > 5}
+                        />
+                        {checks}
+                      </Paper>
+                    ) : null}
+                  </Stack>
 
-              <PasswordInput
-                label="Confirmare parolă"
-                variant="filled"
-                placeholder="Tastează parola introdusă anterior..."
-                size="md"
-                radius={10}
-                classNames={{ input: classes.input }}
-                {...formRegistration.getInputProps('confirmPassword')}
-              />
-            </Group>
-            <Group position="center" mt={16}>
-              <Autocomplete
-                data={cities}
-                onChange={handleChangeCity}
-                onBlur={onBlurCity}
-                label="Orașul"
-                rightSection={loading ? <Loader size={16} /> : null}
-                placeholder="Alege orașul"
-                variant="filled"
-                size="md"
-                radius={10}
-                classNames={{ input: classes.input }}
-                error={errorCity}
-              />
+                  <PasswordInput
+                    label="Confirmare parolă"
+                    variant="filled"
+                    placeholder="Tastează parola introdusă anterior..."
+                    size="md"
+                    radius={10}
+                    classNames={{ input: classes.input }}
+                    {...formRegistration.getInputProps('confirmPassword')}
+                  />
+                </Group>
+                <Group position="center" mt={16}>
+                  <Autocomplete
+                    data={cities}
+                    onChange={handleChangeCity}
+                    onBlur={onBlurCity}
+                    label="Orașul"
+                    rightSection={loading ? <Loader size={16} /> : null}
+                    placeholder="Alege orașul"
+                    variant="filled"
+                    size="md"
+                    radius={10}
+                    classNames={{ input: classes.input }}
+                    error={errorCity}
+                  />
 
-              <Select
-                data={['Feminin', 'Masculin', 'Altul']}
-                label="Gen"
-                placeholder="Alege genul"
-                variant="filled"
-                size="md"
-                radius={10}
-                classNames={{ input: classes.input }}
-                {...formRegistration.getInputProps('gender')}
-              />
-            </Group>
-            <Center>
-              <Button
-                size="sm"
-                mt={'xl'}
-                onClick={onPressCreateAcount}
-                type="submit"
-                className={classes.submitButton}
-                loading={isLoading}
-              >
-                Creează cont
-              </Button>
-            </Center>
-          </form>
-        </Paper>
+                  <Select
+                    data={['Feminin', 'Masculin', 'Altul']}
+                    label="Gen"
+                    placeholder="Alege genul"
+                    variant="filled"
+                    size="md"
+                    radius={10}
+                    classNames={{ input: classes.input }}
+                    {...formRegistration.getInputProps('gender')}
+                  />
+                </Group>
+                <Center>
+                  <Button
+                    size="sm"
+                    mt={'xl'}
+                    onClick={onPressCreateAcount}
+                    type="submit"
+                    className={classes.submitButton}
+                    loading={isLoading}
+                  >
+                    Creează cont
+                  </Button>
+                </Center>
+              </ScrollArea>
+            </form>
+          </Paper>
+        </Flex>
+
+        <ErrorSuccesNotification />
       </Container>
     </BackgroundImage>
   )

@@ -26,6 +26,9 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { useChangePassword } from '../../api/user/useChangePassword'
 import { useForm } from '@mantine/form'
 import { useNavigate } from 'react-router-dom'
+import { ErrorSuccesNotification } from '../../Notification/notification'
+import { setMessageNotification } from '../../Redux/notification/slice'
+import { useDispatch } from 'react-redux'
 const ICON_SIZE = rem(60)
 export const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -209,18 +212,20 @@ const PersonalData = () => {
   const tablet = useMediaQuery('(max-width: 800px)')
   const [visible, { toggle }] = useDisclosure(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   const succesInfoUserCallBack = () => {}
-  const succesChangePasswordCallBack = () => {}
+  const succesChangePasswordCallBack = (data: any) => {
+    dispatch(setMessageNotification(data))
+    localStorage.clear()
+    navigate('/login')
+  }
   const { mutate } = useChangePassword(succesChangePasswordCallBack, userUuid, authToken)
   const { data, refetch, isLoading, isRefetching } = useGetInfoUser(
     succesInfoUserCallBack,
     userUuid,
     authToken,
   )
-  // const succesCallBack = () => {
-  //   // setEditMode(false)
-  // }
-  // const { mutate } = useUpdateInfoUser(succesCallBack, userUuid, authToken)
 
   const formChangePassword = useForm({
     initialValues: {
@@ -240,7 +245,6 @@ const PersonalData = () => {
   const onChangePassword = () => {
     if (formChangePassword.validate().hasErrors === false) {
       mutate({ password: formChangePassword.values.password })
-      navigate('/login')
     }
   }
   useEffect(() => {
@@ -407,6 +411,7 @@ const PersonalData = () => {
             </Container>
           </Flex>
         </Paper>
+        <ErrorSuccesNotification />
       </Container>
     </BackgroundImage>
   )

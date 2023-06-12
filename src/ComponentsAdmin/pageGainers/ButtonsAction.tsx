@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useDeleteGainer } from '../../api/gainer/useDeleteGainer'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { RootState } from '../../Redux/store'
-import { IGainer } from '../../type'
+import { IGainer } from '../../types/typeGainer'
 import { FormGainersData } from './FormGainer'
 
 export const ButtonsAction: FunctionComponent<{ gainerUuid: string }> = (props) => {

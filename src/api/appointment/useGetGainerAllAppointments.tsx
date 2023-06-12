@@ -6,7 +6,7 @@ export const useGetGainerAllAppointment = (
   gainerUuid?: string,
 ) => {
   return useQuery(
-    [`http://localhost:3306/gainer-appointments/${gainerUuid}`],
+    [['read-all-gainer-key']],
     () => axios.get(`http://localhost:3306/gainer-appointments/${gainerUuid}`),
     {
       retry: false,

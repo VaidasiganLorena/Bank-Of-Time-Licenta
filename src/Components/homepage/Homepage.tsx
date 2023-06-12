@@ -19,8 +19,13 @@ import { DatePicker } from '@mantine/dates'
 import { IconCalendar, IconHeart } from '@tabler/icons-react'
 import moment from 'moment'
 import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
+import { useGetAppointmentAll } from '../../api/statistic/useGetAppointmentAll'
+import { useGetAppointmentCancel } from '../../api/statistic/useGetAppointmentCancel'
+import { useGetAppointmentComplete } from '../../api/statistic/useGetAppointmentComplete'
+
 import { useGetInfoUser } from '../../api/user/useGetInfoUser'
 import { TInfoAppCard } from '../../ComponentsAdmin/pageAppointments/CardsAppoimentAdmin'
+import { ErrorSuccesNotification } from '../../Notification/notification'
 import { NavigationBar } from '../Navbar'
 import { CardCalendarApp } from './CardCalendarApp'
 
@@ -77,12 +82,15 @@ const Homepage = () => {
   const userUUid = localStorage.getItem('userUuid')
   const authToken = localStorage.getItem('userToken')
   const successCallBack = (data: any) => {
-    console.log(data)
     localStorage.setItem('firstName', data.data.response[0].firstname)
     localStorage.setItem('lastName', data.data.response[0].lastname)
   }
+  const successCallBackApp = () => {}
   const { data } = useGetInfoUser(successCallBack, userUUid, authToken)
-  const { data: dataApp } = useGetAllAppointment(successCallBack)
+  const { data: dataApp } = useGetAllAppointment(successCallBackApp)
+  const { data: dataCompleteAppointment } = useGetAppointmentComplete(userUUid, authToken)
+  const { data: dataCancelAppointment } = useGetAppointmentCancel(userUUid, authToken)
+  const { data: dataAllAppointment } = useGetAppointmentAll(userUUid, authToken)
 
   const cardApp = dataApp?.data.response.map(
     (card: TInfoAppCard) =>
@@ -154,7 +162,7 @@ const Homepage = () => {
                         Numărul total de activități
                       </Text>
                       <Text ta="center" size={25} fw={700}>
-                        9
+                        {dataAllAppointment?.data.response}
                       </Text>
                     </Stack>
                     <Stack align={'center'} spacing={0}>
@@ -166,7 +174,9 @@ const Homepage = () => {
                         Activități în așteptare
                       </Text>
                       <Text ta="center" size={25} fw={700}>
-                        2
+                        {dataAllAppointment?.data.response -
+                          dataCompleteAppointment?.data.response -
+                          dataCancelAppointment?.data.response}
                       </Text>
                     </Stack>
                     <Stack align={'center'} spacing={0}>
@@ -177,7 +187,7 @@ const Homepage = () => {
                         Activități finalizate
                       </Text>
                       <Text ta="center" size={25} fw={700}>
-                        5
+                        {dataCompleteAppointment?.data.response}
                       </Text>
                     </Stack>
 
@@ -189,7 +199,7 @@ const Homepage = () => {
                         Activități anulate
                       </Text>
                       <Text ta="center" size={25} fw={700}>
-                        2
+                        {dataCancelAppointment?.data.response}
                       </Text>
                     </Stack>
                   </SimpleGrid>
@@ -226,6 +236,7 @@ const Homepage = () => {
             </Flex>
           </Flex>
         </Paper>
+        <ErrorSuccesNotification />
       </Container>
     </BackgroundImage>
   )

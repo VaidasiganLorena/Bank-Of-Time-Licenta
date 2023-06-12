@@ -10,9 +10,13 @@ export const useChangePassword = (
     headers: { authToken: authToken },
   }
   const myPasswordUrl: string = `http://localhost:3306/user/change-password/${userUuid}`
-  return useMutation((newPassword: any) => axios.put(myPasswordUrl, newPassword, config), {
-    onSuccess: (data) => {
-      successCallBack(data.data.response, data.data.status)
+  return useMutation(
+    ['change-password-key'],
+    (newPassword: any) => axios.put(myPasswordUrl, newPassword, config),
+    {
+      onSuccess: (data) => {
+        successCallBack(data.data.response, data.data.status)
+      },
     },
-  })
+  )
 }

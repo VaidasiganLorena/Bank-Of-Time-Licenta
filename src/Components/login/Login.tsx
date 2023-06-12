@@ -16,6 +16,7 @@ import { useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 import { usePostLogin } from '../../api/usePostLogin'
+import { ErrorSuccesNotification } from '../../Notification/notification'
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -183,6 +184,7 @@ export function Login() {
             </Grid.Col>
           </Grid>
         </Paper>
+        <ErrorSuccesNotification />
       </Container>
     </BackgroundImage>
   )

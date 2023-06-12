@@ -10,7 +10,7 @@ export const useGetInfoUser = (
     headers: { authToken: authToken },
   }
   return useQuery(
-    [`http://localhost:3306/user/${userUuid}`],
+    ['get-info-user-key'],
     () => axios.get(`http://localhost:3306/user/${userUuid}`, config),
     {
       retry: false,

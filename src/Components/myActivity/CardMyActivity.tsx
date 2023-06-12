@@ -109,6 +109,8 @@ export const CardMyActivity: FunctionComponent<IAppointment> = (props) => {
                     ? 'yellow'
                     : status === 'Anulat'
                     ? 'red'
+                    : status === 'În confirmare'
+                    ? 'darkturquise'
                     : 'green'
                 }
                 variant="outline"

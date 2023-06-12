@@ -12,8 +12,9 @@ import { useMediaQuery } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
+import { ErrorSuccesNotification } from '../../Notification/notification'
 import { setGainers } from '../../Redux/gainersDate/slice'
-import { NavbarAdmin } from '../HomepageAdmin/NavbarAdmin'
+import { NavbarAdmin } from '../NavbarAdmin'
 import { FormGainersData } from './FormGainer'
 
 import { TableGainers } from './TableGainers'
@@ -87,6 +88,7 @@ const PageGainers = () => {
             <TableGainers />
           </Paper>
         </Paper>
+        <ErrorSuccesNotification />
       </Container>
       <FormGainersData
         isOpenModal={openModalAddGainer}
