@@ -189,7 +189,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
       setValidCity(false)
     }
 
-    window.location.reload()
+    // window.location.reload()
   }
   const onCancel = () => {
     setEditMode(false)

@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom'
 import { ErrorSuccesNotification } from '../../Notification/notification'
 import { setMessageNotification } from '../../Redux/notification/slice'
 import { useDispatch } from 'react-redux'
+import { GenericDeleteModal } from '../deleteModal/deleteModal'
 const ICON_SIZE = rem(60)
 export const useStyles = createStyles((theme: any) => ({
   wrapper: {

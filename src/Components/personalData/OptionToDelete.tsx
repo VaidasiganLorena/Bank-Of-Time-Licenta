@@ -25,7 +25,13 @@ export const OptionToDelete: FunctionComponent<{ open: boolean; setOpen: any }> 
     mutate({ userUuid, authToken })
   }
   return (
-    <Modal opened={open} onClose={() => setOpen(false)} radius={'lg'} title="Ștergere cont">
+    <Modal
+      opened={open}
+      centered
+      onClose={() => setOpen(false)}
+      radius={'lg'}
+      title="Ștergere cont"
+    >
       <Text>
         Sunteți sigur că doriți să ștergeți contul? O dată șters acesta nu poate fi recuperat.
       </Text>

@@ -9,9 +9,12 @@ import {
   ScrollArea,
   Tabs,
   Text,
+  Title,
 } from '@mantine/core'
 import { IconCheck, IconChecks, IconRotate2 } from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
 import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
+import { ErrorSuccesNotification } from '../../Notification/notification'
 import { NavbarAdmin } from '../NavbarAdmin'
 import { CardAppoimentAdmin, TInfoAppCard } from './CardsAppoimentAdmin'
 
@@ -51,8 +54,10 @@ const useStyles = createStyles((theme: any) => ({
 
 const Appointments = () => {
   const { classes, theme } = useStyles()
+  const [nrAppCheck, setNrAppCheck] = useState(0)
   const successCallback = () => {}
   const { data, isLoading, isRefetching } = useGetAllAppointment(successCallback)
+
   const cardsAppointmentCheck = data?.data.response.map(
     (card: TInfoAppCard) =>
       card.status === 'În verificare' && (
@@ -129,7 +134,17 @@ const Appointments = () => {
         />
       ),
   )
+  useEffect(() => {
+    let nrAppInCheck = 0
+    data &&
+      data.data.response.forEach((element: TInfoAppCard) => {
+        if (element.status === 'În verificare') {
+          nrAppInCheck = nrAppInCheck + 1
+        }
+      })
 
+    setNrAppCheck(nrAppInCheck)
+  }, [data])
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
@@ -138,9 +153,9 @@ const Appointments = () => {
           <NavbarAdmin />
           <Paper className={classes.paperTable}>
             <Flex p={10} w={'100%'} direction={'column'}>
-              <Text ta="center" fw={700} c={theme.colors.brand[6]} size={'xl'} mt={5}>
+              <Title order={2} c={theme.colors.brand[5]} mx={20} mt={10} align="center">
                 Programări
-              </Text>
+              </Title>
               <Tabs defaultValue="check">
                 <Tabs.List>
                   <Tabs.Tab
@@ -155,7 +170,7 @@ const Appointments = () => {
                         size="xs"
                         p={0}
                       >
-                        {data && data.data.numberCheckCards}
+                        {nrAppCheck}
                       </Badge>
                     }
                   >
@@ -190,6 +205,7 @@ const Appointments = () => {
           </Paper>
         </Paper>
       </Container>
+      <ErrorSuccesNotification />
     </BackgroundImage>
   )
 }

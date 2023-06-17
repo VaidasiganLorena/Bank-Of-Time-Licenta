@@ -9,13 +9,13 @@ import {
   Tabs,
   Text,
 } from '@mantine/core'
-import { useMediaQuery, useSetState } from '@mantine/hooks'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useGetAppointment } from '../../api/appointment/useGetAppointmentOfUser'
-import { useGetAppointmentAll } from '../../api/statistic/useGetAppointmentAll'
-import { useGetAppointmentCancel } from '../../api/statistic/useGetAppointmentCancel'
-import { useGetAppointmentComplete } from '../../api/statistic/useGetAppointmentComplete'
+import { useGetCountAllAppointments } from '../../api/statistic/useGetCountAllAppointments'
+import { useGetCountAppointmentCancel } from '../../api/statistic/useGetCountAppointmentsCancel'
+import { useGetCountAppointmentComplete } from '../../api/statistic/useGetCountAppointmentsComplete'
 import { ErrorSuccesNotification } from '../../Notification/notification'
 import { NavigationBar } from '../Navbar'
 import { CardMyActivity } from './CardMyActivity'
@@ -137,9 +137,9 @@ export const MyActivity = () => {
       )
     }
   })
-  const { data: dataCompleteAppointment } = useGetAppointmentComplete(userUUid, authToken)
-  const { data: dataCancelAppointment } = useGetAppointmentCancel(userUUid, authToken)
-  const { data: dataAllAppointment } = useGetAppointmentAll(userUUid, authToken)
+  const { data: dataCompleteAppointment } = useGetCountAppointmentComplete(userUUid, authToken)
+  const { data: dataCancelAppointment } = useGetCountAppointmentCancel(userUUid, authToken)
+  const { data: dataAllAppointment } = useGetCountAllAppointments(userUUid, authToken)
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>

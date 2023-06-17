@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
-export const useGetAppointmentCancel = (userUuid: string | null, authToken: string | null) => {
+export const useGetCountAppointmentCancel = (userUuid: string | null, authToken: string | null) => {
   let config = {
     headers: { authToken: authToken },
   }

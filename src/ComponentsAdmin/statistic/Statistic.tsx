@@ -1,6 +1,18 @@
-import { BackgroundImage, Container, createStyles, Paper, Text, rem, Flex } from '@mantine/core'
+import {
+  BackgroundImage,
+  Container,
+  createStyles,
+  Paper,
+  rem,
+  Flex,
+  LoadingOverlay,
+  Title,
+} from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-
+import { SetStateAction, useEffect, useState } from 'react'
+import { Chart } from 'react-google-charts'
+import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
+import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { NavbarAdmin } from '../NavbarAdmin'
 
 const ICON_SIZE = rem(60)
@@ -181,20 +193,145 @@ export const useStyles = createStyles((theme: any) => ({
 }))
 
 export const Statistics = () => {
-  const { classes } = useStyles()
+  const { classes, theme } = useStyles()
   const tablet = useMediaQuery('(max-width: 800px)')
+  const [nrTypeShopping, setNrTypeShopping] = useState(0)
+  const [nrTypeCleaning, setNrTypeCleaning] = useState(0)
+  const [nrTypeCompany, setNrTypeCompany] = useState(0)
+  const [nrTypeCare, setNrTypeCare] = useState(0)
+  const [nrGenderF, setNrGenderF] = useState(0)
+  const [nrGenderM, setNrGenderM] = useState(0)
+  const [nrOver65, setNrOver65] = useState(0)
+  const [nrUnder65, setNrUnder65] = useState(0)
+  const [arrayCity, setArrayCity] = useState<any[]>([])
+  const succesCallback = () => {}
+  const { data: dataGainers, isLoading } = useGetInfoGainers(succesCallback)
+
+  useEffect(() => {
+    let nrShop = 0
+    let nrClean = 0
+    let nrCompany = 0
+    let nrCare = 0
+    dataGainers &&
+      dataGainers.data.response.forEach((element: any) => {
+        if (element.helpTypeUuid === '1') {
+          nrClean = nrClean + 1
+        } else if (element.helpTypeUuid === '2') {
+          nrShop = nrShop + 1
+        } else if (element.helpTypeUuid === '3') {
+          nrCompany = nrCompany + 1
+        } else if (element.helpTypeUuid === '4') {
+          nrCare = nrCare + 1
+        }
+      })
+    setNrTypeCare(nrCare)
+    setNrTypeCleaning(nrClean)
+    setNrTypeCompany(nrCompany)
+    setNrTypeShopping(nrShop)
+  }, [dataGainers])
+  useEffect(() => {
+    let nrFeminin = 0
+    let nrMasculin = 0
+    dataGainers &&
+      dataGainers.data.response.forEach((element: any) => {
+        if (element.genderGainer === 'Feminin') {
+          nrFeminin = nrFeminin + 1
+        } else {
+          nrMasculin = nrMasculin + 1
+        }
+      })
+    setNrGenderF(nrFeminin)
+    setNrGenderM(nrMasculin)
+  }, [dataGainers])
+  useEffect(() => {
+    let nrUnder65 = 0
+    let nrOver65 = 0
+    dataGainers &&
+      dataGainers.data.response.forEach((element: any) => {
+        var today = new Date()
+        var DOB = new Date(element.dateOfBirth)
+        var age_now = today.getFullYear() - DOB.getFullYear()
+        var m = today.getMonth() - DOB.getMonth()
+
+        if (m < 0 || (m === 0 && today.getDate() < DOB.getDate())) {
+          age_now--
+        }
+        if (age_now <= 65) {
+          nrUnder65 = nrUnder65 + 1
+        } else if (age_now > 65) {
+          nrOver65 = nrOver65 + 1
+        }
+      })
+    setNrUnder65(nrUnder65)
+    setNrOver65(nrOver65)
+  }, [dataGainers])
+
+  const dataStatisticTypeHelp = [
+    ['Tip ajutor', 'Nr. persoane', { role: 'style' }],
+    ['Cumpăraturi', nrTypeShopping, '#ead9c6'],
+    ['Îngrijire', nrTypeCare, '#689983'],
+    ['Companie', nrTypeCompany, '#c8c7a9'],
+    ['Curățenie', nrTypeCleaning, '#92d5b7'],
+  ]
+
+  const dataStatisticGender = [
+    ['Genul', 'Nr. persoane'],
+    ['Masculin', nrGenderM],
+    ['Feminin', nrGenderF],
+  ]
+  const dataStatisticAge = [
+    ['Vârsta', 'Nr. persoane'],
+    ['Peste 65', nrOver65],
+    ['Sub 65', nrUnder65],
+  ]
+  const dataStatisticCity = [['Oraș', 'Nr. persoane']]
+  useEffect(() => {
+    const array: any[] = []
+    dataGainers &&
+      dataGainers.data.response.forEach((element: any) => {
+        array.push(element.cityGainer)
+      })
+    setArrayCity(array)
+  }, [dataGainers])
 
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
         <Paper withBorder className={classes.paper}>
           <NavbarAdmin />
+
           <Flex mr={20} direction={tablet ? 'column' : 'row'} className={classes.flex}>
             <Paper className={classes.containerImage} radius={0} p={15} withBorder>
-              {/* <LoadingOverlay  /> */}
+              <Title order={2} c={theme.colors.brand[5]} mx={20} mt={10} mb={20} align="center">
+                Aici poți vizualiza statistici despre beneficiari
+              </Title>
+              <Flex direction={'row'} h={'100%'} w="100%" align={'center'} justify="center">
+                <Chart
+                  chartType="ColumnChart"
+                  width="95%"
+                  height="75vh"
+                  data={dataStatisticTypeHelp}
+                  options={{ title: 'Statistica cu tipul de ajutor' }}
+                />
+                <Flex w="100%" justify={'center'} direction={'column'}>
+                  <Chart
+                    chartType="PieChart"
+                    data={dataStatisticGender}
+                    height={'30vh'}
+                    options={{ title: 'Statistica categorie de gen' }}
+                  />
+                  <Chart
+                    chartType="PieChart"
+                    data={dataStatisticAge}
+                    height={'30vh'}
+                    options={{ title: 'Statistica categorie de vârstă' }}
+                  />
+                </Flex>
+              </Flex>
             </Paper>
           </Flex>
         </Paper>
+        <LoadingOverlay visible={isLoading} />
       </Container>
     </BackgroundImage>
   )

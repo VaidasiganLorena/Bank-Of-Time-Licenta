@@ -19,9 +19,11 @@ import { DatePicker } from '@mantine/dates'
 import { IconCalendar, IconHeart } from '@tabler/icons-react'
 import moment from 'moment'
 import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
-import { useGetAppointmentAll } from '../../api/statistic/useGetAppointmentAll'
-import { useGetAppointmentCancel } from '../../api/statistic/useGetAppointmentCancel'
-import { useGetAppointmentComplete } from '../../api/statistic/useGetAppointmentComplete'
+import { useGetFutureAppointment } from '../../api/appointment/useGetFutureAppointment'
+import { useGetCountAllAppointments } from '../../api/statistic/useGetCountAllAppointments'
+
+import { useGetCountAppointmentCancel } from '../../api/statistic/useGetCountAppointmentsCancel'
+import { useGetCountAppointmentComplete } from '../../api/statistic/useGetCountAppointmentsComplete'
 
 import { useGetInfoUser } from '../../api/user/useGetInfoUser'
 import { TInfoAppCard } from '../../ComponentsAdmin/pageAppointments/CardsAppoimentAdmin'
@@ -85,24 +87,34 @@ const Homepage = () => {
     localStorage.setItem('firstName', data.data.response[0].firstname)
     localStorage.setItem('lastName', data.data.response[0].lastname)
   }
-  const successCallBackApp = () => {}
+  const successCallBackFutureApp = () => {}
   const { data } = useGetInfoUser(successCallBack, userUUid, authToken)
-  const { data: dataApp } = useGetAllAppointment(successCallBackApp)
-  const { data: dataCompleteAppointment } = useGetAppointmentComplete(userUUid, authToken)
-  const { data: dataCancelAppointment } = useGetAppointmentCancel(userUUid, authToken)
-  const { data: dataAllAppointment } = useGetAppointmentAll(userUUid, authToken)
+  const { data: dataFutureAppointments } = useGetFutureAppointment(
+    successCallBackFutureApp,
+    userUUid,
+    authToken,
+  )
+  const { data: dataCompleteAppointment } = useGetCountAppointmentComplete(userUUid, authToken)
+  const { data: dataCancelAppointment } = useGetCountAppointmentCancel(userUUid, authToken)
+  const { data: dataAllAppointment } = useGetCountAllAppointments(userUUid, authToken)
 
-  const cardApp = dataApp?.data.response.map(
-    (card: TInfoAppCard) =>
-      card.status === 'În procesare' && (
-        <CardCalendarApp
-          avatar={card.photoGainer}
-          name={card.nameGainer}
-          date={moment(card.dateOfAppointment).format('L')}
-          phone={card.phoneNumberGainer}
-          status={card.status}
-        />
-      ),
+  const cardApp = dataFutureAppointments ? (
+    dataFutureAppointments.data.response.map((card: TInfoAppCard) => (
+      <CardCalendarApp
+        avatar={card.photoGainer}
+        name={card.nameGainer}
+        date={moment(card.dateOfAppointment).format('L')}
+        phone={card.phoneNumberGainer}
+        status={card.status}
+      />
+    ))
+  ) : (
+    <Flex direction={'column'} justify="center" w={'100%'} fw={600}>
+      <Image src={'32.svg'} />
+      <Text align="center" c="white">
+        Momentan nu există nici o programare viitoare.
+      </Text>
+    </Flex>
   )
 
   return (
@@ -130,9 +142,9 @@ const Homepage = () => {
                   <Text ta="center" fw={700} className={classes.title}>
                     Timpul tău în care ai ales să ajuți comunitatea
                   </Text>
-                  <Text c="dimmed" ta="center" fz="sm">
+                  {/* <Text c="dimmed" ta="center" fz="sm">
                     20 ore/ lună
-                  </Text>
+                  </Text> */}
                   <Group position="apart" mt="xs">
                     <Text fz="sm" color="dimmed">
                       Progresul tău

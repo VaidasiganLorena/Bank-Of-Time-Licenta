@@ -5,7 +5,7 @@ export const InitialValueDataGainers = {
   phoneNumberGainer: '',
   adress: '',
   cityGainer: '',
-  gender: '',
+  genderGainer: '',
   photoGainer: '',
   listOfDates: '',
   description: '',
@@ -22,7 +22,7 @@ export const ValidateForm = {
   },
   adress: (value: string) =>
     value.length < 5 ? 'Adresa trebuie să conțină cel puțin 5 caractere' : null,
-  gender: (value: string) => (value.length < 2 ? 'Trebuie să alegeți genul' : null),
+  genderGainer: (value: string) => (value.length < 2 ? 'Trebuie să alegeți genul' : null),
   description: (value: string) =>
     value.length < 50 ? 'Descrierea trebuie să conțină cel puțin 50 de caractere' : null,
   helpTypeUuid: (value: string) =>

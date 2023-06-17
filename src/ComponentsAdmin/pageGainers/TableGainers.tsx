@@ -11,6 +11,7 @@ import {
   Flex,
   Stack,
   ScrollArea,
+  LoadingOverlay,
 } from '@mantine/core'
 import { keys } from '@mantine/utils'
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react'
@@ -147,7 +148,7 @@ export function TableGainers() {
               <ButtonsAction gainerUuid={row.gainerUuid} />
             </Group>
             <Group>
-              <Text fw={500}>Gen:</Text> {row.gender}
+              <Text fw={500}>Gen:</Text> {row.genderGainer}
             </Group>
             <Group>
               <Text>Data nașterii:</Text>
@@ -180,7 +181,7 @@ export function TableGainers() {
           <Flex direction={'column'}>
             <b>{row.nameGainer}</b>
             <Text>{moment(row.dateOfBirth).format('L')}</Text>
-            <Text>{row.gender}</Text>
+            <Text>{row.genderGainer}</Text>
             <Text>{row.phoneNumberGainer}</Text>
           </Flex>
         </td>
@@ -198,7 +199,7 @@ export function TableGainers() {
       <tr key={row.gainerUuid}>
         <td>{row.nameGainer}</td>
         <td>{moment(row.dateOfBirth).format('L')}</td>
-        <td width={'2rem'}>{row.gender}</td>
+        <td width={'2rem'}>{row.genderGainer}</td>
         <td>{row.phoneNumberGainer}</td>
         <td>{row.adress.concat(', ').concat(`${row.cityGainer}`)}</td>
         <td>
@@ -211,9 +212,7 @@ export function TableGainers() {
       </tr>
     ),
   )
-  useEffect(() => {
-    console.log(sortedData, gainersEntriesData)
-  }, [])
+  useEffect(() => {}, [gainersEntriesData])
   return (
     <>
       <TextInput

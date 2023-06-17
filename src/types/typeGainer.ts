@@ -4,7 +4,7 @@ export interface IGainer {
   phoneNumberGainer: string
   adress: string
   cityGainer: string
-  gender: string
+  genderGainer: string
   photoGainer: string
   listOfDates: string
   description: string
@@ -18,7 +18,7 @@ export interface IGainerUpdate {
   phoneNumberGainer: string
   adress: string
   cityGainer: string
-  gender: string
+  genderGainer: string
   photoGainer: string
   listOfDates: string
   description: string

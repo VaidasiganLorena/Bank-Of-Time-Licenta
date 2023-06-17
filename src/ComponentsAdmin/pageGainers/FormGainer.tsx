@@ -12,11 +12,13 @@ import {
   Avatar,
   Box,
   Center,
+  LoadingOverlay,
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { IconCalendar, IconUpload } from '@tabler/icons-react'
 import React, { FunctionComponent, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { usePostGainer } from '../../api/gainer/usePostGainer'
 import { useUpdateInfoGainer } from '../../api/gainer/useUpdateGainer'
@@ -32,8 +34,9 @@ export const FormGainersData: FunctionComponent<{
   gainerUuid?: string
 }> = (props) => {
   const { isOpenModal, setOpenModal, isModEdit, dataGainer } = props
-  const succesCallBackGetGainers = () => {}
-  const { refetch } = useGetInfoGainers(succesCallBackGetGainers)
+  const dispatch = useDispatch()
+  const succesCallBackGetGainers = (data: any) => {}
+  const { refetch, isRefetching } = useGetInfoGainers(succesCallBackGetGainers)
 
   const listConverted: Date[] = []
   const dataOfListConverted = dataGainer ? dataGainer.listOfDates.split(',') : []
@@ -47,7 +50,7 @@ export const FormGainersData: FunctionComponent<{
             phoneNumberGainer: dataGainer.phoneNumberGainer,
             adress: dataGainer.adress,
             cityGainer: dataGainer.cityGainer,
-            gender: dataGainer.gender,
+            genderGainer: dataGainer.genderGainer,
             photoGainer: dataGainer.photoGainer,
             listOfDates: dataGainer.listOfDates,
             description: dataGainer.description,
@@ -68,18 +71,23 @@ export const FormGainersData: FunctionComponent<{
 
   useEffect(() => {}, [dates])
   const onCloseModal = () => {
-    setOpenModal && setOpenModal(false)
     formGainerData.reset()
     formGainerData.clearErrors()
+    setOpenModal && setOpenModal(false)
     refetch()
   }
-
-  const successCallBack = () => {
-    onCloseModal()
+  const successCallBackPost = (data: any) => {
+    refetch()
   }
-  const errorCallBack = () => {}
-  const { mutate } = usePostGainer(successCallBack, errorCallBack)
-  const { mutate: mutateUpdate } = useUpdateInfoGainer(successCallBack, dataGainer?.gainerUuid)
+  const errorCallBackPost = (error: any) => {}
+  const successCallBackUpdate = (data: any) => {
+    refetch()
+  }
+  const { mutate, isLoading } = usePostGainer(successCallBackPost, errorCallBackPost)
+  const { mutate: mutateUpdate, isLoading: isLoadingUpdate } = useUpdateInfoGainer(
+    successCallBackUpdate,
+    dataGainer?.gainerUuid,
+  )
 
   const onCreateGainer = () => {
     if (formGainerData.isValid()) {
@@ -89,18 +97,16 @@ export const FormGainersData: FunctionComponent<{
         phoneNumberGainer: formGainerData.values.phoneNumberGainer,
         adress: formGainerData.values.adress,
         cityGainer: formGainerData.values.cityGainer,
-        gender: formGainerData.values.gender,
+        genderGainer: formGainerData.values.genderGainer,
         photoGainer: formGainerData.values.photoGainer,
         listOfDates: String(dates),
         description: formGainerData.values.description,
         helpTypeUuid: formGainerData.values.helpTypeUuid,
         gainerUuid: formGainerData.values.gainerUuid,
       })
-      onCloseModal()
-      formGainerData.clearErrors()
-      refetch()
     }
-    console.log(formGainerData.errors)
+
+    onCloseModal()
   }
   const onUpdateGainer = () => {
     if (formGainerData.isValid()) {
@@ -110,17 +116,16 @@ export const FormGainersData: FunctionComponent<{
         phoneNumberGainer: formGainerData.values.phoneNumberGainer,
         adress: formGainerData.values.adress,
         cityGainer: formGainerData.values.cityGainer,
-        gender: formGainerData.values.gender,
+        genderGainer: formGainerData.values.genderGainer,
         photoGainer: formGainerData.values.photoGainer,
         listOfDates: String(dates),
         description: formGainerData.values.description,
         helpTypeUuid: formGainerData.values.helpTypeUuid,
         gainerUuid: formGainerData.values.gainerUuid,
       })
-      onCloseModal()
-      formGainerData.clearErrors()
-      refetch()
     }
+
+    onCloseModal()
   }
 
   const onUploadFile = (event: File | null) => {
@@ -133,7 +138,6 @@ export const FormGainersData: FunctionComponent<{
 
   return (
     <Modal
-      //size={isMobile ? 'calc(100vw - 5vw)' : isLaptopS ? '65%' : '45%'}
       opened={isOpenModal}
       onClose={() => onCloseModal()}
       title={isModEdit ? 'Editare date beneficiar' : 'Adăugare beneficiar'}
@@ -201,7 +205,7 @@ export const FormGainersData: FunctionComponent<{
             variant="filled"
             size="md"
             radius={10}
-            {...formGainerData.getInputProps('gender')}
+            {...formGainerData.getInputProps('genderGainer')}
           />
           <TextInput
             label="Numărul de telefon"
@@ -241,20 +245,7 @@ export const FormGainersData: FunctionComponent<{
             value={dates}
             onChange={setDates}
           />
-          {/* <MultiSelect
-            label="Lista de date"
-            data={listOfDates}
-            defaultValue={listOfDates}
-            placeholder="Introduceți datele disponibile"
-            searchable
-            creatable
-            getCreateLabel={(query) => `+ Adaugă data de:  ${query}`}
-            onCreate={(query) => {
-              const item = { value: query, label: query }
-              setListOfDates((oldArray: any) => [...oldArray, query])
-              return item
-            }}
-          /> */}
+
           <Select
             data={[
               { value: '1', label: 'Curățenie' },
@@ -288,16 +279,7 @@ export const FormGainersData: FunctionComponent<{
           </Group>
         )}
       </form>
-
-      {/* <Notification
-        radius={'lg'}
-        color={'red'}
-        title="A aparut o eroare"
-        withCloseButton={false}
-        icon={<IconX size="1.1rem" />}
-      >
-        {backendError}
-      </Notification> */}
+      <LoadingOverlay visible={isLoading || isRefetching || isLoadingUpdate} />
     </Modal>
   )
 }

@@ -1,5 +1,4 @@
 import { createStyles, Avatar, Text, Group, Paper, Stack } from '@mantine/core'
-import { IconPhoneCall, IconAt } from '@tabler/icons-react'
 
 const useStyles = createStyles((theme) => ({
   icon: {
@@ -34,13 +33,6 @@ export const CardCalendarApp = ({ avatar, name, date, phone, status }: UserInfoI
             {date}
           </Text>
         </Stack>
-
-        {/* <Group noWrap spacing={10} mt={5}>
-            <IconPhoneCall stroke={1.5} size="1rem" className={classes.icon} />
-            <Text fz="xs" c="dimmed">
-              {phone}
-            </Text>
-          </Group> */}
       </Group>
     </Paper>
   )

@@ -71,31 +71,33 @@ const PageGainers = () => {
     dispatch(setGainers(data?.data.response))
   }, [data, isRefetching, isLoading])
   return (
-    <BackgroundImage src="/backround.png" h={'100%'}>
-      <Container className={classes.wrapper} fluid p={16}>
-        <Paper className={classes.paper}>
-          <NavbarAdmin />
-          <Paper className={classes.paperTable}>
-            <Flex justify="space-between" mx="xs" direction={isMobile ? 'column' : 'row'}>
-              <Title order={2} c={theme.colors.brand[5]} mx={20} mt={10}>
-                Aici poți vizualiza persoanele beneficiare...
-              </Title>
-              <Button radius="xl" mt={15} onClick={() => setOpenModalAddGainer(true)}>
-                Adaugare beneficiar
-              </Button>
-            </Flex>
-            <LoadingOverlay visible={isLoading || isRefetching} />
-            <TableGainers />
+    <>
+      <BackgroundImage src="/backround.png" h={'100%'}>
+        <Container className={classes.wrapper} fluid p={16}>
+          <Paper className={classes.paper}>
+            <NavbarAdmin />
+            <Paper className={classes.paperTable}>
+              <Flex justify="space-between" mx="xs" direction={isMobile ? 'column' : 'row'}>
+                <Title order={2} c={theme.colors.brand[5]} mx={20} mt={10}>
+                  Aici poți vizualiza persoanele beneficiare...
+                </Title>
+                <Button radius="xl" mt={15} onClick={() => setOpenModalAddGainer(true)}>
+                  Adaugare beneficiar
+                </Button>
+              </Flex>
+              <LoadingOverlay visible={isLoading || isRefetching} />
+              <TableGainers />
+            </Paper>
           </Paper>
-        </Paper>
-        <ErrorSuccesNotification />
-      </Container>
-      <FormGainersData
-        isOpenModal={openModalAddGainer}
-        setOpenModal={setOpenModalAddGainer}
-        isModEdit={false}
-      />
-    </BackgroundImage>
+        </Container>
+
+        <FormGainersData
+          isOpenModal={openModalAddGainer}
+          setOpenModal={setOpenModalAddGainer}
+          isModEdit={false}
+        />
+      </BackgroundImage>
+    </>
   )
 }
 export default PageGainers

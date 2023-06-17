@@ -1,12 +1,24 @@
-import { Card, Group, Text, Image, createStyles, Flex, Button, Stack } from '@mantine/core'
+import {
+  Card,
+  Group,
+  Text,
+  Image,
+  createStyles,
+  Flex,
+  Button,
+  Stack,
+  LoadingOverlay,
+} from '@mantine/core'
 import { IconSend } from '@tabler/icons-react'
 import moment from 'moment'
 import 'moment/locale/ro'
 import React, { FunctionComponent, useEffect, useState } from 'react'
+import { useDeleteAppointment } from '../../api/appointment/useDeleteAppointment'
 import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
 import { useUpdateStatus } from '../../api/appointment/useUpdateStatus'
 import { useUpdateTimeVolunteering } from '../../api/user/useUpdateTimeVolunteering'
 import { useSendMail } from '../../api/useSendMail'
+import { GenericDeleteModal } from '../../Components/deleteModal/deleteModal'
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -63,6 +75,7 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
   const [isDisableButtonConfimation, setDisableButtonConfimation] = useState(false)
   const { mutate } = useSendMail(succesCallbackMail)
   const currentDate = moment()
+  const [showCancelMoadal, setShowCancelModal] = useState(false)
   const dateOfAppointmentRemainder = moment(dataApp?.dateOfAppointment)
     .subtract(7, 'days')
     .valueOf()
@@ -70,14 +83,22 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
   const [mesageTimeChangeStatus, setMessageTimeChangeStatus] = useState('')
   const [mesageTimeChangeStatusConfimationBtn, setMesageTimeChangeStatusConfimationBtn] =
     useState('')
-
-  const succesCallback = () => {}
-  const { mutate: mutateUpdateStatus } = useUpdateStatus(succesCallback, dataApp?.appointmentUuid)
+  const successCallbackAllApp = () => {}
+  const { refetch, isRefetching } = useGetAllAppointment(successCallbackAllApp)
+  const succesCallbackUpdate = () => {
+    refetch()
+  }
+  const succesCallbackTime = () => {
+    refetch()
+  }
+  const { mutate: mutateUpdateStatus, isLoading } = useUpdateStatus(
+    succesCallbackUpdate,
+    dataApp?.appointmentUuid,
+  )
   const { mutate: mutateUpdateTimeVounteering } = useUpdateTimeVolunteering(
-    succesCallback,
+    succesCallbackTime,
     dataApp?.userUuid,
   )
-  const { refetch } = useGetAllAppointment(succesCallback)
 
   useEffect(() => {
     if (dateOfAppointmentRemainder <= currentDate.valueOf()) {
@@ -96,7 +117,20 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
       setMesageTimeChangeStatusConfimationBtn(moment(timeStampAppDate).endOf('day').fromNow())
     }
   }, [currentDate])
+  const succesCallbackDelete = () => {}
+  const errorCallbackDelete = () => {}
 
+  const { mutate: mutateDelete, isLoading: isLoadingDelete } = useDeleteAppointment(
+    succesCallbackDelete,
+    errorCallbackDelete,
+    dataApp.appointmentUuid,
+  )
+  const onDeleteApp = () => {
+    if (dataApp) {
+      mutateDelete()
+      refetch()
+    }
+  }
   return dataApp?.status === 'Anulat' || dataApp?.status === 'Finalizat' ? null : (
     <Card radius="lg" mx={'xs'} className={classes.card} key={dataApp.appointmentUuid} mt={'xs'}>
       <Flex direction={'column'}>
@@ -246,7 +280,7 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
                 variant={'outline'}
                 radius={'xl'}
                 onClick={() => {
-                  mutateUpdateStatus({ status: 'Anulat' })
+                  setShowCancelModal(true)
                   refetch()
                 }}
               >
@@ -256,6 +290,16 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
           )}
         </Group>
       </Flex>
+      <GenericDeleteModal
+        isOpenModal={showCancelMoadal}
+        setOpenModal={setShowCancelModal}
+        onDelete={onDeleteApp}
+        title={'Ești sigur(ă) că vrei să ștergi programarea?'}
+        subTitle={'O dată ce programarea va fi ștearsă acesta nu se mai poate recupera. '}
+        mainActionText={'Ștergere'}
+        isLoading={isLoadingDelete}
+      />
+      <LoadingOverlay visible={isLoading} />
     </Card>
   )
 }

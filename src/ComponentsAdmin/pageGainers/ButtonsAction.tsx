@@ -1,9 +1,10 @@
 import { ActionIcon, Button, Group, Modal, Paper, Tooltip, Text } from '@mantine/core'
 import { IconCalendarTime, IconEdit, IconTrash } from '@tabler/icons-react'
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useDeleteGainer } from '../../api/gainer/useDeleteGainer'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
+import { setErrorNotification, setMessageNotification } from '../../Redux/notification/slice'
 import { RootState } from '../../Redux/store'
 import { IGainer } from '../../types/typeGainer'
 import { FormGainersData } from './FormGainer'
@@ -13,9 +14,14 @@ export const ButtonsAction: FunctionComponent<{ gainerUuid: string }> = (props) 
   const [openModalEditGainer, setOpenModalEditGainer] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentGainer, setCurrentGainer] = useState<IGainer>()
+  const dispatch = useDispatch()
   const { gainersEntriesData } = useSelector((state: RootState) => state.gainers)
-  const succesCallback = () => {}
-  const errorCallback = () => {}
+  const succesCallback = (data: any) => {
+    dispatch(setMessageNotification(data.message))
+  }
+  const errorCallback = (error: any) => {
+    dispatch(setErrorNotification(error))
+  }
   const { refetch } = useGetInfoGainers(succesCallback)
   const { mutate } = useDeleteGainer(succesCallback, errorCallback)
   const onDeleteGainer = () => {
