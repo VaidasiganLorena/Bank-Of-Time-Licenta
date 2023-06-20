@@ -72,7 +72,7 @@ export const CardActivities: FunctionComponent<TInfoGainerCard> = (props) => {
   const navigate = useNavigate()
   const [dateOfAppointment, setDateOfAppointment] = useState<string | null>('')
   const [timeVolunteering, setTimeVolunteering] = useState<string | null>('')
-  const userUuid = localStorage.getItem('userUuid')
+  const userUuid = sessionStorage.getItem('userUuid')
   const dispatch = useDispatch()
   const { classes } = useStyles()
 

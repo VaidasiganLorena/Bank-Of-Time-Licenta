@@ -84,7 +84,8 @@ export const CardAppoimentAdmin: FunctionComponent<TInfoAppCard> = (dataApp?) =>
   const [mesageTimeChangeStatusConfimationBtn, setMesageTimeChangeStatusConfimationBtn] =
     useState('')
   const successCallbackAllApp = () => {}
-  const { refetch, isRefetching } = useGetAllAppointment(successCallbackAllApp)
+  const authToken = sessionStorage.getItem('userToken')
+  const { refetch, isRefetching } = useGetAllAppointment(successCallbackAllApp, authToken)
   const succesCallbackUpdate = () => {
     refetch()
   }

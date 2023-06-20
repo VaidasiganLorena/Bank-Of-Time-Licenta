@@ -7,8 +7,8 @@ import { useStyles } from './PersonalData'
 export const OptionToDelete: FunctionComponent<{ open: boolean; setOpen: any }> = (props) => {
   const { open, setOpen } = props
   const { classes } = useStyles()
-  const userUuid = localStorage.getItem('userUuid')
-  const authToken = localStorage.getItem('authToken')
+  const userUuid = sessionStorage.getItem('userUuid')
+  const authToken = sessionStorage.getItem('authToken')
   const navigate = useNavigate()
   const successDeleteCallBack = () => {
     sessionStorage.clear()

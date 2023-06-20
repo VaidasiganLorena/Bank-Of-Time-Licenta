@@ -19,6 +19,7 @@ import {
   Image,
   Flex,
   ScrollArea,
+  Tooltip,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IconCheck, IconX } from '@tabler/icons-react'
@@ -258,15 +259,17 @@ const Register = () => {
       <Container className={classes.wrapper}>
         <Flex direction={'column'}>
           <Flex h={'100%'} align="center" justify={'center'}>
-            <Image
-              src="logoB.png"
-              height={'auto'}
-              width={'10rem'}
-              onClick={() => {
-                navigate('/login')
-              }}
-              style={{ cursor: 'pointer' }}
-            />
+            <Tooltip label={'Înapoi'} position="bottom">
+              <Image
+                src="logoB.png"
+                height={'auto'}
+                width={'10rem'}
+                onClick={() => {
+                  navigate('/login')
+                }}
+                style={{ cursor: 'pointer' }}
+              />
+            </Tooltip>
           </Flex>
           <Paper className={classes.form} radius={0} p={30}>
             <Title order={2} className={classes.title} align="center" mt="md" mb={30}>

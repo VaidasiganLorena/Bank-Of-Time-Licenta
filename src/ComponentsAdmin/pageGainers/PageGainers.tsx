@@ -12,7 +12,6 @@ import { useMediaQuery } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
-import { ErrorSuccesNotification } from '../../Notification/notification'
 import { setGainers } from '../../Redux/gainersDate/slice'
 import { NavbarAdmin } from '../NavbarAdmin'
 import { FormGainersData } from './FormGainer'
@@ -66,7 +65,8 @@ const PageGainers = () => {
   const [openModalAddGainer, setOpenModalAddGainer] = useState(false)
   const dispatch = useDispatch()
   const succesCallBackGetGainers = () => {}
-  const { data, isLoading, isRefetching } = useGetInfoGainers(succesCallBackGetGainers)
+  const authToken = sessionStorage.getItem('userToken')
+  const { data, isLoading, isRefetching } = useGetInfoGainers(succesCallBackGetGainers, authToken)
   useEffect(() => {
     dispatch(setGainers(data?.data.response))
   }, [data, isRefetching, isLoading])

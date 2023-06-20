@@ -75,13 +75,13 @@ const useStyles = createStyles((theme: any) => ({
 }))
 export const MyActivity = () => {
   const { classes, theme } = useStyles()
-  const userUUid = localStorage.getItem('userUuid')
+  const userUUid = sessionStorage.getItem('userUuid')
   const tablet = useMediaQuery('(max-width: 800px)')
-  const userUuid = localStorage.getItem('userUuid')
-  const authToken = localStorage.getItem('authToken')
+  const userUuid = sessionStorage.getItem('userUuid')
+  const authToken = sessionStorage.getItem('authToken')
   const successCallBack = (data: any) => {}
 
-  const { data, refetch } = useGetAppointment(successCallBack, userUuid, authToken)
+  const { data } = useGetAppointment(successCallBack, userUuid, authToken)
   useEffect(() => {}, [])
   const cardsAppointmentFinished = data?.data.response.map(
     (card: any) =>

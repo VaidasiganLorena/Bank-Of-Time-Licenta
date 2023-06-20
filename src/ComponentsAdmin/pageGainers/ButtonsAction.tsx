@@ -2,6 +2,7 @@ import { ActionIcon, Button, Group, Modal, Paper, Tooltip, Text } from '@mantine
 import { IconCalendarTime, IconEdit, IconTrash } from '@tabler/icons-react'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { useDeleteGainer } from '../../api/gainer/useDeleteGainer'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { setErrorNotification, setMessageNotification } from '../../Redux/notification/slice'
@@ -15,6 +16,7 @@ export const ButtonsAction: FunctionComponent<{ gainerUuid: string }> = (props) 
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [currentGainer, setCurrentGainer] = useState<IGainer>()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { gainersEntriesData } = useSelector((state: RootState) => state.gainers)
   const succesCallback = (data: any) => {
     dispatch(setMessageNotification(data.message))
@@ -22,7 +24,8 @@ export const ButtonsAction: FunctionComponent<{ gainerUuid: string }> = (props) 
   const errorCallback = (error: any) => {
     dispatch(setErrorNotification(error))
   }
-  const { refetch } = useGetInfoGainers(succesCallback)
+  const authToken = sessionStorage.getItem('userToken')
+  const { refetch } = useGetInfoGainers(succesCallback, authToken)
   const { mutate } = useDeleteGainer(succesCallback, errorCallback)
   const onDeleteGainer = () => {
     mutate({ gainerUuid })
@@ -48,8 +51,8 @@ export const ButtonsAction: FunctionComponent<{ gainerUuid: string }> = (props) 
             radius="xl"
             variant="subtle"
             style={{ color: '#1c6350' }}
-            component="a"
-            href={`/gainer-appointments/${gainerUuid}`}
+            component="button"
+            onClick={() => navigate(`/gainer-appointments/${gainerUuid}`)}
           >
             <IconCalendarTime size="1.125rem" />
           </ActionIcon>

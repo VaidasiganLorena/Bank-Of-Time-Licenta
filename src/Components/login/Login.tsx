@@ -92,11 +92,12 @@ export function Login() {
   const successCallBack = (data: any) => {
     setErrorBackend('')
     if (data.role === 'admin') {
-      localStorage.setItem('userUuid', data.userUuid)
+      sessionStorage.setItem('userUuid', data.userUuid)
+      sessionStorage.setItem('userToken', data.authToken)
       navigate('/appointments')
     } else {
-      localStorage.setItem('userUuid', data.userUuid)
-      localStorage.setItem('userToken', data.authToken)
+      sessionStorage.setItem('userUuid', data.userUuid)
+      sessionStorage.setItem('userToken', data.authToken)
       navigate('/homepage')
     }
   }
@@ -152,6 +153,18 @@ export function Login() {
                   input: errorBackend.length === 0 ? classes.input : classes.inputError,
                 }}
               />
+              <Text size={12} m={5}>
+                <Anchor<'a'>
+                  href="#"
+                  className={classes.anchor}
+                  onClick={(event: any) => {
+                    event.preventDefault()
+                    navigate('/forget-password')
+                  }}
+                >
+                  Ai uitat parola?
+                </Anchor>
+              </Text>
               <Text c="red" size={'md'} mt={15} align={'center'}>
                 {errorBackend}
               </Text>

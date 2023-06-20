@@ -14,6 +14,8 @@ import { Statistics } from './ComponentsAdmin/statistic/Statistic'
 import Appointments from './ComponentsAdmin/pageAppointments/Appointments'
 import GainerAllAppointments from './ComponentsAdmin/pageGainerAllAppointments/pageGainerAllAppointments'
 import { MyActivity } from './Components/myActivity/MyActivity'
+import { ProtectedRoute } from './protected-route'
+import { ForgetPassword } from './Components/forgetPassword/forgetPassword'
 
 const queryClient = new QueryClient()
 function App() {
@@ -50,14 +52,71 @@ function App() {
             <Route path="/" element={<Intro />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/homepage" element={<Homepage />} />
-            <Route path="/personal-data" element={<PersonalData />} />
-            <Route path="/activites" element={<Activites />} />
-            <Route path="/my-activity" element={<MyActivity />} />
-            <Route path="/gainers" element={<PageGainers />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/statistics" element={<Statistics />} />
-            <Route path="/gainer-appointments/:gainerUuid" element={<GainerAllAppointments />} />
+            <Route path="/forget-password" element={<ForgetPassword />} />
+            <Route
+              path="/homepage"
+              element={
+                <ProtectedRoute>
+                  <Homepage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/personal-data"
+              element={
+                <ProtectedRoute>
+                  <PersonalData />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/activites"
+              element={
+                <ProtectedRoute>
+                  <Activites />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-activity"
+              element={
+                <ProtectedRoute>
+                  <MyActivity />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/gainers"
+              element={
+                <ProtectedRoute>
+                  <PageGainers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/appointments"
+              element={
+                <ProtectedRoute>
+                  <Appointments />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/statistics"
+              element={
+                <ProtectedRoute>
+                  <Statistics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/gainer-appointments/:gainerUuid"
+              element={
+                <ProtectedRoute>
+                  <GainerAllAppointments />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
       </QueryClientProvider>

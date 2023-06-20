@@ -1,11 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
-export const useGetInfoUser = (
-  successCallBack: (data: any) => void,
-  userUuid?: string | null,
-  authToken?: string | null,
-) => {
+export const useGetInfoUser = (successCallBack: (data: any) => void, userUuid?: string | null) => {
+  const authToken = sessionStorage.getItem('userToken')
   let config = {
     headers: { authToken: authToken },
   }

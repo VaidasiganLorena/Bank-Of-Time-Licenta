@@ -18,6 +18,7 @@ import { DatePicker } from '@mantine/dates'
 
 import { IconCalendar, IconHeart } from '@tabler/icons-react'
 import moment from 'moment'
+import { useEffect } from 'react'
 import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
 import { useGetFutureAppointment } from '../../api/appointment/useGetFutureAppointment'
 import { useGetCountAllAppointments } from '../../api/statistic/useGetCountAllAppointments'
@@ -81,23 +82,39 @@ const useStyles = createStyles((theme: any) => ({
 
 const Homepage = () => {
   const { classes } = useStyles()
-  const userUUid = localStorage.getItem('userUuid')
-  const authToken = localStorage.getItem('userToken')
+  const userUUid = sessionStorage.getItem('userUuid')
+  const authToken = sessionStorage.getItem('userToken')
   const successCallBack = (data: any) => {
-    localStorage.setItem('firstName', data.data.response[0].firstname)
-    localStorage.setItem('lastName', data.data.response[0].lastname)
+    sessionStorage.setItem('firstName', data.data.response[0].firstname)
+    sessionStorage.setItem('lastName', data.data.response[0].lastname)
   }
   const successCallBackFutureApp = () => {}
-  const { data } = useGetInfoUser(successCallBack, userUUid, authToken)
-  const { data: dataFutureAppointments } = useGetFutureAppointment(
+  const { data, refetch } = useGetInfoUser(successCallBack, userUUid)
+  const { data: dataFutureAppointments, refetch: refetchDataFutureApp } = useGetFutureAppointment(
     successCallBackFutureApp,
     userUUid,
     authToken,
   )
-  const { data: dataCompleteAppointment } = useGetCountAppointmentComplete(userUUid, authToken)
-  const { data: dataCancelAppointment } = useGetCountAppointmentCancel(userUUid, authToken)
-  const { data: dataAllAppointment } = useGetCountAllAppointments(userUUid, authToken)
 
+  const { data: dataCompleteAppointment, refetch: refetchCompApp } = useGetCountAppointmentComplete(
+    userUUid,
+    authToken,
+  )
+  const { data: dataCancelAppointment, refetch: refetchCancelApp } = useGetCountAppointmentCancel(
+    userUUid,
+    authToken,
+  )
+  const { data: dataAllAppointment, refetch: refetchAllApp } = useGetCountAllAppointments(
+    userUUid,
+    authToken,
+  )
+  useEffect(() => {
+    refetch()
+    refetchDataFutureApp()
+    refetchCompApp()
+    refetchCancelApp()
+    refetchAllApp()
+  }, [])
   const cardApp = dataFutureAppointments ? (
     dataFutureAppointments.data.response.map((card: TInfoAppCard) => (
       <CardCalendarApp
@@ -142,9 +159,7 @@ const Homepage = () => {
                   <Text ta="center" fw={700} className={classes.title}>
                     Timpul tău în care ai ales să ajuți comunitatea
                   </Text>
-                  {/* <Text c="dimmed" ta="center" fz="sm">
-                    20 ore/ lună
-                  </Text> */}
+
                   <Group position="apart" mt="xs">
                     <Text fz="sm" color="dimmed">
                       Progresul tău

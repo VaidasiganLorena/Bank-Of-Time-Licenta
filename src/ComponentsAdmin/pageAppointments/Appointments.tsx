@@ -56,7 +56,8 @@ const Appointments = () => {
   const { classes, theme } = useStyles()
   const [nrAppCheck, setNrAppCheck] = useState(0)
   const successCallback = () => {}
-  const { data, isLoading, isRefetching } = useGetAllAppointment(successCallback)
+  const authToken = sessionStorage.getItem('userToken')
+  const { data, isLoading, isRefetching } = useGetAllAppointment(successCallback, authToken)
 
   const cardsAppointmentCheck = data?.data.response.map(
     (card: TInfoAppCard) =>

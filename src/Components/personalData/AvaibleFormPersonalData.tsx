@@ -20,8 +20,8 @@ import { useUpdateInfoUser } from '../../api/user/useUpdateInfoUser'
 import { IconUpload } from '@tabler/icons-react'
 import { convertBase64 } from '../../ComponentsAdmin/pageGainers/UtilsForm'
 import { setMessageNotification } from '../../Redux/notification/slice'
-import { useDispatch } from 'react-redux'
-import { da } from 'date-fns/locale'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../Redux/store'
 import { useGetInfoUser } from '../../api/user/useGetInfoUser'
 
 const useStyles = createStyles((theme: any) => ({
@@ -110,16 +110,6 @@ const useStyles = createStyles((theme: any) => ({
 }))
 
 export type TInfoUser = {
-  firstname?: string
-  lastname?: string
-  email?: string
-  phoneNumber?: string
-  gender?: string
-  city?: string
-  photo?: string
-}
-
-export const AvaibleFormPersonalData: FunctionComponent<{
   firstname: string
   lastname: string
   email: string
@@ -127,28 +117,38 @@ export const AvaibleFormPersonalData: FunctionComponent<{
   gender: string
   city: string
   photo: string
-  setEditMode: any
+}
+
+export const AvaibleFormPersonalData: FunctionComponent<{
+  editMode: boolean
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>
 }> = (props) => {
-  const { firstname, lastname, email, phoneNumber, gender, city, setEditMode, photo } = props
+  const { setEditMode } = props
   const { classes } = useStyles()
+  const userUuid = sessionStorage.getItem('userUuid')
+  const authToken = sessionStorage.getItem('authToken')
+  const { userData } = useSelector((state: RootState) => state.user)
   const timeoutRef = useRef<number>(0)
   const [loading, setLoading] = useState(false)
   const [location, setLocation] = useState<string>('')
   const [validCity, setValidCity] = useState(true)
   const [errorCity, setErrorCity] = useState<string>('')
-  const [file, setFile] = useState(photo)
+  const [file, setFile] = useState(userData.photo)
   const dispatch = useDispatch()
   const isValidCity: (location: string) => string = (location: string) => {
     return location.length < 3 ? 'Locația nu este validă!' : ''
   }
+  const succesInfoUserCallBack = () => {}
+  const { refetch } = useGetInfoUser(succesInfoUserCallBack, userUuid)
+
   const formPersonalData = useForm({
     initialValues: {
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      phoneNumber: phoneNumber,
-      city: city,
-      gender: gender,
+      firstname: userData.firstname,
+      lastname: userData.lastname,
+      email: userData.email,
+      phoneNumber: userData.phoneNumber,
+      city: userData.city,
+      gender: userData.gender,
     },
     validate: {
       firstname: (value) =>
@@ -165,10 +165,10 @@ export const AvaibleFormPersonalData: FunctionComponent<{
       gender: (value: string) => (value.length !== 0 ? null : 'Nu uita să alegi genul.'),
     },
   })
-  const userUuid = localStorage.getItem('userUuid')
-  const authToken = localStorage.getItem('authToken')
+
   const succesCallBackUpdate = (data: any) => {
     dispatch(setMessageNotification(data))
+    refetch()
   }
 
   const { mutate } = useUpdateInfoUser(succesCallBackUpdate, userUuid, authToken)
@@ -183,14 +183,13 @@ export const AvaibleFormPersonalData: FunctionComponent<{
         gender: formPersonalData.values.gender,
         photo: file,
       })
-      setEditMode(false)
     } else {
-      setErrorCity(isValidCity(city))
+      setErrorCity(isValidCity(userData.city))
       setValidCity(false)
     }
-
-    // window.location.reload()
+    setEditMode(false)
   }
+
   const onCancel = () => {
     setEditMode(false)
   }
@@ -284,7 +283,7 @@ export const AvaibleFormPersonalData: FunctionComponent<{
           <Group position="center" mt={'1rem'} spacing={15}>
             <Autocomplete
               data={cities}
-              defaultValue={city}
+              defaultValue={userData.city}
               onChange={handleChangeCity}
               onBlur={onBlurCity}
               label="Oraș"

@@ -1,5 +1,16 @@
 import React, { FunctionComponent } from 'react'
-import { Card, createStyles, Group, Text, Avatar, Badge, Grid, Stack, Center } from '@mantine/core'
+import {
+  Card,
+  createStyles,
+  Group,
+  Text,
+  Avatar,
+  Badge,
+  Grid,
+  Stack,
+  Center,
+  Flex,
+} from '@mantine/core'
 import {
   IconCalendarTime,
   IconCheck,
@@ -101,32 +112,43 @@ export const CardMyActivity: FunctionComponent<IAppointment> = (props) => {
 
           <Grid.Col span={3}>
             <Center>
-              <Badge
-                color={
-                  status === 'În verificare'
-                    ? 'orange'
-                    : status === 'În procesare'
-                    ? 'yellow'
-                    : status === 'Anulat'
-                    ? 'red'
-                    : status === 'În confirmare'
-                    ? 'darkturquise'
-                    : 'green'
-                }
-                variant="outline"
-                rightSection={
-                  status === 'În așteptare' ? (
-                    <IconRotate2 size={'1rem'} />
-                  ) : status === 'Anulat' ? (
-                    <IconX size={'0.9rem'} />
-                  ) : (
-                    <IconCheck size={'1rem'} />
-                  )
-                }
-                classNames={{ rightSection: classes.rightSection }}
-              >
-                {status}
-              </Badge>
+              <Flex direction={'column'} align="center">
+                <Badge
+                  color={
+                    status === 'În verificare'
+                      ? 'orange'
+                      : status === 'În procesare'
+                      ? 'yellow'
+                      : status === 'Anulat'
+                      ? 'red'
+                      : status === 'În confirmare'
+                      ? 'darkturquise'
+                      : 'green'
+                  }
+                  variant="outline"
+                  rightSection={
+                    status === 'În așteptare' ? (
+                      <IconRotate2 size={'1rem'} />
+                    ) : status === 'Anulat' ? (
+                      <IconX size={'0.9rem'} />
+                    ) : (
+                      <IconCheck size={'1rem'} />
+                    )
+                  }
+                  classNames={{ rightSection: classes.rightSection }}
+                >
+                  {status}
+                </Badge>
+                {status === 'În confirmare' ? (
+                  <Text size={12} c="dimmed">
+                    Email primit!
+                  </Text>
+                ) : status === 'În procesare' ? (
+                  <Text size={12} c="dimmed">
+                    Urmeaza sa primiti email !
+                  </Text>
+                ) : null}
+              </Flex>
             </Center>
           </Grid.Col>
         </Grid>

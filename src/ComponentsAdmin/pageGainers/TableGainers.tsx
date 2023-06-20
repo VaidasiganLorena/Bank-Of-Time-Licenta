@@ -97,7 +97,9 @@ function sortData(
   if (!sortBy) {
     return filterData(data, payload.search)
   }
-
+  if (!payload.search) {
+    return data
+  }
   return filterData(
     [...data].sort((a, b) => {
       if (payload.reversed) {

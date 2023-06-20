@@ -1,5 +1,7 @@
 import { Container, Group, createStyles, rem, Paper, Text, Flex, Image } from '@mantine/core'
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../Redux/store'
 import { TInfoUser } from './AvaibleFormPersonalData'
 const useStyles = createStyles((theme: any) => ({
   input: {
@@ -23,13 +25,12 @@ const useStyles = createStyles((theme: any) => ({
   },
 }))
 
-export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => {
-  const { firstname, lastname, email, phoneNumber, gender, city, photo } = props
+export const DisableFormPersonalData = () => {
   const { classes } = useStyles()
-
+  const { userData } = useSelector((state: RootState) => state.user)
   return (
     <Flex direction={'column'} align="center">
-      <Image src={photo} radius="xl" width="15rem" height="13rem"></Image>
+      <Image src={userData.photo} radius="xl" width="15rem" height="13rem"></Image>
       <Container p={0} mb={20}>
         <Group position="center" spacing={15} mt={'1rem'}>
           <Paper radius={10} bg="#f3f5f7" className={classes.input}>
@@ -37,7 +38,7 @@ export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => 
               <Text c={'dimmed'} size={'sm'}>
                 Nume
               </Text>{' '}
-              {lastname}
+              {userData.lastname}
             </Flex>
           </Paper>
 
@@ -46,7 +47,7 @@ export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => 
               <Text c={'dimmed'} size={'sm'}>
                 Prenume
               </Text>{' '}
-              {firstname}
+              {userData.firstname}
             </Flex>
           </Paper>
         </Group>
@@ -56,7 +57,7 @@ export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => 
               <Text c={'dimmed'} size={'sm'}>
                 Adresa de email
               </Text>{' '}
-              {email}
+              {userData.email}
             </Flex>
           </Paper>
           <Paper radius={10} bg="#f3f5f7" className={classes.input}>
@@ -64,7 +65,7 @@ export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => 
               <Text c={'dimmed'} size={'sm'}>
                 Număr de telefon
               </Text>{' '}
-              {phoneNumber}
+              {userData.phoneNumber}
             </Flex>
           </Paper>
         </Group>
@@ -75,7 +76,7 @@ export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => 
               <Text c={'dimmed'} size={'sm'}>
                 Oraș
               </Text>{' '}
-              {city}
+              {userData.city}
             </Flex>
           </Paper>
           <Paper radius={10} bg="#f3f5f7" className={classes.input}>
@@ -83,7 +84,7 @@ export const DisableFormPersonalData: FunctionComponent<TInfoUser> = (props) => 
               <Text c={'dimmed'} size={'sm'}>
                 Gen
               </Text>{' '}
-              {gender}
+              {userData.gender}
             </Flex>
           </Paper>
         </Group>

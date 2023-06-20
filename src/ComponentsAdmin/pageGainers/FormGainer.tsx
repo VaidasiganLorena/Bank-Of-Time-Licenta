@@ -36,7 +36,8 @@ export const FormGainersData: FunctionComponent<{
   const { isOpenModal, setOpenModal, isModEdit, dataGainer } = props
   const dispatch = useDispatch()
   const succesCallBackGetGainers = (data: any) => {}
-  const { refetch, isRefetching } = useGetInfoGainers(succesCallBackGetGainers)
+  const authToken = sessionStorage.getItem('userToken')
+  const { refetch, isRefetching } = useGetInfoGainers(succesCallBackGetGainers, authToken)
 
   const listConverted: Date[] = []
   const dataOfListConverted = dataGainer ? dataGainer.listOfDates.split(',') : []

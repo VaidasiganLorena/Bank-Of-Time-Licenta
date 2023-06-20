@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { IClient } from '../../types/client-types'
 import type { RootState } from '../store'
 
 const initialState: {

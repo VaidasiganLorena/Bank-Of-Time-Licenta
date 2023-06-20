@@ -50,35 +50,32 @@ export const CardAppoimentForGainer: FunctionComponent<TInfoAppForGainer> = (dat
     <>
       <Card radius="lg" mx={'xs'} className={classes.card} key={dataApp.appointmentUuid} mt={'xs'}>
         <Flex direction={'column'}>
-          <Flex justify={'space-around'}>
-            <Group noWrap>
+          <Flex justify={'space-around'} align="center">
+            <Group>
               <Image src={dataApp.photo} height={100} width={100} radius={'md'} />
-              <Stack spacing={5}>
-                <Group spacing={5}>
-                  <Text className={classes.title} size="xl">
-                    {dataApp.lastname}
-                  </Text>
-                  <Text className={classes.title} size="xl">
-                    {dataApp.firstname}
-                  </Text>
-                </Group>
-
-                <Stack spacing={0}>
-                  <Group>
-                    <Text size="sm">Localitea:</Text>
-                    <Text size="sm">{dataApp.city}</Text>
-                  </Group>
-                  <Group>
-                    <Text size="sm">Număr de telefon:</Text>
-                    <Text size="sm">{dataApp.phoneNumber}</Text>
-                  </Group>
-                  <Group>
-                    <Text size="sm">Email:</Text>
-                    <Text size="sm">{dataApp.email}</Text>
-                  </Group>
-                </Stack>
-              </Stack>
+              <Group spacing={5}>
+                <Text className={classes.title} size="xl">
+                  {dataApp.lastname}
+                </Text>
+                <Text className={classes.title} size="xl">
+                  {dataApp.firstname}
+                </Text>
+              </Group>
             </Group>
+            <Stack spacing={0}>
+              <Group>
+                <Text size="sm">Localitea:</Text>
+                <Text size="sm">{dataApp.city}</Text>
+              </Group>
+              <Group>
+                <Text size="sm">Număr de telefon:</Text>
+                <Text size="sm">{dataApp.phoneNumber}</Text>
+              </Group>
+              <Group>
+                <Text size="sm">Email:</Text>
+                <Text size="sm">{dataApp.email}</Text>
+              </Group>
+            </Stack>
             <Stack spacing={0}>
               <Group>
                 <Text size="sm">In data de:</Text>
@@ -89,7 +86,7 @@ export const CardAppoimentForGainer: FunctionComponent<TInfoAppForGainer> = (dat
                 <Text size="sm">{dataApp.timeVolunteering}</Text>
                 <Text size="sm">ore</Text>
               </Group>
-            </Stack>
+            </Stack>{' '}
           </Flex>
         </Flex>
       </Card>

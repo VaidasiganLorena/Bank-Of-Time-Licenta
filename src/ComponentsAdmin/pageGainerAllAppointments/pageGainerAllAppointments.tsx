@@ -1,6 +1,5 @@
 import {
   BackgroundImage,
-  Badge,
   Container,
   createStyles,
   Flex,
@@ -9,13 +8,17 @@ import {
   Tabs,
   Text,
   Image,
+  Breadcrumbs,
+  Anchor,
 } from '@mantine/core'
-import { IconCheck, IconRotate2, IconX } from '@tabler/icons-react'
-import { da } from 'date-fns/locale'
+import { IconCheck, IconX } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useGetGainerAllAppointment } from '../../api/appointment/useGetGainerAllAppointments'
-import { NavbarAdmin } from '../NavbarAdmin'
+import { RootState } from '../../Redux/store'
+import { IGainer } from '../../types/typeGainer'
+
 import { CardAppoimentForGainer, TInfoAppForGainer } from './CardAppoimentForGainer'
 
 const useStyles = createStyles((theme: any) => ({
@@ -32,7 +35,7 @@ const useStyles = createStyles((theme: any) => ({
     width: '100%',
     height: '96vh',
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
 
     [theme.fn.smallerThan('xs')]: {
       marginBottom: 20,
@@ -42,7 +45,7 @@ const useStyles = createStyles((theme: any) => ({
   paperTable: {
     borderRadius: 30,
     margin: 15,
-    width: '100%',
+    width: '98%',
     height: '96%',
     color: 'green',
     [theme.fn.smallerThan('xs')]: {
@@ -56,10 +59,13 @@ const GainerAllAppointments = () => {
   const { classes, theme } = useStyles()
   const { gainerUuid } = useParams()
   const successCallback = (data: any) => {}
-
   const { data } = useGetGainerAllAppointment(successCallback, gainerUuid)
-
-  useEffect(() => {}, [data])
+  const { gainersEntriesData } = useSelector((state: RootState) => state.gainers)
+  const [dataGainer, setDataGainer] = useState<IGainer>()
+  useEffect(() => {
+    const data = gainersEntriesData.find((item) => item.gainerUuid === gainerUuid)
+    setDataGainer(data)
+  }, [gainersEntriesData])
 
   const cardsAppointmentCancel = data?.data.response.map(
     (card: TInfoAppForGainer) =>
@@ -105,19 +111,34 @@ const GainerAllAppointments = () => {
         />
       ),
   )
-  console.log(data?.data)
+  const items = [
+    { title: 'Beneficiari', href: '/gainers' },
+    { title: `${dataGainer?.nameGainer}`, href: '#' },
+  ].map((item, index) => (
+    <Anchor href={item.href} key={index}>
+      {item.title}
+    </Anchor>
+  ))
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
         <Paper className={classes.paper}>
-          <NavbarAdmin />
+          <Breadcrumbs
+            separator="→"
+            ml="xl"
+            mt="md"
+            styles={{
+              root: { fontSize: 20, fontWeight: 650 },
+              separator: { color: '#28886f', fontWeight: 700 },
+            }}
+          >
+            {items}
+          </Breadcrumbs>
           <Paper className={classes.paperTable}>
             <Flex p={10} w={'100%'} direction={'column'}>
-              <Text ta="center" fw={700} c={theme.colors.brand[6]} size={'xl'} mt={5}>
-                Programări
-              </Text>
+              <Text ta="center" fw={700} c={theme.colors.brand[6]} size={'xl'} mt={5}></Text>
               <Tabs defaultValue="complete">
-                <Tabs.List>
+                <Tabs.List grow>
                   <Tabs.Tab value="complete" icon={<IconCheck size="0.8rem" />}>
                     Finalizat
                   </Tabs.Tab>
@@ -127,10 +148,6 @@ const GainerAllAppointments = () => {
                 </Tabs.List>
 
                 <Tabs.Panel value="cancel" pt="xs">
-                  <>
-                    <Text>Momentan nu există nicio o programre</Text>
-                    <Image src={'attention.png'}></Image>
-                  </>
                   <ScrollArea type="auto" h={'77vh'}>
                     {cardsAppointmentCancel}
                   </ScrollArea>

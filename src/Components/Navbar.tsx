@@ -7,7 +7,6 @@ import {
   Tooltip,
   UnstyledButton,
 } from '@mantine/core'
-import { useEffect, useState } from 'react'
 
 import { useLocation, useNavigate } from 'react-router-dom'
 const useStyles = createStyles((theme: any) => ({
@@ -55,12 +54,10 @@ const useStyles = createStyles((theme: any) => ({
 
 export const NavigationBar = () => {
   const { classes } = useStyles()
-
   const location = useLocation()
-
   const navigate = useNavigate()
   const logOut = () => {
-    localStorage.clear()
+    sessionStorage.clear()
     navigate('/')
   }
 

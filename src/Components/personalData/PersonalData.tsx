@@ -29,7 +29,7 @@ import { useNavigate } from 'react-router-dom'
 import { ErrorSuccesNotification } from '../../Notification/notification'
 import { setMessageNotification } from '../../Redux/notification/slice'
 import { useDispatch } from 'react-redux'
-import { GenericDeleteModal } from '../deleteModal/deleteModal'
+import { setDataUser } from '../../Redux/user/userSlice'
 const ICON_SIZE = rem(60)
 export const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -207,10 +207,11 @@ export const useStyles = createStyles((theme: any) => ({
 const PersonalData = () => {
   const { classes } = useStyles()
   const [editMode, setEditMode] = useState<boolean>(false)
-  const userUuid = localStorage.getItem('userUuid')
-  const authToken = localStorage.getItem('authToken')
+  const userUuid = sessionStorage.getItem('userUuid')
+  const authToken = sessionStorage.getItem('authToken')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const tablet = useMediaQuery('(max-width: 800px)')
+
   const [visible, { toggle }] = useDisclosure(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -218,14 +219,13 @@ const PersonalData = () => {
   const succesInfoUserCallBack = () => {}
   const succesChangePasswordCallBack = (data: any) => {
     dispatch(setMessageNotification(data))
-    localStorage.clear()
+    sessionStorage.clear()
     navigate('/login')
   }
   const { mutate } = useChangePassword(succesChangePasswordCallBack, userUuid, authToken)
   const { data, refetch, isLoading, isRefetching } = useGetInfoUser(
     succesInfoUserCallBack,
     userUuid,
-    authToken,
   )
 
   const formChangePassword = useForm({
@@ -250,7 +250,11 @@ const PersonalData = () => {
   }
   useEffect(() => {
     refetch()
-  }, [editMode, refetch])
+  }, [editMode])
+  useEffect(() => {
+    if (data) dispatch(setDataUser(data.data.response[0]))
+  }, [data])
+
   return (
     <BackgroundImage src="/backround.png">
       <Container className={classes.wrapper} fluid p={16}>
@@ -265,31 +269,14 @@ const PersonalData = () => {
                     isLoading ? (
                       <Loader />
                     ) : (
-                      <AvaibleFormPersonalData
-                        firstname={data?.data.response[0].firstname}
-                        lastname={data?.data.response[0].lastname}
-                        email={data?.data.response[0].email}
-                        phoneNumber={data?.data.response[0].phoneNumber}
-                        gender={data?.data.response[0].gender}
-                        city={data?.data.response[0].city}
-                        photo={data?.data.response[0].photo}
-                        setEditMode={setEditMode}
-                      />
+                      <AvaibleFormPersonalData setEditMode={setEditMode} editMode={editMode} />
                     )
                   ) : isLoading ? (
                     <Center>
                       <Loader color="teal" size="lg" variant="dots" />
                     </Center>
                   ) : (
-                    <DisableFormPersonalData
-                      firstname={data?.data.response[0].firstname}
-                      lastname={data?.data.response[0].lastname}
-                      email={data?.data.response[0].email}
-                      phoneNumber={data?.data.response[0].phoneNumber}
-                      gender={data?.data.response[0].gender}
-                      city={data?.data.response[0].city}
-                      photo={data?.data.response[0].photo}
-                    />
+                    <DisableFormPersonalData />
                   )}
                 </div>
               </Group>

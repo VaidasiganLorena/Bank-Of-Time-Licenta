@@ -64,7 +64,7 @@ export const NavbarAdmin = () => {
   const { classes } = useStyles()
   const navigate = useNavigate()
   const logOut = () => {
-    localStorage.clear()
+    sessionStorage.clear()
     navigate('/')
   }
   const location = useLocation()

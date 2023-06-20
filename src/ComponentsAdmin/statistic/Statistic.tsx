@@ -9,9 +9,8 @@ import {
   Title,
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Chart } from 'react-google-charts'
-import { useGetAllAppointment } from '../../api/appointment/useGetAllAppoiments'
 import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { NavbarAdmin } from '../NavbarAdmin'
 
@@ -66,7 +65,7 @@ export const useStyles = createStyles((theme: any) => ({
   containerImage: {
     borderRadius: 30,
     width: '100%',
-    height: 'fit-content',
+    height: '96%',
     margin: 15,
     padding: theme.spacing.xl,
 
@@ -203,9 +202,9 @@ export const Statistics = () => {
   const [nrGenderM, setNrGenderM] = useState(0)
   const [nrOver65, setNrOver65] = useState(0)
   const [nrUnder65, setNrUnder65] = useState(0)
-  const [arrayCity, setArrayCity] = useState<any[]>([])
   const succesCallback = () => {}
-  const { data: dataGainers, isLoading } = useGetInfoGainers(succesCallback)
+  const authToken = sessionStorage.getItem('userToken')
+  const { data: dataGainers, isLoading } = useGetInfoGainers(succesCallback, authToken)
 
   useEffect(() => {
     let nrShop = 0
@@ -284,15 +283,6 @@ export const Statistics = () => {
     ['Peste 65', nrOver65],
     ['Sub 65', nrUnder65],
   ]
-  const dataStatisticCity = [['Oraș', 'Nr. persoane']]
-  useEffect(() => {
-    const array: any[] = []
-    dataGainers &&
-      dataGainers.data.response.forEach((element: any) => {
-        array.push(element.cityGainer)
-      })
-    setArrayCity(array)
-  }, [dataGainers])
 
   return (
     <BackgroundImage src="/backround.png">
@@ -305,26 +295,32 @@ export const Statistics = () => {
               <Title order={2} c={theme.colors.brand[5]} mx={20} mt={10} mb={20} align="center">
                 Aici poți vizualiza statistici despre beneficiari
               </Title>
-              <Flex direction={'row'} h={'100%'} w="100%" align={'center'} justify="center">
+              <Flex direction={'row'} h={'85%'} w="100%" align={'center'} justify="center">
                 <Chart
                   chartType="ColumnChart"
                   width="95%"
                   height="75vh"
                   data={dataStatisticTypeHelp}
-                  options={{ title: 'Statistica cu tipul de ajutor' }}
+                  options={{ title: 'Statistica cu tipul de ajutor', colors: ['#28886f'] }}
                 />
                 <Flex w="100%" justify={'center'} direction={'column'}>
                   <Chart
                     chartType="PieChart"
                     data={dataStatisticGender}
                     height={'30vh'}
-                    options={{ title: 'Statistica categorie de gen' }}
+                    options={{
+                      title: 'Statistica categorie de gen',
+                      colors: ['#9ab091', '#c8c7a9'],
+                    }}
                   />
                   <Chart
                     chartType="PieChart"
                     data={dataStatisticAge}
                     height={'30vh'}
-                    options={{ title: 'Statistica categorie de vârstă' }}
+                    options={{
+                      title: 'Statistica categorie de vârstă',
+                      colors: ['#609b8b', '#048261'],
+                    }}
                   />
                 </Flex>
               </Flex>
