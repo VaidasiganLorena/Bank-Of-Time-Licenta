@@ -123,7 +123,7 @@ export function Login() {
         <Paper className={classes.form} radius={0} p={30} pb={20}>
           <Grid className={classes.grid}>
             <Grid.Col span={5} className={classes.loginContainer}>
-              <Title order={2} className={classes.title} align="center" mt="md" mb={50}>
+              <Title order={1} className={classes.title} align="center" mt="md" mb={30}>
                 Bine ai revenit!
               </Title>
 
@@ -153,7 +153,7 @@ export function Login() {
                   input: errorBackend.length === 0 ? classes.input : classes.inputError,
                 }}
               />
-              <Text size={12} m={5}>
+              <Text size={14} m={5}>
                 <Anchor<'a'>
                   href="#"
                   className={classes.anchor}

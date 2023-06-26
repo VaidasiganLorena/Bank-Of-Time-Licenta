@@ -8,9 +8,7 @@ import {
   Select,
   FileInput,
   rem,
-  Image,
   Avatar,
-  Box,
   Center,
   LoadingOverlay,
 } from '@mantine/core'
@@ -23,6 +21,7 @@ import { useGetInfoGainers } from '../../api/gainer/useGetGainers'
 import { usePostGainer } from '../../api/gainer/usePostGainer'
 import { useUpdateInfoGainer } from '../../api/gainer/useUpdateGainer'
 import { cities } from '../../aseert/city'
+import { setGainers } from '../../Redux/gainersDate/slice'
 import { IGainerUpdate } from '../../types/typeGainer'
 import { base64ToFile, convertBase64, InitialValueDataGainers, ValidateForm } from './UtilsForm'
 
@@ -37,7 +36,7 @@ export const FormGainersData: FunctionComponent<{
   const dispatch = useDispatch()
   const succesCallBackGetGainers = (data: any) => {}
   const authToken = sessionStorage.getItem('userToken')
-  const { refetch, isRefetching } = useGetInfoGainers(succesCallBackGetGainers, authToken)
+  const { data, refetch, isRefetching } = useGetInfoGainers(succesCallBackGetGainers, authToken)
 
   const listConverted: Date[] = []
   const dataOfListConverted = dataGainer ? dataGainer.listOfDates.split(',') : []
@@ -136,7 +135,9 @@ export const FormGainersData: FunctionComponent<{
       })
       .catch((err) => console.log('Eroare incarcare fisier', err))
   }
-
+  useEffect(() => {
+    dispatch(setGainers)
+  }, [data])
   return (
     <Modal
       opened={isOpenModal}

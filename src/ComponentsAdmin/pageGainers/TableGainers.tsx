@@ -11,7 +11,6 @@ import {
   Flex,
   Stack,
   ScrollArea,
-  LoadingOverlay,
 } from '@mantine/core'
 import { keys } from '@mantine/utils'
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react'
@@ -116,11 +115,15 @@ export function TableGainers() {
   const { classes } = useStyles()
   const [search, setSearch] = useState('')
   const { gainersEntriesData } = useSelector((state: RootState) => state.gainers)
-  const [sortedData, setSortedData] = useState(gainersEntriesData)
+  const [sortedData, setSortedData] = useState<IGainer[]>()
   const [sortBy, setSortBy] = useState<keyof IGainer | null>(null)
   const [reverseSortDirection, setReverseSortDirection] = useState(false)
   const isMobile = useMediaQuery('(max-width: 30em)')
   const isLaptopS = useMediaQuery('(max-width: 75em)')
+
+  useEffect(() => {
+    setSortedData(gainersEntriesData)
+  }, [gainersEntriesData])
 
   const setSorting = (field: keyof IGainer) => {
     const reversed = field === sortBy ? !reverseSortDirection : false
@@ -137,84 +140,86 @@ export function TableGainers() {
     )
   }
 
-  const rows = sortedData.map((row) =>
-    isMobile ? (
-      <tr key={row.gainerUuid}>
-        <td>
-          <Flex direction={'column'}>
-            <Group position="apart">
-              <Stack spacing={0}>
-                <b>{row.nameGainer}</b>
-              </Stack>
+  const rows =
+    sortedData &&
+    sortedData.map((row) =>
+      isMobile ? (
+        <tr key={row.gainerUuid}>
+          <td>
+            <Flex direction={'column'}>
+              <Group position="apart">
+                <Stack spacing={0}>
+                  <b>{row.nameGainer}</b>
+                </Stack>
 
-              <ButtonsAction gainerUuid={row.gainerUuid} />
-            </Group>
-            <Group>
-              <Text fw={500}>Gen:</Text> {row.genderGainer}
-            </Group>
-            <Group>
-              <Text>Data nașterii:</Text>
-              {moment(row.dateOfBirth).format('L')}
-            </Group>
+                <ButtonsAction gainerUuid={row.gainerUuid} />
+              </Group>
+              <Group>
+                <Text fw={500}>Gen:</Text> {row.genderGainer}
+              </Group>
+              <Group>
+                <Text>Data nașterii:</Text>
+                {moment(row.dateOfBirth).format('L')}
+              </Group>
+
+              <Group>
+                <Text>Nr. telefon:</Text>
+                {row.phoneNumberGainer}
+              </Group>
+              <Group>
+                <Text>Adresă:</Text>
+                {row.adress.concat(', ').concat(`${row.cityGainer}`)}
+              </Group>
+            </Flex>
+            <Stack spacing={0} my={5}>
+              <Text>Descriere:</Text>
+              <Text lineClamp={2}>{row.description}</Text>
+            </Stack>
 
             <Group>
-              <Text>Nr. telefon:</Text>
-              {row.phoneNumberGainer}
+              <Text>Tipul de ajutor:</Text>
+              {row.nameHelpType}
             </Group>
-            <Group>
-              <Text>Adresă:</Text>
-              {row.adress.concat(', ').concat(`${row.cityGainer}`)}
-            </Group>
-          </Flex>
-          <Stack spacing={0} my={5}>
-            <Text>Descriere:</Text>
+          </td>
+        </tr>
+      ) : isLaptopS ? (
+        <tr key={row.gainerUuid}>
+          <td>
+            <Flex direction={'column'}>
+              <b>{row.nameGainer}</b>
+              <Text>{moment(row.dateOfBirth).format('L')}</Text>
+              <Text>{row.genderGainer}</Text>
+              <Text>{row.phoneNumberGainer}</Text>
+            </Flex>
+          </td>
+          <td>{row.adress.concat(', ').concat(`${row.cityGainer}`)}</td>
+
+          <td>
             <Text lineClamp={2}>{row.description}</Text>
-          </Stack>
+          </td>
+          <td>{row.nameHelpType}</td>
+          <td>
+            <ButtonsAction gainerUuid={row.gainerUuid} />
+          </td>
+        </tr>
+      ) : (
+        <tr key={row.gainerUuid}>
+          <td>{row.nameGainer}</td>
+          <td>{moment(row.dateOfBirth).format('L')}</td>
+          <td width={'2rem'}>{row.genderGainer}</td>
+          <td>{row.phoneNumberGainer}</td>
+          <td>{row.adress.concat(', ').concat(`${row.cityGainer}`)}</td>
+          <td>
+            <Text lineClamp={2}>{row.description}</Text>
+          </td>
+          <td>{row.nameHelpType}</td>
+          <td>
+            <ButtonsAction gainerUuid={row.gainerUuid} />
+          </td>
+        </tr>
+      ),
+    )
 
-          <Group>
-            <Text>Tipul de ajutor:</Text>
-            {row.nameHelpType}
-          </Group>
-        </td>
-      </tr>
-    ) : isLaptopS ? (
-      <tr key={row.gainerUuid}>
-        <td>
-          <Flex direction={'column'}>
-            <b>{row.nameGainer}</b>
-            <Text>{moment(row.dateOfBirth).format('L')}</Text>
-            <Text>{row.genderGainer}</Text>
-            <Text>{row.phoneNumberGainer}</Text>
-          </Flex>
-        </td>
-        <td>{row.adress.concat(', ').concat(`${row.cityGainer}`)}</td>
-
-        <td>
-          <Text lineClamp={2}>{row.description}</Text>
-        </td>
-        <td>{row.nameHelpType}</td>
-        <td>
-          <ButtonsAction gainerUuid={row.gainerUuid} />
-        </td>
-      </tr>
-    ) : (
-      <tr key={row.gainerUuid}>
-        <td>{row.nameGainer}</td>
-        <td>{moment(row.dateOfBirth).format('L')}</td>
-        <td width={'2rem'}>{row.genderGainer}</td>
-        <td>{row.phoneNumberGainer}</td>
-        <td>{row.adress.concat(', ').concat(`${row.cityGainer}`)}</td>
-        <td>
-          <Text lineClamp={2}>{row.description}</Text>
-        </td>
-        <td>{row.nameHelpType}</td>
-        <td>
-          <ButtonsAction gainerUuid={row.gainerUuid} />
-        </td>
-      </tr>
-    ),
-  )
-  useEffect(() => {}, [gainersEntriesData])
   return (
     <>
       <TextInput
@@ -312,7 +317,7 @@ export function TableGainers() {
             )}
           </thead>
           <tbody>
-            {rows.length > 0 ? (
+            {rows && rows.length > 0 ? (
               rows
             ) : (
               <tr>

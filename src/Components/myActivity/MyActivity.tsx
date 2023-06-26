@@ -147,7 +147,7 @@ export const MyActivity = () => {
           <NavigationBar />
           <Flex p={10} w={'100%'} direction={tablet ? 'column' : 'row'}>
             <Paper className={classes.paperAppointments}>
-              <Text ta="center" fw={700} c={theme.colors.brand[6]} size={'xl'} mt={5}>
+              <Text ta="center" fw={700} c={theme.colors.brand[6]} size={24} mt={5}>
                 Activitatea mea
               </Text>
               <Tabs defaultValue="pending">

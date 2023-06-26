@@ -92,7 +92,7 @@ export const NavbarAdmin = () => {
                     location.pathname.includes('/appointments') ? classes.active : classes.inactive
                   }
                 >
-                  <Image height={'2.2rem'} width={'2.2rem'} src="appointments.png" />
+                  <Image height={'2.2rem'} width={'2.2rem'} src="/appointments.png" />
                 </UnstyledButton>
               </Tooltip>
               <Tooltip label="Beneficiari" color="light" position="bottom" offset={-5}>
@@ -103,7 +103,7 @@ export const NavbarAdmin = () => {
                     location.pathname.includes('/gainers') ? classes.active : classes.inactive
                   }
                 >
-                  <Image height={'2.2rem'} width={'2.2rem'} src="gainers.png" />
+                  <Image height={'2.2rem'} width={'2.2rem'} src="/gainers.png" />
                 </UnstyledButton>
               </Tooltip>
 
@@ -115,14 +115,14 @@ export const NavbarAdmin = () => {
                     location.pathname.includes('/statistics') ? classes.active : classes.inactive
                   }
                 >
-                  <Image height={'1.8rem'} width={'1.8rem'} src="statistic.png" />
+                  <Image height={'1.8rem'} width={'1.8rem'} src="/statistic.png" />
                 </UnstyledButton>
               </Tooltip>
             </Navbar.Section>
             <Navbar.Section>
               <Tooltip label="Ieșire cont" color="light" position="bottom" offset={-10}>
                 <UnstyledButton onClick={logOut} mr={isTablet ? '1rem' : 0}>
-                  <Image height={'1.7rem'} width={'1.7rem'} src="logOut.png" />
+                  <Image height={'1.7rem'} width={'1.7rem'} src="/logOut.png" />
                 </UnstyledButton>
               </Tooltip>
             </Navbar.Section>

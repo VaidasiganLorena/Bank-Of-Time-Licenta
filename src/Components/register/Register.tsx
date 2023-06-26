@@ -34,9 +34,9 @@ import { setErrorNotification, setMessageNotification } from '../../Redux/notifi
 const useStyles = createStyles((theme) => ({
   wrapper: {
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
+    alignItems: 'flex-start',
     [theme.fn.largerThan('xs')]: {
       height: '100vh',
     },
@@ -195,7 +195,7 @@ const Register = () => {
         password: formRegistration.values.password,
         city: formRegistration.values.city,
         gender: formRegistration.values.gender,
-        photo: formRegistration.values.gender === 'Masculin' ? 'avatarMan.png' : 'avatar.png',
+        photo: formRegistration.values.gender === 'Masculin' ? '/avatarMan.png' : '/avatar.png',
       })
       navigate('/login')
     } else {
@@ -268,6 +268,7 @@ const Register = () => {
                   navigate('/login')
                 }}
                 style={{ cursor: 'pointer' }}
+                my={'xs'}
               />
             </Tooltip>
           </Flex>
