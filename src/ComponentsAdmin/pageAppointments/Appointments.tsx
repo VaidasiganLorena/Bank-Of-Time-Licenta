@@ -8,7 +8,6 @@ import {
   Paper,
   ScrollArea,
   Tabs,
-  Text,
   Title,
 } from '@mantine/core'
 import { IconCheck, IconChecks, IconRotate2 } from '@tabler/icons-react'
