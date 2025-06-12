@@ -1,2 +1,3 @@
 node_modules
-opainai.config.ts
+openai.config.ts
+.env
