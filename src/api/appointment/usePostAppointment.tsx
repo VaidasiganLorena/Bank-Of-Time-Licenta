@@ -1,5 +1,5 @@
-import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
 
 export type IErrorRegister = {
   response: string
@@ -7,22 +7,22 @@ export type IErrorRegister = {
 }
 export const usePostAppointment = (
   successCallBack: (data: string, status: number) => void,
-  errorCallBack: (data: IErrorRegister) => void,
+  errorCallBack: (data: IErrorRegister) => void
 ) => {
   return useMutation(
-    ['post-appointment-key'],
+    ["post-appointment-key"],
     (dataAppointment: {
       userUuid: string
       gainerUuid: string
       dateOfAppointment: string
       status: string
       timeVolunteering: number
-    }) => axios.post('http://localhost:3306/appointment', dataAppointment),
+    }) => axios.post("http://localhost:8080/appointment", dataAppointment),
     {
       onSuccess: (data) => {
         successCallBack(data.data.response, data.data.status)
       },
       onError: (error: any) => errorCallBack(error?.response.data),
-    },
+    }
   )
 }

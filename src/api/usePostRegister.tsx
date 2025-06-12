@@ -1,5 +1,5 @@
-import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
 
 export type IErrorRegister = {
   response: string
@@ -7,7 +7,7 @@ export type IErrorRegister = {
 }
 export const usePostRegister = (
   successCallBack: (data: string, status: number) => void,
-  errorCallBack: (data: IErrorRegister) => void,
+  errorCallBack: (data: IErrorRegister) => void
 ) => {
   return useMutation(
     (dataRegistration: {
@@ -19,12 +19,12 @@ export const usePostRegister = (
       city: string
       gender: string
       photo: string
-    }) => axios.post('http://localhost:3306/user/register', dataRegistration),
+    }) => axios.post("http://localhost:8080/user/register", dataRegistration),
     {
       onSuccess: (data) => {
         successCallBack(data.data.response, data.data.status)
       },
       onError: (error: any) => errorCallBack(error?.response.data),
-    },
+    }
   )
 }

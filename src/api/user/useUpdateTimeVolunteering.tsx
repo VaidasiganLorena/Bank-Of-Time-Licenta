@@ -1,18 +1,18 @@
-import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
 
 export const useUpdateTimeVolunteering = (
   successCallBack: (data: string, status: number) => void,
-  userUuid: string | null,
+  userUuid: string | null
 ) => {
-  const pathUpdateTime: string = `http://localhost:3306/users/update/time-volunteering/${userUuid}`
+  const pathUpdateTime: string = `http://localhost:8080/users/update/time-volunteering/${userUuid}`
   return useMutation(
-    ['update-time-volunteering-key'],
+    ["update-time-volunteering-key"],
     (body: { timeVolunteering: number }) => axios.put(pathUpdateTime, body),
     {
       onSuccess: (data) => {
         successCallBack(data.data.response, data.data.status)
       },
-    },
+    }
   )
 }

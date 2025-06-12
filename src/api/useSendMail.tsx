@@ -1,5 +1,5 @@
-import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
 
 export const useSendMail = (successCallBack: (data: string) => void) => {
   return useMutation(
@@ -10,11 +10,11 @@ export const useSendMail = (successCallBack: (data: string) => void) => {
       nameGainer: string
       dateOfAppointment: string
       cityGainer: string
-    }) => axios.post('http://localhost:3306/mailAppointment', dataMail),
+    }) => axios.post("http://localhost:8080/mailAppointment", dataMail),
     {
       onSuccess: (data) => {
         successCallBack(data.data.response)
       },
-    },
+    }
   )
 }

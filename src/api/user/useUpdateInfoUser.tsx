@@ -1,23 +1,23 @@
-import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
-import { TInfoUser } from '../../Components/personalData/AvaibleFormPersonalData'
+import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
+import { TInfoUser } from "../../Components/personalData/AvaibleFormPersonalData"
 
 export const useUpdateInfoUser = (
   successCallBack: (data: string, status: number) => void,
   userUuid: string | null,
-  authToken: string | null,
+  authToken: string | null
 ) => {
   let config = {
     headers: { authToken: authToken },
   }
-  const myAccount: string = `http://localhost:3306/user/update/${userUuid}`
+  const myAccount: string = `http://localhost:8080/user/update/${userUuid}`
   return useMutation(
-    ['update-info-user-key'],
+    ["update-info-user-key"],
     (dataMyAccount: TInfoUser) => axios.put(myAccount, dataMyAccount, config),
     {
       onSuccess: (data) => {
         successCallBack(data.data.response, data.data.status)
       },
-    },
+    }
   )
 }
