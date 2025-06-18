@@ -16,6 +16,7 @@ import GainerAllAppointments from "./ComponentsAdmin/pageGainerAllAppointments/p
 import { MyActivity } from "./Components/myActivity/MyActivity"
 import { ProtectedRoute } from "./protected-route"
 import { ForgetPassword } from "./Components/forgetPassword/forgetPassword"
+import { VolunteerProfile } from "./Components/volunteerProfile/volunteerProfile"
 
 const queryClient = new QueryClient()
 function App() {
@@ -114,6 +115,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <GainerAllAppointments />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/volunteer-profile"
+              element={
+                <ProtectedRoute>
+                  <VolunteerProfile />
                 </ProtectedRoute>
               }
             />

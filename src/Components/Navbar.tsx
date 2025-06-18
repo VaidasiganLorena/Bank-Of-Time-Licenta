@@ -118,7 +118,7 @@ export const NavigationBar = () => {
             </UnstyledButton>
           </Tooltip>
 
-          <Tooltip label="Chatbot" color="light" position="bottom" offset={-5}>
+          {/* <Tooltip label="Chatbot" color="light" position="bottom" offset={-5}>
             <UnstyledButton
               component="a"
               href="/chatbot"
@@ -129,6 +129,28 @@ export const NavigationBar = () => {
               }
             >
               <Image height={"2rem"} width={"2rem"} src="chatbot.png" />
+            </UnstyledButton>
+          </Tooltip> */}
+          <Tooltip
+            label="Profil voluntar"
+            color="light"
+            position="bottom"
+            offset={-5}
+          >
+            <UnstyledButton
+              component="a"
+              href="/volunteer-profile"
+              className={
+                location.pathname.includes("/volunteer-profile")
+                  ? classes.active
+                  : classes.inactive
+              }
+            >
+              <Image
+                height={"2rem"}
+                width={"2rem"}
+                src="volunteer-profile.png"
+              />
             </UnstyledButton>
           </Tooltip>
 

@@ -52,7 +52,6 @@ export const ChatBubble = ({
   const viewport = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const [messages, setMessages] = useState<Message[]>(() => {
-    // Add welcome message if there are no initial messages
     if (initialMessages.length === 0) {
       return [
         {
@@ -122,11 +121,14 @@ export const ChatBubble = ({
 
   return (
     <>
-      <div className={classes.chatBubble} onClick={handleOpenModal}>
+      <div
+        className={classes.chatBubble}
+        onClick={isModalOpen ? () => setIsModalOpen(false) : handleOpenModal}
+      >
         <ThemeIcon size={60} radius={30} color="#28886f">
-          <IconMessageCircle size={30} />
+          {isModalOpen ? <IconX size={30} /> : <IconMessageCircle size={30} />}
         </ThemeIcon>
-        {unreadMessages > 0 && (
+        {unreadMessages > 0 && !isModalOpen && (
           <Badge className={classes.notificationBadge} size="sm" radius="xl">
             {unreadMessages}
           </Badge>
@@ -142,13 +144,19 @@ export const ChatBubble = ({
         padding={0}
         radius={20}
         styles={{
-          root: {
-            position: "relative",
-            left: 440,
+          inner: {
+            top: "calc(100vh/2 - 420px)",
+            left: "calc(100vw/2 - 260px)",
           },
+          close: { display: "none" },
         }}
       >
         <Paper className={classes.chatContainer}>
+          <div style={{ position: "absolute", top: 10, right: 10, zIndex: 1 }}>
+            <ActionIcon onClick={() => setIsModalOpen(false)}>
+              <IconX size={20} />
+            </ActionIcon>
+          </div>
           <ScrollArea h="100%" type="auto" viewportRef={viewport}>
             {messages.map((message, index) => (
               <div
