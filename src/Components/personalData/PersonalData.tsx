@@ -209,7 +209,7 @@ const PersonalData = () => {
   const { classes } = useStyles()
   const [editMode, setEditMode] = useState<boolean>(false)
   const userUuid = sessionStorage.getItem("userUuid")
-  const authToken = sessionStorage.getItem("authToken")
+  const authToken = sessionStorage.getItem("userToken")
   const [openModal, setOpenModal] = useState<boolean>(false)
   const tablet = useMediaQuery("(max-width: 800px)")
 

@@ -79,10 +79,10 @@ export const MyActivity = () => {
   const userUUid = sessionStorage.getItem("userUuid")
   const tablet = useMediaQuery("(max-width: 800px)")
   const userUuid = sessionStorage.getItem("userUuid")
-  const authToken = sessionStorage.getItem("authToken")
+  const authToken = sessionStorage.getItem("userToken")
   const successCallBack = (data: any) => {}
 
-  const { data } = useGetAppointment(successCallBack, userUuid, authToken)
+  const { data } = useGetAppointment(successCallBack, userUuid)
   useEffect(() => {}, [])
   const cardsAppointmentFinished = data?.data.response.map(
     (card: any) =>

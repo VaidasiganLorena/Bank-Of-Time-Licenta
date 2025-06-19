@@ -1,5 +1,5 @@
+import { CreateVolunteerDocumentInput } from "../../../api/volunteer-doc/usePostDoc"
 import { openai } from "../../../config/openai.config"
-import { CreateVolunteerDocumentInput } from "../../../api/volunteer-doc/useCreateDoc"
 
 export const generateDocData = async (
   extractedText: string
@@ -28,26 +28,44 @@ ${correctedText}
 
 INSTRUCȚIUNI DE EXTRAGERE:
 1. Analizează textul cu atenție și extrage toate informațiile relevante
-2. Pentru câmpurile care nu sunt menționate explicit, fă estimări inteligente bazate pe context
-3. Pentru date, folosește formatul dd.mm.yyyy
-4. Pentru liste (responsibilities, skills), returnează array-uri JSON valide
-5. Pentru ore, returnează un număr întreg
+2. TOATE câmpurile trebuie completate - NU sunt permise valori null, undefined sau câmpuri goale
+3. Pentru câmpurile care nu sunt menționate explicit, fă estimări inteligente bazate pe context
+4. Pentru date, folosește formatul dd.mm.yyyy
+5. Pentru liste (responsibilities, skills), returnează array-uri JSON valide cu cel puțin un element
+6. Pentru ore, returnează un număr întreg pozitiv
+7. Dacă nu găsești informații directe, dedu din context și folosește valori plauzibile
+
+CERINȚE OBLIGATORII:
+- volunteerName: Dacă nu e specificat, dedu din context (ex: "Ion Popescu")
+- eventName: Dacă nu e specificat, dedu din titlu, locație, tipul activității (ex: "Activitate Voluntariat", "Proiect Educațional", "Eveniment Comunitar")
+- organization: Dacă nu e menționată, folosește "Organizație Locală" sau "Comunitate"
+- dateFrom: Dacă e menționată doar o lună/an, folosește prima zi a lunii (ex: "01.06.2023")
+- dateTo: Dacă e o singură zi, folosește aceeași dată ca dateFrom
+- role: Dacă nu e specificat, folosește "voluntar" sau "participant"
+- validation: "true" pentru activități formale, "false" pentru activități informale
+- hours: Estimează în funcție de durata evenimentului (minim 4 oră, daca nu este specificat), daca is mai multe zile atunci formula (nr zile * 4 ore), daca e pe o perioada mai lunga de timp maximul de ore este 100(daca nu este specificat)
+- responsabilities: Lista cu cel puțin o responsabilitate (ex: ["participare la activități"])
+- skills: Lista cu cel puțin o competență (ex: ["lucru în echipă"])
 
 Returnează STRICT un obiect JSON valid cu următoarea structură:
 
 {
-  "eventName": string, // Numele evenimentului sau activității. Dacă nu este specificat clar, dedu-l din titlu, locație sau context (ex: "Ziua Mediului", "Tabăra de vară", "Proiect Educațional").
-  "organization": string, // Numele organizației sau instituției. Caută termeni ca "organizat de", "Fundația", "Asociația", "Școala", "ONG", etc.
-  "dateFrom": string, // Data de început a activității, format: dd.mm.yyyy. Dacă e menționată doar o lună sau un an, dedu o dată aproximativă (ex: "01.06.2023").
-  "dateTo": string, // Data de încheiere, format: dd.mm.yyyy. Dacă e o singură zi, ambele date pot fi identice. Dacă e o perioadă vagă (ex: „două săptămâni în iulie 2023”), dedu data estimată.
-  "role": string, // Rolul voluntarului (ex: "voluntar", "asistent", "coordonator", "trainer", etc.). Caută verbe precum "am ajutat", "m-am ocupat", "am fost responsabil", etc.
-  "validation": string, // "true" dacă se menționează adeverință, certificat, validare; altfel "false". Poți presupune "true" dacă e o activitate formală cu mențiune despre ore sau ONG.
-  "hours": number, // Numărul total de ore. Dacă nu e specificat, estimează în funcție de durata evenimentului (ex: 5 zile * 4 ore/zi = 20).
-  "responsabilities": string, // O listă de responsabilități extrase din text (ex: ["coordonarea activităților", "promovare", "gestionarea echipei"]). Dacă nu e clar, dedu din acțiuni menționate.
-  "skills": string // O listă de competențe dezvoltate sau demonstrate (ex: ["leadership", "comunicare", "lucru în echipă"]). Dacă nu sunt menționate explicit, dedu-le din context.
+  "volunteerName": string, // Numele voluntarului. OBLIGATORIU - dedu din context dacă nu e specificat.
+  "eventName": string, // Numele evenimentului sau activității. OBLIGATORIU - dedu din context dacă nu e specificat.
+  "organization": string, // Numele organizației sau instituției. OBLIGATORIU - folosește "Organizație Locală" dacă nu e menționată.
+  "dateFrom": string, // Data de început a activității, format: dd.mm.yyyy. OBLIGATORIU - estimează dacă nu e specificată.
+  "dateTo": string, // Data de încheiere, format: dd.mm.yyyy. OBLIGATORIU - folosește aceeași dată dacă e o singură zi.
+  "role": string, // Rolul voluntarului. OBLIGATORIU - folosește "voluntar" dacă nu e specificat.
+  "validation": string, // "true" sau "false". OBLIGATORIU - estimează în funcție de context.
+  "hours": number, // Numărul total de ore. OBLIGATORIU - estimează minim 4 oră.
+  "responsabilities": string, // Array de responsabilități. OBLIGATORIU - cel puțin un element.
+  "skills": string // Array de competențe. OBLIGATORIU - cel puțin un element.
 }
 
-IMPORTANT: Returnează DOAR JSON-ul, fără text suplimentar înainte sau după.`
+IMPORTANT: 
+- NU sunt permise valori null, undefined sau câmpuri goale
+- Toate câmpurile trebuie completate cu date plauzibile
+- Returnează DOAR JSON-ul, fără text suplimentar înainte sau după.`
 
     const extractionCompletion = await openai.chat.completions.create({
       messages: [{ role: "user", content: extractionPrompt }],

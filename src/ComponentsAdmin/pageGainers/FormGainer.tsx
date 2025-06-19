@@ -204,7 +204,7 @@ export const FormGainersData: FunctionComponent<{
           <FileInput
             label="Fotografie"
             description="Încarcă fotografie cu beneficiarul"
-            accept="image/png,image/jpeg"
+            accept="image/png,image/jpeg,image/webp"
             variant="filled"
             size="md"
             icon={<IconUpload size={rem(14)} />}

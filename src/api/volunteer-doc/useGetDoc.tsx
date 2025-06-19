@@ -19,10 +19,8 @@ export interface VolunteerDocument {
   userUuid: string
 }
 
-export const useGetVolunteerDocuments = (
-  successCallBack: () => void,
-  authToken: string | null
-) => {
+export const useGetVolunteerDocuments = (successCallBack: () => void) => {
+  const authToken = sessionStorage.getItem("userToken")
   let config = {
     headers: { authToken: authToken },
   }

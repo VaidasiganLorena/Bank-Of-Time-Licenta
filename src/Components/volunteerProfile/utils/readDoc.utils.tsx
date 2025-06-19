@@ -1,22 +1,16 @@
-import { createWorker, PSM } from "tesseract.js"
+import { createWorker } from "tesseract.js"
 
 export const extractTextFromImage = async (
   imageFile: File
 ): Promise<string> => {
   let worker = null
   try {
-    worker = await createWorker()
-    await worker.load()
-    await worker.loadLanguage("ron")
-    await worker.initialize("ron")
-
-    await worker.setParameters({
-      tessedit_pageseg_mode: PSM.AUTO,
-    })
+    worker = await createWorker("ron")
 
     const result = await worker.recognize(imageFile)
 
     const text = result.data.text
+    console.log(text)
 
     await worker.terminate()
 

@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 
 export interface CreateVolunteerDocumentInput {
+  volunteerName?: string
   eventName?: string
   organization?: string
   dateFrom?: string
@@ -17,7 +18,7 @@ export interface CreateVolunteerDocumentInput {
   userUuid: string
 }
 
-export const useCreateVolunteerDocument = (
+export const usePostVolunteerDocument = (
   successCallBack: (data: any) => void,
   errorCallBack: (error: any) => void
 ) => {
