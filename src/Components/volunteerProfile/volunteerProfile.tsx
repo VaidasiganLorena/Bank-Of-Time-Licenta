@@ -9,14 +9,15 @@ import {
   Text,
 } from "@mantine/core"
 import { useMediaQuery } from "@mantine/hooks"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 import { ErrorSuccesNotification } from "../../Notification/notification"
 import { NavigationBar } from "../Navbar"
 import { ChatBubble } from "../chatbot/ChatBubble"
+
 import { UploadFiles } from "./uploadFilesPage"
-import { CvPage } from "./cvPage"
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react"
+import { CVPage } from "./cvPage"
 
 const useStyles = createStyles((theme: any) => ({
   wrapper: {
@@ -166,7 +167,7 @@ export const VolunteerProfile = () => {
                     setGeneretingCV={setIsGeneretingCV}
                   />
                 ) : (
-                  <CvPage />
+                  <CVPage />
                 )}
               </Paper>
             </Flex>

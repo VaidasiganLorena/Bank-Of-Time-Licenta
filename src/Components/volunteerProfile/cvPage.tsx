@@ -42,8 +42,9 @@ import {
 } from "../../Redux/notification/slice"
 import moment from "moment"
 import "moment/locale/ro"
+import { CVPreview } from "./CVPreview"
 
-export const CvPage: FC<{}> = ({}) => {
+export const CVPage: FC<{}> = ({}) => {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedCV, setGeneratedCV] = useState<CVData | null>(null)
   const [showPreview, setShowPreview] = useState(false)
@@ -514,9 +515,24 @@ Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
 
               <Box>
                 <Title order={5} mb="xs">
-                  Activități în Banca Timpului
+                  Realizări
                 </Title>
                 <List>
+                  {generatedCV?.achievements
+                    ?.filter(
+                      (achievement) => achievement && achievement.trim() !== ""
+                    )
+                    ?.map((achievement, index) => (
+                      <List.Item key={index}>{achievement}</List.Item>
+                    ))}
+                </List>
+              </Box>
+
+              <Box>
+                <Title order={4} mb="xs">
+                  Activități în Banca Timpului
+                </Title>
+                <Stack spacing="md">
                   {activitiesData?.data?.response
                     ?.filter((activity: any) => activity.status === "Finalizat")
                     ?.map((activity: any, index: number) => {
@@ -528,15 +544,52 @@ Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
                         "DD.MM.YYYY"
                       )
                       return (
-                        <List.Item key={index}>
-                          Ajutor {helpType} pentru{" "}
-                          {activity.nameGainer || "beneficiar"} în{" "}
-                          {activity.cityGainer || "oraș"} ({date}) -{" "}
-                          {activity.timeVolunteering || 0} ore
-                        </List.Item>
+                        <Card key={index} withBorder radius="md" p="md">
+                          <Group align="flex-start" spacing="md">
+                            {activity.photoGainer && (
+                              <Image
+                                src={activity.photoGainer}
+                                radius="xl"
+                                width={60}
+                                height={60}
+                                fit="cover"
+                                withPlaceholder
+                              />
+                            )}
+                            <Box style={{ flex: 1 }}>
+                              <Group position="apart" mb="xs">
+                                <Title order={6}>
+                                  Ajutor {helpType} pentru{" "}
+                                  {activity.nameGainer || "beneficiar"}
+                                </Title>
+                                <Badge color="green" variant="light">
+                                  {activity.timeVolunteering || 0} ore
+                                </Badge>
+                              </Group>
+                              <Group spacing="lg" mb="xs">
+                                <Group spacing={4}>
+                                  <IconMapPin size={14} />
+                                  <Text size="sm" color="dimmed">
+                                    {activity.cityGainer || "Oraș necunoscut"}
+                                  </Text>
+                                </Group>
+                                <Group spacing={4}>
+                                  <IconClock size={14} />
+                                  <Text size="sm" color="dimmed">
+                                    {date}
+                                  </Text>
+                                </Group>
+                              </Group>
+                              <Text size="sm">
+                                Activități de voluntariat finalizate cu succes
+                                în cadrul aplicației Banca Timpului.
+                              </Text>
+                            </Box>
+                          </Group>
+                        </Card>
                       )
                     })}
-                </List>
+                </Stack>
               </Box>
 
               <Divider />
@@ -565,146 +618,25 @@ Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
       <Modal
         opened={showPreview}
         onClose={() => setShowPreview(false)}
-        title="Previzualizare CV"
+        title=""
         size="lg"
         fullScreen
+        styles={{
+          header: {
+            backgroundColor: "#f7f9fa",
+            height: 10,
+            padding: "20px 20x 0px 0px",
+          },
+          body: {
+            padding: 0,
+          },
+        }}
       >
-        {generatedCV && (
-          <Box p="md">
-            <Stack spacing="lg">
-              <Title order={2} ta="center" color="brand.6">
-                CV VOLUNTAR - {generatedCV?.personalInfo?.name}
-              </Title>
-
-              <Box>
-                <Title order={4} mb="xs">
-                  Date Personale
-                </Title>
-                <Group align="flex-start" spacing="lg" mb="md">
-                  {photo && (
-                    <Image
-                      src={photo}
-                      radius="xl"
-                      width={100}
-                      height={100}
-                      fit="cover"
-                      withPlaceholder
-                    />
-                  )}
-                  <Grid style={{ flex: 1 }}>
-                    <Grid.Col span={6}>
-                      <Text>
-                        <strong>Nume:</strong> {generatedCV?.personalInfo?.name}
-                      </Text>
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                      <Text>
-                        <strong>Email:</strong>{" "}
-                        {generatedCV?.personalInfo?.email}
-                      </Text>
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                      <Text>
-                        <strong>Telefon:</strong>{" "}
-                        {generatedCV?.personalInfo?.phone}
-                      </Text>
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                      <Text>
-                        <strong>Oraș:</strong>{" "}
-                        {generatedCV?.personalInfo?.location}
-                      </Text>
-                    </Grid.Col>
-                  </Grid>
-                </Group>
-              </Box>
-
-              <Divider />
-
-              <Box>
-                <Title order={4} mb="xs">
-                  Sumar
-                </Title>
-                <Text>{generatedCV?.summary}</Text>
-              </Box>
-
-              <Box>
-                <Title order={4} mb="xs">
-                  Experiență de Voluntariat
-                </Title>
-                <Stack spacing="md">
-                  {generatedCV?.volunteerExperience?.map((exp, index) => (
-                    <Card key={index} withBorder radius="md" p="md">
-                      <Group position="apart" mb="xs">
-                        <Title order={5}>{exp.organization}</Title>
-                        <Badge color="brand">{exp.hours} ore</Badge>
-                      </Group>
-                      <Text size="sm" color="dimmed" mb="xs">
-                        {exp.role} • {exp.period}
-                      </Text>
-                      <Text size="sm" mb="xs">
-                        {exp.description}
-                      </Text>
-                      <Group spacing={8}>
-                        {exp.skills?.map((skill, skillIndex) => (
-                          <Badge key={skillIndex} variant="light" size="xs">
-                            {skill}
-                          </Badge>
-                        ))}
-                      </Group>
-                    </Card>
-                  ))}
-                </Stack>
-              </Box>
-
-              <Box>
-                <Title order={4} mb="xs">
-                  Competențe
-                </Title>
-                <Group spacing={8}>
-                  {generatedCV?.skills?.map((skill, index) => (
-                    <Badge key={index} color="blue" variant="light" size="md">
-                      {skill}
-                    </Badge>
-                  ))}
-                </Group>
-              </Box>
-
-              <Box>
-                <Title order={4} mb="xs">
-                  Realizări
-                </Title>
-                <List>
-                  {generatedCV?.achievements
-                    ?.filter(
-                      (achievement) => achievement && achievement.trim() !== ""
-                    )
-                    ?.map((achievement, index) => (
-                      <List.Item key={index}>{achievement}</List.Item>
-                    ))}
-                </List>
-              </Box>
-
-              <Divider />
-
-              <Group position="apart">
-                <Text>
-                  <strong>Total ore voluntariat:</strong>{" "}
-                  {generatedCV?.totalHours}
-                </Text>
-                <Text>
-                  <strong>Total activități:</strong>{" "}
-                  {generatedCV?.totalActivities}
-                </Text>
-              </Group>
-
-              <Text size="xs" color="dimmed" ta="center">
-                Generat automat de Banca Timpului -{" "}
-                {moment().format("DD.MM.YYYY")}
-              </Text>
-            </Stack>
-          </Box>
-        )}
+        <CVPreview
+          generatedCV={generatedCV}
+          activitiesData={activitiesData}
+          photo={photo}
+        />
       </Modal>
 
       <ErrorSuccesNotification />
