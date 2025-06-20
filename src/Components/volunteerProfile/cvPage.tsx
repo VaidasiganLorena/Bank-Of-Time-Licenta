@@ -43,6 +43,7 @@ import {
 import moment from "moment"
 import "moment/locale/ro"
 import { CVPreview } from "./CVPreview"
+import { CVDownload } from "./CVDownload"
 
 export const CVPage: FC<{ nrDoc: number }> = ({ nrDoc }) => {
   const [isGenerating, setIsGenerating] = useState(false)
@@ -292,60 +293,6 @@ Generează CV în format JSON:
     }
   }
 
-  const downloadCV = () => {
-    if (!generatedCV) return
-
-    const { name, email, phone, city } = userData?.data || {}
-    const cvContent = `
-CV VOLUNTAR 
-
-${name}
-${email}
-${phone}
-${city}
-
-DESCRIERE:
-${generatedCV.summary}
-
-EXPERIENȚĂ DE VOLUNTARIAT:
-${generatedCV.volunteerExperience
-  .map(
-    (exp) => `
-${exp.organization} - ${exp.role}
-${exp.period} (${exp.hours} ore)
-${exp.description}
-Competențe: ${exp.skills.join(", ")}
-`
-  )
-  .join("\n")}
-
-COMPETENȚE:
-${generatedCV.skills.join(", ")}
-
-REALIZĂRI ÎN APLICAȚIA BANCA TIMPULUI:
-${generatedCV.achievements.join("\n")}
-
-STATISTICI:
-Total ore voluntariat: ${generatedCV.totalHours}
-Total activități: ${generatedCV.totalActivities}
-
-Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
-    `.trim()
-
-    const blob = new Blob([cvContent], { type: "text/plain;charset=utf-8" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `CV_Voluntar_${generatedCV.personalInfo.name.replace(
-      /\s+/g,
-      "_"
-    )}.txt`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-  }
-
   const hasData =
     (documentsData?.data.response && documentsData.data.response.length > 0) ||
     (activitiesData?.data.response &&
@@ -401,15 +348,12 @@ Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
                 >
                   Previzualizare
                 </Button>
-                <Button
-                  onClick={downloadCV}
-                  leftIcon={<IconDownload size={16} />}
-                  color="brand"
-                  variant="outline"
-                  radius="md"
-                >
-                  Descarcă CV
-                </Button>
+                <CVDownload
+                  generatedCV={generatedCV}
+                  userData={userData}
+                  activitiesData={activitiesData}
+                  photo={photo}
+                />
               </>
             )}
           </Group>

@@ -5,7 +5,10 @@ export const extractTextFromImage = async (
 ): Promise<string> => {
   let worker = null
   try {
-    worker = await createWorker("ron")
+    worker = await createWorker()
+
+    await worker.loadLanguage("ron")
+    await worker.initialize("ron")
 
     const result = await worker.recognize(imageFile)
 

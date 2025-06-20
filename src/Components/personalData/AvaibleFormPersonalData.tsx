@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useRef, useState } from 'react'
-import { useForm } from '@mantine/form'
+import React, { FunctionComponent, useRef, useState } from "react"
+import { useForm } from "@mantine/form"
 import {
   Autocomplete,
   Button,
@@ -14,25 +14,25 @@ import {
   Image,
   Flex,
   Box,
-} from '@mantine/core'
-import { cities } from '../../aseert/city'
-import { useUpdateInfoUser } from '../../api/user/useUpdateInfoUser'
-import { IconUpload } from '@tabler/icons-react'
-import { convertBase64 } from '../../ComponentsAdmin/pageGainers/UtilsForm'
-import { setMessageNotification } from '../../Redux/notification/slice'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../Redux/store'
-import { useGetInfoUser } from '../../api/user/useGetInfoUser'
+} from "@mantine/core"
+import { cities } from "../../aseert/city"
+import { useUpdateInfoUser } from "../../api/user/useUpdateInfoUser"
+import { IconUpload } from "@tabler/icons-react"
+import { convertBase64 } from "../../ComponentsAdmin/pageGainers/UtilsForm"
+import { setMessageNotification } from "../../Redux/notification/slice"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../../Redux/store"
+import { useGetInfoUser } from "../../api/user/useGetInfoUser"
 
 const useStyles = createStyles((theme: any) => ({
   form: {
     paddingTop: 15,
     borderRadius: 30,
-    width: '100%',
+    width: "100%",
     height: 500,
     margin: 15,
 
-    [theme.fn.smallerThan('xs')]: {
+    [theme.fn.smallerThan("xs")]: {
       marginBottom: 20,
       marginTop: 35,
     },
@@ -40,68 +40,68 @@ const useStyles = createStyles((theme: any) => ({
 
   saveButton: {
     marginTop: 10,
-    width: '35%',
+    width: "35%",
     borderRadius: 10,
-    [theme.fn.smallerThan('md')]: {
-      width: 'auto',
+    [theme.fn.smallerThan("md")]: {
+      width: "auto",
     },
-    '&:hover': {
-      backgroundColor: '#144639',
+    "&:hover": {
+      backgroundColor: "#144639",
     },
   },
   cancelButton: {
     marginTop: 10,
-    width: '35%',
+    width: "35%",
     borderRadius: 10,
-    color: '#28886f',
-    borderColor: '#28886f',
-    [theme.fn.smallerThan('md')]: {
-      width: 'auto',
+    color: "#28886f",
+    borderColor: "#28886f",
+    [theme.fn.smallerThan("md")]: {
+      width: "auto",
     },
-    '&:hover': {
-      backgroundColor: '#144639',
+    "&:hover": {
+      backgroundColor: "#144639",
     },
   },
   root: {
-    position: 'relative',
+    position: "relative",
   },
   uploadButton: {
-    width: 'auto',
-    position: 'absolute',
+    width: "auto",
+    position: "absolute",
     zIndex: 10,
-    backgroundColor: '#28886f',
+    backgroundColor: "#28886f",
     borderRadius: 30,
-    [theme.fn.smallerThan('md')]: {
-      width: 'auto',
+    [theme.fn.smallerThan("md")]: {
+      width: "auto",
     },
-    '&:hover': {
-      backgroundColor: '#144639',
+    "&:hover": {
+      backgroundColor: "#144639",
     },
   },
 
   input: {
     height: rem(54),
     paddingTop: rem(18),
-    backgroundColor: '#f3f5f7',
-    width: '20vw',
+    backgroundColor: "#f3f5f7",
+    width: "20vw",
     [theme.fn.largerThan(1800)]: {
-      width: '15vw',
+      width: "15vw",
     },
     [theme.fn.smallerThan(1300)]: {
-      width: '25vw',
+      width: "25vw",
     },
     [theme.fn.smallerThan(980)]: {
-      width: '40vw',
+      width: "40vw",
     },
-    [theme.fn.smallerThan('xs')]: {
-      width: '70vw',
+    [theme.fn.smallerThan("xs")]: {
+      width: "70vw",
     },
   },
 
   label: {
-    position: 'absolute',
-    pointerEvents: 'none',
-    color: 'gray',
+    position: "absolute",
+    pointerEvents: "none",
+    color: "gray",
     fontSize: theme.fontSizes.sm,
     paddingLeft: theme.spacing.sm,
     paddingTop: `calc(${theme.spacing.sm} / 2)`,
@@ -125,18 +125,18 @@ export const AvaibleFormPersonalData: FunctionComponent<{
 }> = (props) => {
   const { setEditMode } = props
   const { classes } = useStyles()
-  const userUuid = sessionStorage.getItem('userUuid')
-  const authToken = sessionStorage.getItem('authToken')
+  const userUuid = sessionStorage.getItem("userUuid")
+  const authToken = sessionStorage.getItem("authToken")
   const { userData } = useSelector((state: RootState) => state.user)
   const timeoutRef = useRef<number>(0)
   const [loading, setLoading] = useState(false)
-  const [location, setLocation] = useState<string>('')
+  const [location, setLocation] = useState<string>("")
   const [validCity, setValidCity] = useState(true)
-  const [errorCity, setErrorCity] = useState<string>('')
+  const [errorCity, setErrorCity] = useState<string>("")
   const [file, setFile] = useState(userData.photo)
   const dispatch = useDispatch()
   const isValidCity: (location: string) => string = (location: string) => {
-    return location.length < 3 ? 'Locația nu este validă!' : ''
+    return location.length < 3 ? "Locația nu este validă!" : ""
   }
   const succesInfoUserCallBack = () => {}
   const { refetch } = useGetInfoUser(succesInfoUserCallBack, userUuid)
@@ -152,17 +152,41 @@ export const AvaibleFormPersonalData: FunctionComponent<{
     },
     validate: {
       firstname: (value) =>
-        value.length < 2 ? 'Prenumele trebuie sa contina cel putin 2 caractere' : null,
+        value.length < 2
+          ? "Prenumele trebuie sa contina cel putin 2 caractere"
+          : null,
       lastname: (value) =>
-        value.length < 2 ? 'Numele trebuie sa contina cel putin 2 caractere' : null,
+        value.length < 2
+          ? "Numele trebuie sa contina cel putin 2 caractere"
+          : null,
       email: (value: string) =>
-        /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) && value.length > 0
+        /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) &&
+        value.length > 0
           ? null
-          : 'Email invalid!',
+          : "Email invalid!",
       phoneNumber: (value: string) => {
-        return /^(07)\d{8}$/.test(value) && value.length > 1 ? null : 'Număr de telefon invalid!'
+        // Remove all non-digit characters for validation
+        const cleanValue = value.replace(/\D/g, "")
+
+        // Accept Romanian mobile numbers (07 + 8 digits = 10 total)
+        if (/^07\d{8}$/.test(cleanValue)) {
+          return null
+        }
+
+        // Accept Romanian landline numbers (02, 03, 04 + 8 digits = 10 total)
+        if (/^0[234]\d{8}$/.test(cleanValue)) {
+          return null
+        }
+
+        // Accept international numbers (minimum 7 digits, maximum 15 digits)
+        if (cleanValue.length >= 7 && cleanValue.length <= 15) {
+          return null
+        }
+
+        return "Număr de telefon invalid! Trebuie să fie un număr valid românesc sau internațional."
       },
-      gender: (value: string) => (value.length !== 0 ? null : 'Nu uita să alegi genul.'),
+      gender: (value: string) =>
+        value.length !== 0 ? null : "Nu uita să alegi genul.",
     },
   })
 
@@ -171,7 +195,11 @@ export const AvaibleFormPersonalData: FunctionComponent<{
     refetch()
   }
 
-  const { mutate } = useUpdateInfoUser(succesCallBackUpdate, userUuid, authToken)
+  const { mutate } = useUpdateInfoUser(
+    succesCallBackUpdate,
+    userUuid,
+    authToken
+  )
   const onSave = () => {
     if (formPersonalData.validate().hasErrors === false && validCity === true) {
       mutate({
@@ -203,16 +231,16 @@ export const AvaibleFormPersonalData: FunctionComponent<{
         setLoading(false)
       }, 100)
       setLocation(val)
-      formPersonalData.setFieldValue('city', location)
+      formPersonalData.setFieldValue("city", location)
     }
   }
   const onBlurCity = () => {
-    setErrorCity('')
+    setErrorCity("")
     if (location.length < 3) {
       setErrorCity(isValidCity(location))
       setValidCity(false)
     } else {
-      formPersonalData.setFieldValue('city', location)
+      formPersonalData.setFieldValue("city", location)
       setValidCity(true)
       formPersonalData.setErrors(formPersonalData.errors)
     }
@@ -222,15 +250,20 @@ export const AvaibleFormPersonalData: FunctionComponent<{
       .then((e: any) => {
         setFile(e)
       })
-      .catch((err: any) => console.log('Eroare incarcare fisier', err))
+      .catch((err: any) => console.log("Eroare incarcare fisier", err))
   }
   return (
     <form onSubmit={formPersonalData.onSubmit(onSave)}>
-      <Flex direction={'column'} align="center">
+      <Flex direction={"column"} align="center">
         <div>
           <FileButton onChange={uploadFile} accept="image/png,image/jpeg">
             {(props) => (
-              <ActionIcon {...props} radius="xl" variant="filled" className={classes.uploadButton}>
+              <ActionIcon
+                {...props}
+                radius="xl"
+                variant="filled"
+                className={classes.uploadButton}
+              >
                 <IconUpload size="1.125rem" />
               </ActionIcon>
             )}
@@ -246,8 +279,12 @@ export const AvaibleFormPersonalData: FunctionComponent<{
               placeholder="Popescu"
               size="md"
               radius={10}
-              classNames={{ input: classes.input, root: classes.root, label: classes.label }}
-              {...formPersonalData.getInputProps('lastname')}
+              classNames={{
+                input: classes.input,
+                root: classes.root,
+                label: classes.label,
+              }}
+              {...formPersonalData.getInputProps("lastname")}
             />
 
             <TextInput
@@ -256,31 +293,43 @@ export const AvaibleFormPersonalData: FunctionComponent<{
               placeholder="Ana"
               size="md"
               radius={10}
-              classNames={{ input: classes.input, root: classes.root, label: classes.label }}
-              {...formPersonalData.getInputProps('firstname')}
+              classNames={{
+                input: classes.input,
+                root: classes.root,
+                label: classes.label,
+              }}
+              {...formPersonalData.getInputProps("firstname")}
             />
           </Group>
-          <Group position="center" mt={'1rem'} spacing={15}>
+          <Group position="center" mt={"1rem"} spacing={15}>
             <TextInput
               label="Adresa de email"
               variant="filled"
               placeholder="hello@gmail.com"
               size="md"
               radius={10}
-              classNames={{ input: classes.input, root: classes.root, label: classes.label }}
-              {...formPersonalData.getInputProps('email')}
+              classNames={{
+                input: classes.input,
+                root: classes.root,
+                label: classes.label,
+              }}
+              {...formPersonalData.getInputProps("email")}
             />
             <TextInput
               label="Număr de telefon"
               variant="filled"
-              placeholder="07653..."
+              placeholder="07xxxxxxxx sau +40xxxxxxxxx"
               size="md"
               radius={10}
-              classNames={{ input: classes.input, root: classes.root, label: classes.label }}
-              {...formPersonalData.getInputProps('phoneNumber')}
+              classNames={{
+                input: classes.input,
+                root: classes.root,
+                label: classes.label,
+              }}
+              {...formPersonalData.getInputProps("phoneNumber")}
             />
           </Group>
-          <Group position="center" mt={'1rem'} spacing={15}>
+          <Group position="center" mt={"1rem"} spacing={15}>
             <Autocomplete
               data={cities}
               defaultValue={userData.city}
@@ -292,19 +341,27 @@ export const AvaibleFormPersonalData: FunctionComponent<{
               variant="filled"
               size="md"
               radius={10}
-              classNames={{ input: classes.input, root: classes.root, label: classes.label }}
+              classNames={{
+                input: classes.input,
+                root: classes.root,
+                label: classes.label,
+              }}
               error={errorCity}
             />
 
             <Select
-              data={['Feminin', 'Masculin', 'Altul']}
+              data={["Feminin", "Masculin", "Altul"]}
               label="Gen"
               placeholder="Alege genul"
               variant="filled"
               size="md"
               radius={10}
-              classNames={{ input: classes.input, root: classes.root, label: classes.label }}
-              {...formPersonalData.getInputProps('gender')}
+              classNames={{
+                input: classes.input,
+                root: classes.root,
+                label: classes.label,
+              }}
+              {...formPersonalData.getInputProps("gender")}
             />
           </Group>
         </Box>
@@ -313,7 +370,12 @@ export const AvaibleFormPersonalData: FunctionComponent<{
         <Button size="sm" onClick={onSave} className={classes.saveButton}>
           Salvează
         </Button>
-        <Button size="sm" variant="outline" onClick={onCancel} className={classes.cancelButton}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={onCancel}
+          className={classes.cancelButton}
+        >
           Anuleză
         </Button>
       </Group>
