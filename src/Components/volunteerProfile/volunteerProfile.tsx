@@ -5,6 +5,7 @@ import {
   createStyles,
   Flex,
   Grid,
+  Group,
   Paper,
   Text,
 } from "@mantine/core"
@@ -83,54 +84,6 @@ export const VolunteerProfile = () => {
     setNrDoc(newNrDoc)
   }
 
-  const navigateButtonLeft = (
-    <Flex
-      justify="flex-start"
-      align="center"
-      gap={0}
-      w={"100%"}
-      mt={6}
-      style={{ cursor: "pointer" }}
-      onClick={() => setIsGeneretingCV(false)}
-    >
-      <ActionIcon
-        variant="transparent"
-        color="brand"
-        size="lg"
-        style={{ borderRadius: "100%" }}
-      >
-        <IconArrowLeft />
-      </ActionIcon>
-      <Text style={{ fontWeight: 400, color: "gray", fontSize: 15 }}>
-        Istoric Documente
-      </Text>
-    </Flex>
-  )
-  const navigateButtonRight = (
-    <Flex
-      justify="flex-end"
-      align="center"
-      gap={0}
-      w={"100%"}
-      mt={6}
-      style={{ cursor: "pointer" }}
-      onClick={() => setIsGeneretingCV(true)}
-    >
-      <Text style={{ fontWeight: 400, color: "gray", fontSize: 15 }}>
-        CV Personalizat
-      </Text>
-      <ActionIcon
-        variant="transparent"
-        color="brand"
-        size="lg"
-        style={{ borderRadius: "100%" }}
-        disabled={nrDoc === 0}
-      >
-        <IconArrowRight />
-      </ActionIcon>
-    </Flex>
-  )
-
   return (
     <>
       <ChatBubble />
@@ -140,35 +93,21 @@ export const VolunteerProfile = () => {
             <NavigationBar />
             <Flex p={10} w={"100%"} direction={tablet ? "column" : "row"}>
               <Paper className={classes.paperAppointments}>
-                <Grid w={"100%"}>
-                  <Grid.Col span={2}>
-                    {isGeneretingCV && navigateButtonLeft}
-                  </Grid.Col>
-                  <Grid.Col span={8} style={{ textAlign: "center" }}>
-                    <Text
-                      ta="center"
-                      fw={700}
-                      c={theme.colors.brand[6]}
-                      size={24}
-                      mt={5}
-                      mb={10}
-                    >
-                      Profilul Voluntarului
-                    </Text>
-                  </Grid.Col>
-                  <Grid.Col span={2}>
-                    {!isGeneretingCV && navigateButtonRight}
-                  </Grid.Col>
-                </Grid>
-
-                {!isGeneretingCV ? (
-                  <UploadFiles
-                    setNrDoc={handleSetNrDoc}
-                    setGeneretingCV={setIsGeneretingCV}
-                  />
-                ) : (
-                  <CVPage />
-                )}
+                <Text
+                  ta="center"
+                  fw={700}
+                  c={theme.colors.brand[6]}
+                  size={24}
+                  mt={5}
+                  mb={10}
+                >
+                  Profilul Voluntarului
+                </Text>
+                <CVPage nrDoc={nrDoc} />
+                <UploadFiles
+                  setNrDoc={handleSetNrDoc}
+                  setGeneretingCV={setIsGeneretingCV}
+                />
               </Paper>
             </Flex>
           </Paper>

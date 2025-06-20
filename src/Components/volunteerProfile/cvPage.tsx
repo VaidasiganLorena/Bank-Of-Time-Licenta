@@ -44,7 +44,7 @@ import moment from "moment"
 import "moment/locale/ro"
 import { CVPreview } from "./CVPreview"
 
-export const CVPage: FC<{}> = ({}) => {
+export const CVPage: FC<{ nrDoc: number }> = ({ nrDoc }) => {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedCV, setGeneratedCV] = useState<CVData | null>(null)
   const [showPreview, setShowPreview] = useState(false)
@@ -355,28 +355,29 @@ Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
   return (
     <Flex direction="column" gap="md">
       <Paper p="md" radius="lg" withBorder>
-        <Stack spacing="md">
-          <Title order={2} color="brand.6">
+        <Stack spacing="xs" align="flex-start" justify="center">
+          <Title order={3} color="brand.6">
             <IconFileText size={24} style={{ marginRight: 8 }} />
             Generare CV Personalizat
           </Title>
 
-          <Text size="sm" color="dimmed">
-            Generează un CV profesional pe baza documentelor tale de voluntariat
-            și activităților din aplicație.
-          </Text>
-
-          {!hasData && (
-            <Alert color="orange" title="Nu există date">
-              Pentru a genera un CV, trebuie să ai documente de voluntariat
-              încărcate sau activități finalizate.
-            </Alert>
+          {!hasData || nrDoc === 0 ? (
+            <Text size="sm" color="dimmed" ta="center">
+              Pentru a genera un CV profesional cu activitățile tale de
+              voluntariat, trebuie să încarci cel puțin un document (adeverință,
+              certificat sau diplomă).
+            </Text>
+          ) : (
+            <Text size="sm" color="dimmed">
+              Bravo pentru implicare! Acum poți crea un CV complet, care să
+              reflecte activitățile tale de voluntariat,
+            </Text>
           )}
 
-          <Group>
+          <Group mt={15}>
             <Button
               onClick={generateCVWithOpenAI}
-              disabled={!hasData || isGenerating || isSavingCV}
+              disabled={!hasData || isGenerating || isSavingCV || nrDoc === 0}
               leftIcon={
                 isGenerating ? <Loader size="sm" /> : <IconFileText size={16} />
               }
@@ -403,7 +404,8 @@ Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
                 <Button
                   onClick={downloadCV}
                   leftIcon={<IconDownload size={16} />}
-                  color="green"
+                  color="brand"
+                  variant="outline"
                   radius="md"
                 >
                   Descarcă CV
@@ -414,7 +416,7 @@ Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
         </Stack>
       </Paper>
 
-      {generatedCV && (
+      {/* {generatedCV && (
         <Paper
           p={0}
           radius="lg"
@@ -613,7 +615,7 @@ Generat automat de Banca Timpului - ${moment().format("DD.MM.YYYY")}
             </Stack>
           </Card>
         </Paper>
-      )}
+      )} */}
 
       <Modal
         opened={showPreview}

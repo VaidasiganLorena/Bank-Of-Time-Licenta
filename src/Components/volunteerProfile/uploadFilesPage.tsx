@@ -228,63 +228,21 @@ export const UploadFiles: FC<{
   return (
     <div>
       <Flex direction="column" gap={10}>
-        <Text style={{ color: "black", marginTop: "10px" }}>
-          Faptele bune merită recunoscute! Încarcă diploma, adeverința sau
-          certificatul tău de voluntariat – noi ți le organizăm și le păstrăm în
-          profilul tău, gata să le folosești când ai nevoie.
-        </Text>
-        <Flex direction="column" gap={10}>
-          {rows.length > 0 ? (
-            <Group spacing={5}>
-              <Text style={{ color: "black" }}>
-                Bravo pentru implicare! Acum poți crea un CV complet, care să
-                reflecte activitățile tale de voluntariat,
-              </Text>
-
-              <Text
-                onClick={() => setGeneretingCV(true)}
-                style={{
-                  width: "fit-content",
-                  cursor: "pointer",
-                  color: "#2f6e5dd1",
-                  fontWeight: 500,
-                }}
-              >
-                click aici pentru a vedea CV-ul.
-              </Text>
-            </Group>
-          ) : (
-            <>
-              <Text style={{ color: "black", fontSize: "14px" }}>
-                Pentru a genera un CV profesional cu activitățile tale de
-                voluntariat, trebuie să încarci cel puțin un document
-                (adeverință, certificat sau diplomă).
-              </Text>
-
-              <Text
-                style={{
-                  width: "fit-content",
-                  marginLeft: "auto",
-                  color: "#868e96",
-                  fontStyle: "italic",
-                  fontSize: "14px",
-                }}
-              >
-                Încarcă primul document pentru a începe
-              </Text>
-            </>
-          )}
-        </Flex>
-
         <FileInput
           accept="image/png,image/jpeg,image/webp"
           label="Adaugă adeverințe/certificare/diplome"
           capture="environment"
+          description="Încarcă diploma, adeverința sau certificatul tău de voluntariat – noi ți le organizăm și le păstrăm în profilul tău, gata să le folosești când ai nevoie."
           value={fileValue}
           onChange={handleFileUpload}
           disabled={isCreating || isProcessing}
           error={error ? error : null}
-          style={{ marginBottom: "5px" }}
+          mt={"2rem"}
+          mb={"1rem"}
+          styles={{
+            label: { fontSize: "16px", fontWeight: 600 },
+            description: { fontSize: "14px", color: "#868e96" },
+          }}
         />
       </Flex>
 
@@ -296,11 +254,18 @@ export const UploadFiles: FC<{
       )}
 
       <Table
-        style={{ maxHeight: "300px", overflowY: "auto", marginTop: "5px" }}
+        style={{
+          height: "fit-content",
+          maxHeight: "30vh",
+          overflowY: "auto",
+          marginTop: "5px",
+        }}
       >
         <thead>
           <tr>
-            <th>Documente/Adeverințe de voluntariat</th>
+            <th style={{ fontSize: "18px" }}>
+              Documente/Adeverințe de voluntariat
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -314,7 +279,14 @@ export const UploadFiles: FC<{
             rows
           ) : (
             <tr>
-              <td colSpan={2} style={{ textAlign: "center" }}>
+              <td
+                colSpan={2}
+                style={{
+                  textAlign: "center",
+                  fontSize: "18px",
+                  color: "#868e96",
+                }}
+              >
                 Nu există documente
               </td>
             </tr>
